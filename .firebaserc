@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "my-spa-assistant-dev",
+    "prod": "my-spa-assistant"
+  }
+}
