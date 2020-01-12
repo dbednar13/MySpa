@@ -7,7 +7,6 @@ import Dashboard from './components/dashboard';
 import Home from './components/home';
 import Login from './components/logIn';
 import SignOut from './components/signOut';
-import SignUp from './components/signUp';
 import Nav from './Nav';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/Login" component={Login} />
             <Route path="/SignOut" component={SignOut} />
-            <Route path="/SignUp" component={SignUp} />
             <Route component={Home} />
           </Switch>
         </div>

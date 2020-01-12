@@ -8,7 +8,6 @@ function Nav() {
       <NavLink activeClassName="active" to="/About">About</NavLink>
       <NavLink activeClassName="active" to="/DashBoard">DashBoard</NavLink>
       <NavLink activeClassName="active" to="/Login">LogIn</NavLink>
-      <NavLink activeClassName="active" to="/SignUp">Sign Up</NavLink>
     </span>
   );
 }
