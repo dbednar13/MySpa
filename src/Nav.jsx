@@ -37,14 +37,26 @@ function Nav({ authenticated }) {
           </NavLink>
         </div>
       )}
-      <div className='nav-item'>
-        <NavLink
-          className='nav-link'
-          activeClassName='nav-link active'
-          to='/Login'>
-          LogIn
-        </NavLink>
-      </div>
+      {authenticated && (
+        <div className='nav-item'>
+          <NavLink
+            className='nav-link'
+            activeClassName='nav-link active'
+            to='/SignOut'>
+            Sign Out
+          </NavLink>
+        </div>
+      )}
+      {!authenticated && (
+        <div className='nav-item'>
+          <NavLink
+            className='nav-link'
+            activeClassName='nav-link active'
+            to='/Login'>
+            LogIn
+          </NavLink>
+        </div>
+      )}
     </Navbar>
   );
 }
