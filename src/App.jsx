@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
-import './App.css';
 import About from './components/about';
 import Dashboard from './components/dashboard';
 import Home from './components/home';
@@ -10,12 +9,19 @@ import SignOut from './components/signOut';
 import Nav from './Nav';
 import { withFirebase } from './firebase';
 
-function App() {
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './css/index.css';
+
+const App = () => {
+  const [user, setUser] = useState({ authenticated: false, user: null });
+
+  const NavWithFirebase = withFirebase(Nav);
   return (
     <div className='App'>
       <Router>
-        <Nav />
-
+        <div className='pb-3'>
+          <NavWithFirebase authenticated={user.authenticated} />
+        </div>
         <div className='container'>
           <Switch>
             <Route exact path='/' component={withFirebase(Home)} />
@@ -30,6 +36,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;
