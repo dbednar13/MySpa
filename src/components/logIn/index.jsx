@@ -1,31 +1,27 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import { shape } from 'prop-types';
 import { StyledFirebaseAuth } from 'react-firebaseui';
-import { FirebaseContext } from '../../firebase';
 
-function LogIn() {
+const LogIn = ({ firebase }) => {
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    signInSuccessUrl: '/dashboard',
+    signInOptions: [
+      firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ]
+  };
+
   return (
-    <FirebaseContext.Consumer>
-      {firebase => {
-        const uiConfig = {
-          // Popup signin flow rather than redirect flow.
-          signInFlow: 'popup',
-          signInSuccessUrl: '/dashboard',
-          signInOptions: [
-            firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
-          ]
-        };
-
-        return (
-          <StyledFirebaseAuth
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
-        );
-      }}
-    </FirebaseContext.Consumer>
+    <div>
+      <h3>Log in or sign up below!</h3>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    </div>
   );
-}
+};
 
-export default withRouter(LogIn);
+LogIn.propTypes = {
+  firebase: shape({}).isRequired
+};
+export default LogIn;

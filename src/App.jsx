@@ -8,22 +8,23 @@ import Home from './components/home';
 import Login from './components/logIn';
 import SignOut from './components/signOut';
 import Nav from './Nav';
+import { withFirebase } from './firebase';
 
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <Router>
         <Nav />
 
-        <div className="container">
+        <div className='container'>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/About" component={About} />
-            <Route path="/Dashboard" component={Dashboard} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/Login" component={Login} />
-            <Route path="/SignOut" component={SignOut} />
-            <Route component={Home} />
+            <Route exact path='/' component={withFirebase(Home)} />
+            <Route path='/About' component={withFirebase(About)} />
+            <Route path='/Dashboard' component={withFirebase(Dashboard)} />
+            <Route path='/dashboard' component={withFirebase(Dashboard)} />
+            <Route path='/Login' component={withFirebase(Login)} />
+            <Route path='/SignOut' component={withFirebase(SignOut)} />
+            <Route component={withFirebase(Home)} />
           </Switch>
         </div>
       </Router>

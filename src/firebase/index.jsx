@@ -1,5 +1,5 @@
 import app from 'firebase/app';
-import FirebaseContext from './context';
+import FirebaseContext, { withFirebase } from './context';
 import firebaseDevConfig from '../constants/FirebaseDevConfig';
 import firebaseProdConfig from '../constants/FirebaseProdConfig';
 
@@ -20,4 +20,4 @@ const Firebase = app.initializeApp(config).firebase_;
 
 export default Firebase;
 
-export { FirebaseContext };
+export { FirebaseContext, withFirebase };
