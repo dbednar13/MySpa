@@ -3,8 +3,8 @@ import FirebaseContext from './context';
 import firebaseDevConfig from '../constants/FirebaseDevConfig';
 import firebaseProdConfig from '../constants/FirebaseProdConfig';
 
-require('firebase/auth');
-require('firebase/firestore');
+import 'firebase/auth';
+import 'firebase/firestore';
 
 const config =
   process.env.REACT_APP_MODE === 'prod'
