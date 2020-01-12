@@ -1,10 +1,13 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
 
 const SignOut = ({ firebase }) => {
-  firebase.auth().signOut();
+  if (firebase.auth().currentUser) {
+    firebase.auth().signOut();
+  }
 
-  return <>Sign Out</>;
+  return <Redirect to='/Home' />;
 };
 
 SignOut.propTypes = {
