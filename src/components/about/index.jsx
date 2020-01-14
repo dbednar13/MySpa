@@ -1,22 +1,21 @@
 import React from 'react';
+import { Tabs, Tab } from 'react-bootstrap';
+import AboutUs from './aboutUs';
+import Contact from './contact';
+import FAQ from './faq';
 
 const About = () => (
-  <>
-    This app is still a work in progress.  Basic goals:
-    <ul>
-      <li>Make Client notes</li>
-      <li>Take credit card payments</li>
-      <li>Subscription for service</li>
-    </ul>
-
-    Eventual items to be done:
-    <ul>
-      <li>SOAP</li>
-      <li>Client Medical History</li>
-      <li>Scheduling</li>
-      <li>Email/Calendar invite to client</li>
-    </ul>
-  </>
+  <Tabs defaultActiveKey='about' id='about-tabs'>
+    <Tab eventKey='about' title='About'>
+      <AboutUs />
+    </Tab>
+    <Tab eventKey='faq' title='FAQ'>
+      <FAQ />
+    </Tab>
+    <Tab eventKey='contact' title='Contact'>
+      <Contact />
+    </Tab>
+  </Tabs>
 );
 
 export default About;
