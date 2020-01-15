@@ -7,6 +7,8 @@ import Dashboard from './components/dashboard';
 import Home from './components/home';
 import Login from './components/logIn';
 import SignOut from './components/signOut';
+import Services from './components/user/services';
+import User from './components/user';
 import Nav from './Nav';
 import { withFirebase } from './firebase';
 
@@ -40,6 +42,8 @@ const AppWithContext = ({ firebase }) => {
             <Route path='/dashboard' component={withFirebase(Dashboard)} />
             <Route path='/Login' component={withFirebase(Login)} />
             <Route path='/SignOut' component={withFirebase(SignOut)} />
+            <Route path='/User/Services' component={withFirebase(Services)} />
+            <Route exact path='/User' component={withFirebase(User)} />
             <Route component={withFirebase(Home)} />
           </Switch>
         </div>

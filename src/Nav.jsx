@@ -6,7 +6,7 @@ import { Navbar, NavDropdown } from 'react-bootstrap';
 function Nav({ authenticated }) {
   return (
     <Navbar bg='dark' variant='dark' sticky='top'>
-      <Navbar.Brand href='/home'>My Spa Assistant</Navbar.Brand>
+      <Navbar.Brand href='/Home'>My Spa Assistant</Navbar.Brand>
       <Navbar.Collapse>
         <div className='nav-item'>
           <NavLink
@@ -48,8 +48,12 @@ function Nav({ authenticated }) {
           </div>
         )}
         <NavDropdown title='Account' id='collasible-nav-dropdown'>
-          <NavDropdown.Item href='/services'>My Services</NavDropdown.Item>
-          <NavDropdown.Item href='/account'>My Account</NavDropdown.Item>
+          <NavDropdown.Item href='/User' disabled={!authenticated}>
+            My Account
+          </NavDropdown.Item>
+          <NavDropdown.Item href='/User/Services' disabled={!authenticated}>
+            My Services
+          </NavDropdown.Item>
           <NavDropdown.Divider />
           {!authenticated && (
             <NavDropdown.Item href='/Login'>Log in</NavDropdown.Item>

@@ -1,7 +1,12 @@
 import React from 'react';
+import Details from './details';
 
 const Service = () => {
-  return <>Maintain a service with time it takes, and base/standard cost</>;
+  return (
+    <>
+      <Details />
+    </>
+  );
 };
 
 export default Service;
