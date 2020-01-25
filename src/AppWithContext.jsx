@@ -16,34 +16,37 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 
 const AppWithContext = ({ firebase }) => {
-  const [user, setUser] = useState({ authenticated: false, user: null });
+  const [currentUser, setCurrentUser] = useState({
+    authenticated: false,
+    user: null
+  });
   const NavWithFirebase = withFirebase(Nav);
 
-  firebase.auth().onAuthStateChanged(newUser => {
-    if (user.user !== newUser) {
-      const retval = newUser
-        ? { authenticated: true, user: newUser }
+  firebase.auth().onAuthStateChanged(() => {
+    const user = firebase.auth().currentUser;
+    if (currentUser.user !== user) {
+      const retval = user
+        ? { authenticated: true, user }
         : { authenticated: false, user: null };
-      setUser(retval);
+      setCurrentUser(retval);
     }
   });
-
   return (
     <div className='App'>
       <Router>
         <div className='pb-3'>
-          <NavWithFirebase authenticated={user.authenticated} />
+          <NavWithFirebase authenticated={currentUser.authenticated} />
         </div>
         <div className='container'>
           <Switch>
             <Route exact path='/' component={withFirebase(Home)} />
+            <Route exact path='/User' component={withFirebase(User)} />
             <Route path='/About' component={withFirebase(About)} />
             <Route path='/Dashboard' component={withFirebase(Dashboard)} />
             <Route path='/dashboard' component={withFirebase(Dashboard)} />
             <Route path='/Login' component={withFirebase(Login)} />
             <Route path='/SignOut' component={withFirebase(SignOut)} />
             <Route path='/User/Services' component={withFirebase(Services)} />
-            <Route exact path='/User' component={withFirebase(User)} />
             <Route component={withFirebase(Home)} />
           </Switch>
         </div>

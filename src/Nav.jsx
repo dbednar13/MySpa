@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { bool } from 'prop-types';
-import { Navbar, NavDropdown } from 'react-bootstrap';
+import { Navbar, NavDropdown, Dropdown } from 'react-bootstrap';
 
 function Nav({ authenticated }) {
   return (
@@ -48,19 +48,15 @@ function Nav({ authenticated }) {
           </div>
         )}
         <NavDropdown title='Account' id='collasible-nav-dropdown'>
-          <NavDropdown.Item href='/User' disabled={!authenticated}>
+          <NavLink to='/User' disabled={!authenticated}>
             My Account
-          </NavDropdown.Item>
-          <NavDropdown.Item href='/User/Services' disabled={!authenticated}>
+          </NavLink>
+          <NavLink to='/User/Services' disabled={!authenticated}>
             My Services
-          </NavDropdown.Item>
-          <NavDropdown.Divider />
-          {!authenticated && (
-            <NavDropdown.Item href='/Login'>Log in</NavDropdown.Item>
-          )}
-          {authenticated && (
-            <NavDropdown.Item href='/SignOut'>Sign Out</NavDropdown.Item>
-          )}
+          </NavLink>
+          <Dropdown.Divider />
+          {!authenticated && <NavLink to='/Login'>Log in</NavLink>}
+          {authenticated && <NavLink to='/SignOut'>Sign Out</NavLink>}
         </NavDropdown>
       </Navbar.Collapse>
     </Navbar>
