@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
@@ -28,6 +29,12 @@ const User = ({ firebase }) => {
     }
   };
 
+  const theme = createMuiTheme({
+    palette: {
+      type: 'dark'
+    }
+  });
+
   const itemList = [
     { page: 'user', text: 'My Account', icon: '' },
     { page: 'clients', text: 'Clients', icon: '' },
@@ -37,22 +44,27 @@ const User = ({ firebase }) => {
   return !firebase.auth().currentUser ? (
     <Redirect to='/Home' />
   ) : (
+    /*
+     * Ok, I really don't like the drawer being used.  It covers the nav bar and coloring is a pain.  not intended to be permanent but best we have for now.
+     */
     <>
-      <Drawer variant='permanent'>
-        <List>
-          {itemList.map(item => (
-            <ListItem
-              button
-              key={item.page}
-              onClick={() => {
-                handleClick(item.page);
-              }}
-              selected={item.page === selectedPage}>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      <ThemeProvider theme={theme}>
+        <Drawer variant='permanent' pallette={{ type: 'dark' }}>
+          <List>
+            {itemList.map(item => (
+              <ListItem
+                button
+                key={item.page}
+                onClick={() => {
+                  handleClick(item.page);
+                }}
+                selected={item.page === selectedPage}>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </ThemeProvider>
       <main>{getDisplayedPage()}</main>
     </>
   );
