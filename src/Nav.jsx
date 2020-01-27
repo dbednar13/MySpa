@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { bool } from 'prop-types';
-import { Navbar, NavDropdown } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 
 function Nav({ authenticated }) {
   return (
