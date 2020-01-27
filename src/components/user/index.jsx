@@ -29,9 +29,9 @@ const User = ({ firebase }) => {
   };
 
   const itemList = [
+    { page: 'user', text: 'My Account', icon: '' },
     { page: 'clients', text: 'Clients', icon: '' },
-    { page: 'services', text: 'My Services', icon: '' },
-    { page: 'user', text: 'My Account', icon: '' }
+    { page: 'services', text: 'My Services', icon: '' }
   ];
 
   return !firebase.auth().currentUser ? (
@@ -46,7 +46,8 @@ const User = ({ firebase }) => {
               key={item.page}
               onClick={() => {
                 handleClick(item.page);
-              }}>
+              }}
+              selected={item.page === selectedPage}>
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
