@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { bool, func, string } from 'prop-types';
+import { func, string } from 'prop-types';
 import Details from '../service/details';
 
-const ServiceModal = ({ title, isNew, onClose, onSave }) => {
+const ServiceModal = ({ title, onClose, onSave }) => {
   const handleSave = data => {
-    onSave(data, isNew);
+    onSave(data);
   };
 
   return (
@@ -18,10 +18,10 @@ const ServiceModal = ({ title, isNew, onClose, onSave }) => {
           <Details />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='secondary' onClick={onClose}>
+          <Button variant="secondary" onClick={onClose}>
             Close
           </Button>
-          <Button variant='primary' onClick={handleSave}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>
@@ -32,13 +32,8 @@ const ServiceModal = ({ title, isNew, onClose, onSave }) => {
 
 ServiceModal.propTypes = {
   title: string.isRequired,
-  isNew: bool,
   onClose: func.isRequired,
-  onSave: func.isRequired
-};
-
-ServiceModal.defaultProps = {
-  isNew: false
+  onSave: func.isRequired,
 };
 
 export default ServiceModal;

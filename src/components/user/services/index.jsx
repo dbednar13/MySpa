@@ -15,7 +15,7 @@ const Services = ({ firebase }) => {
     setShowAddModal(false);
   };
 
-  const onSaveClick = (service, isNew) => {
+  const onSaveClick = service => {
     // TODO save new or update existing service
   };
   return !firebase.auth().currentUser ? (
@@ -28,7 +28,6 @@ const Services = ({ firebase }) => {
           title='Add New Service'
           onClose={onModalClose}
           onSave={onSaveClick}
-          isNew
         />
       )}
       <Button onClick={onAddClick}>Add New Service</Button>
