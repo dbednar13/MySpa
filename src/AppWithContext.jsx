@@ -10,7 +10,7 @@ import SignOut from './components/signOut';
 import Services from './components/user/services';
 import User from './components/user';
 import Nav from './Nav';
-import { withFirebase } from './firebase';
+import { withFirebase, fireStore } from './firebase';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
@@ -25,10 +25,23 @@ const AppWithContext = ({ firebase }) => {
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
-      const retval = user
-        ? { authenticated: true, user }
-        : { authenticated: false, user: null };
-      setCurrentUser(retval);
+      if (user) {
+        setCurrentUser({ authenticated: true, user });
+        const index = user.displayName.indexOf(' ');
+        fireStore
+          .collection('users')
+          .doc(user.uid)
+          .set(
+            {
+              email: user.email,
+              firstName: user.displayName.substring(0, index),
+              lastName: user.displayName.substring(index + 1)
+            },
+            { merge: true }
+          );
+      } else {
+        setCurrentUser({ authenticated: false, user: null });
+      }
     }
   });
   return (
