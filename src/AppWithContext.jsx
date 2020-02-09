@@ -18,7 +18,7 @@ import './css/index.css';
 const AppWithContext = ({ firebase }) => {
   const [currentUser, setCurrentUser] = useState({
     authenticated: false,
-    user: null
+    user: null,
   });
   const NavWithFirebase = withFirebase(Nav);
 
@@ -31,13 +31,44 @@ const AppWithContext = ({ firebase }) => {
         fireStore
           .collection('users')
           .doc(user.uid)
+          .get()
+          .then(doc => {
+            if (!doc.exists) {
+              fireStore
+                .collection('users')
+                .doc(user.uid)
+                .set({
+                  email: user.email,
+                  firstName: user.displayName.substring(0, index),
+                  lastName: user.displayName.substring(index + 1),
+                });
+            } else if (
+              !user.displayName.startsWith(doc.firstName) ||
+              !user.displayName.endsWith(doc.lastName)
+            ) {
+              fireStore
+                .collection('users')
+                .doc(user.uid)
+                .set(
+                  {
+                    email: user.email,
+                    firstName: user.displayName.substring(0, index),
+                    lastName: user.displayName.substring(index + 1),
+                  },
+                  { merge: true },
+                );
+            }
+          });
+        fireStore
+          .collection('users')
+          .doc(user.uid)
           .set(
             {
               email: user.email,
               firstName: user.displayName.substring(0, index),
-              lastName: user.displayName.substring(index + 1)
+              lastName: user.displayName.substring(index + 1),
             },
-            { merge: true }
+            { merge: true },
           );
       } else {
         setCurrentUser({ authenticated: false, user: null });
@@ -45,21 +76,21 @@ const AppWithContext = ({ firebase }) => {
     }
   });
   return (
-    <div className='App'>
+    <div className="App">
       <Router>
-        <div className='pb-3'>
+        <div className="pb-3">
           <NavWithFirebase authenticated={currentUser.authenticated} />
         </div>
-        <div className='container'>
+        <div className="container">
           <Switch>
-            <Route exact path='/' component={withFirebase(Home)} />
-            <Route exact path='/User' component={withFirebase(User)} />
-            <Route path='/About' component={withFirebase(About)} />
-            <Route path='/Dashboard' component={withFirebase(Dashboard)} />
-            <Route path='/dashboard' component={withFirebase(Dashboard)} />
-            <Route path='/Login' component={withFirebase(Login)} />
-            <Route path='/SignOut' component={withFirebase(SignOut)} />
-            <Route path='/User/Services' component={withFirebase(Services)} />
+            <Route exact path="/" component={withFirebase(Home)} />
+            <Route exact path="/User" component={withFirebase(User)} />
+            <Route path="/About" component={withFirebase(About)} />
+            <Route path="/Dashboard" component={withFirebase(Dashboard)} />
+            <Route path="/dashboard" component={withFirebase(Dashboard)} />
+            <Route path="/Login" component={withFirebase(Login)} />
+            <Route path="/SignOut" component={withFirebase(SignOut)} />
+            <Route path="/User/Services" component={withFirebase(Services)} />
             <Route component={withFirebase(Home)} />
           </Switch>
         </div>
@@ -69,7 +100,7 @@ const AppWithContext = ({ firebase }) => {
 };
 
 AppWithContext.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 
 export default AppWithContext;
