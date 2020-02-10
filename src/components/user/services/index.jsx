@@ -23,13 +23,12 @@ const Services = ({ firebase }) => {
   ) : (
     <>
       <Service />
-      {showAddModal && (
-        <ServiceModal
-          title='Add New Service'
-          onClose={onModalClose}
-          onSave={onSaveClick}
-        />
-      )}
+      <ServiceModal
+        title='Add New Service'
+        onClose={onModalClose}
+        onSave={onSaveClick}
+        show={showAddModal}
+      />
       <Button onClick={onAddClick}>Add New Service</Button>
     </>
   );

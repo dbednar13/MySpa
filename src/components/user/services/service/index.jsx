@@ -1,12 +1,7 @@
 import React from 'react';
-import Details from './details';
 
 const Service = () => {
-  return (
-    <>
-      <Details />
-    </>
-  );
+  return <>Hello!</>;
 };
 
 export default Service;
