@@ -1,50 +1,56 @@
 import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { bool, func, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-import InternalModal from '../../../modal';
-
 const ServiceModal = ({ show, title, onClose, onSave }) => {
-  const body = (
-    <>
-      <div className='d-flex pb-2'>
-        <label htmlFor='name'>
-          Service Name:{' '}
-          <input id='name' type='text' placeholder='Serivce Name' />
-        </label>
-      </div>
-      <div className='d-flex pb-2'>
-        <label htmlFor='serviceLength'>
-          Service length (minutes):{' '}
-          <NumberFormat
-            id='serviceLength'
-            decimalScale='0'
-            allowNegative={false}
-          />
-        </label>
-      </div>
-      <div className='d-flex pb-2'>
-        <label htmlFor='cost'>
-          Service cost:{' '}
-          <NumberFormat
-            id='cost'
-            decimalScale='2'
-            allowNegative={false}
-            prefix='$'
-          />
-        </label>
-      </div>
-    </>
-  );
+  const handleSave = data => {
+    onSave(data);
+  };
 
   return (
-    <InternalModal
-      body={body}
-      onClose={onClose}
-      onSave={onSave}
-      show={show}
-      title={title}
-    />
+    <Modal centered show={show} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className='d-flex pb-2'>
+          <label htmlFor='name'>
+            Service Name:{' '}
+            <input id='name' type='text' placeholder='Serivce Name' />
+          </label>
+        </div>
+        <div className='d-flex pb-2'>
+          <label htmlFor='serviceLength'>
+            Service length (minutes):{' '}
+            <NumberFormat
+              id='serviceLength'
+              decimalScale='0'
+              allowNegative={false}
+            />
+          </label>
+        </div>
+        <div className='d-flex pb-2'>
+          <label htmlFor='cost'>
+            Service cost:{' '}
+            <NumberFormat
+              id='cost'
+              decimalScale='2'
+              allowNegative={false}
+              prefix='$'
+            />
+          </label>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant='secondary' onClick={onClose}>
+          Close
+        </Button>
+        <Button variant='primary' onClick={handleSave}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
