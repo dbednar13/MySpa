@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import AddonModal from './addonsModal';
 import Service from './service';
 import ServiceModal from './serviceModal';
+import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
   const [showAddonModal, setShowAddonModal] = useState(false);
@@ -24,13 +25,42 @@ const Services = ({ firebase }) => {
     setShowServiceModal(false);
   };
 
-  const onSaveAddonClick = () => {
-    // TODO save new or update existing service
+  const onSaveAddonClick = (isNew, name, cost, id = -1) => {
+    const user = firebase.auth().currentUser;
+    if (isNew || id === -1) {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('addons')
+        .Add({ name, cost });
+    } else {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('addons')
+        .doc(id)
+        .Set({ name, cost });
+    }
   };
 
-  const onSaveServiceClick = () => {
-    // TODO save new or update existing service
+  const onSaveServiceClick = (isNew, name, duration, cost, id = -1) => {
+    const user = firebase.auth().currentUser;
+    if (isNew || id === -1) {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('services')
+        .Add({ name, duration, cost });
+    } else {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('services')
+        .doc(id)
+        .Set({ name, duration, cost });
+    }
   };
+
   return !firebase.auth().currentUser ? (
     <Redirect to='/Home' />
   ) : (

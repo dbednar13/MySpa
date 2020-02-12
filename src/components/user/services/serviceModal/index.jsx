@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -16,8 +16,15 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
 
   const handleSave = () => {
     setShowAlert(false);
-    if (name && name !== '' && cost !== null && cost > 0.0) {
-      onSave({ name, cost });
+    if (
+      name &&
+      name !== '' &&
+      cost !== null &&
+      cost > 0.0 &&
+      duration !== null &&
+      duration > 0.0
+    ) {
+      onSave(true, name, duration, cost);
       onClose();
     } else {
       setShowAlert(true);
@@ -31,12 +38,19 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
       </Modal.Header>
       <Modal.Body>
         {showAlert && (
-          <Alert variant='danger'>Please enter a name and a cost</Alert>
+          <Alert variant='danger'>
+            Please enter a name, duration and a cost
+          </Alert>
         )}
         <div className='d-flex pb-2'>
           <label htmlFor='name'>
             Service Name:{' '}
-            <input id='name' type='text' placeholder='Serivce Name' />
+            <input
+              id='name'
+              type='text'
+              placeholder='Serivce Name'
+              onChange={e => setName(e.target.value)}
+            />
           </label>
         </div>
         <div className='d-flex pb-2'>
@@ -46,6 +60,7 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
               id='serviceLength'
               decimalScale='0'
               allowNegative={false}
+              onValueChange={e => setDuration(e.value)}
             />
           </label>
         </div>
@@ -57,6 +72,7 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
               decimalScale='2'
               allowNegative={false}
               prefix='$'
+              onValueChange={e => setCost(e.value)}
             />
           </label>
         </div>

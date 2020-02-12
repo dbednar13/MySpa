@@ -16,7 +16,7 @@ const AddonModal = ({ show, title, onClose, onSave }) => {
   const handleSave = () => {
     setShowAlert(false);
     if (name && name !== '' && cost !== null && cost > 0.0) {
-      onSave({ name, cost });
+      onSave(true, name, cost);
       onClose();
     } else {
       setShowAlert(true);
