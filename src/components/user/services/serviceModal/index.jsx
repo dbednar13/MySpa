@@ -1,19 +1,38 @@
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
 
 const ServiceModal = ({ show, title, onClose, onSave }) => {
-  const handleSave = data => {
-    onSave(data);
+  const [cost, setCost] = useState(null);
+  const [duration, setDuration] = useState(null);
+  const [name, setName] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleClose = () => {
+    setShowAlert(false);
+    onClose();
+  };
+
+  const handleSave = () => {
+    setShowAlert(false);
+    if (name && name !== '' && cost !== null && cost > 0.0) {
+      onSave({ name, cost });
+      onClose();
+    } else {
+      setShowAlert(true);
+    }
   };
 
   return (
-    <Modal centered show={show} onHide={onClose}>
+    <Modal centered show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {showAlert && (
+          <Alert variant='danger'>Please enter a name and a cost</Alert>
+        )}
         <div className='d-flex pb-2'>
           <label htmlFor='name'>
             Service Name:{' '}
@@ -43,7 +62,7 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='secondary' onClick={onClose}>
+        <Button variant='secondary' onClick={handleClose}>
           Close
         </Button>
         <Button variant='primary' onClick={handleSave}>
