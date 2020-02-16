@@ -25,7 +25,7 @@ const FAQ = () => (
     <h2>What about Credit Card fees?</h2>
     <p>
       My Spa Assistant will take no cut of your credit card receipts. However,
-      our payment processing utility Stripedoes have fees. You can find more
+      our payment processing utility Stripe does have fees. You can find more
       details and up to date fees by checking out Strip&apos;s site{' '}
       <a href='https://stripe.com/pricing#pricing-details'>
         https://stripe.com/pricing#pricing-details
@@ -44,6 +44,15 @@ const FAQ = () => (
       Stripe, we never see any of the credit card information. Stripe is also
       used by giants such as Lyft, KickStarter and GoFundMe so you can rest in
       confidence that your data is safe
+    </p>
+    <br />
+    <br />
+    <h2>Where are the apps?</h2>
+    <p>
+      I get it, apps are nice and your go to for pretty much everything when
+      you&apos;re working. Apps are coming, eventually. The focus is to give you
+      one solid platform that&apos;ll work for all devices instead of a website
+      and 2 apps that only kind of work.
     </p>
   </>
 );

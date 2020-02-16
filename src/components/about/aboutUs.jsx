@@ -34,24 +34,6 @@ const AboutUs = () => (
       what you without making you have to do 2-3 extra services just to pay this
       expense.
     </p>
-    <br />
-    <br />
-    <p>
-      This app is still a work in progress. Basic goals:
-      <ul>
-        <li>Make Client notes</li>
-        <li>Take credit card payments</li>
-      </ul>
-      Eventual items to be done:
-      <ul>
-        <li>Subscription for service</li>
-        <li>SOAP</li>
-        <li>Client Medical History</li>
-        <li>Scheduling</li>
-        <li>Email/Calendar invite to client</li>
-        <li>Android and iOS apps</li>
-      </ul>
-    </p>
   </>
 );
 
