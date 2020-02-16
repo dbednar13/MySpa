@@ -27,39 +27,39 @@ const Services = ({ firebase }) => {
     setShowServiceModal(false);
   };
 
-  const onSaveAddonClick = (isNew, name, cost, id = -1) => {
+  const onSaveAddonClick = (isNew, name, cost, active, id = -1) => {
     const user = firebase.auth().currentUser;
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
-        .Add({ name, cost });
+        .Add({ name, cost, active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
         .doc(id)
-        .Set({ name, cost });
+        .Set({ name, cost, active });
     }
   };
 
-  const onSaveServiceClick = (isNew, name, duration, cost, id = -1) => {
+  const onSaveServiceClick = (isNew, name, duration, cost, active, id = -1) => {
     const user = firebase.auth().currentUser;
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
-        .Add({ name, duration, cost });
+        .Add({ name, duration, cost, active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
         .doc(id)
-        .Set({ name, duration, cost });
+        .Set({ name, duration, cost, active });
     }
   };
 

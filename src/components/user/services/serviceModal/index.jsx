@@ -24,7 +24,7 @@ const ServiceModal = ({ show, title, onClose, onSave }) => {
       duration !== null &&
       duration > 0.0
     ) {
-      onSave(true, name, duration, cost);
+      onSave(true, name, duration, cost, true);
       onClose();
     } else {
       setShowAlert(true);
