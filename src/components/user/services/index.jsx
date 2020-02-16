@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { shape } from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, CardColumns } from 'react-bootstrap';
+import Divider from '@material-ui/core/Divider';
 import AddonModal from './addonsModal';
 import Service from './service';
 import ServiceModal from './serviceModal';
+import EditableCard from '../../editableCard';
 import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
@@ -65,20 +67,32 @@ const Services = ({ firebase }) => {
     <Redirect to='/Home' />
   ) : (
     <>
-      <AddonModal
-        title='Add New Service Addon'
-        onClose={onAddonClose}
-        onSave={onSaveAddonClick}
-        show={showAddonModal}
-      />
-      <Service />
       <ServiceModal
         title='Add New Service'
         onClose={onServiceClose}
         onSave={onSaveServiceClick}
         show={showServiceModal}
       />
+      <AddonModal
+        title='Add New Service Addon'
+        onClose={onAddonClose}
+        onSave={onSaveAddonClick}
+        show={showAddonModal}
+      />
+      <div>
+        <Service />
+      </div>
+      <CardColumns className='pb-3'>
+        <EditableCard
+          title='test1'
+          onDelete={onAddonClick}
+          onEdit={onAddonClick}
+        />
+      </CardColumns>
       <Button onClick={onServiceClick}>Add New Service</Button>
+      <div className='pt-3 pb-3'>
+        <Divider variant='middle' />
+      </div>
       <Button onClick={onAddonClick}>Add New Service Addon</Button>
     </>
   );
