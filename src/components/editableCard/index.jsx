@@ -1,16 +1,18 @@
 import React from 'react';
-import { func, string } from 'prop-types';
+import { func, string, object } from 'prop-types';
 import { Button, Card } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-const EditableCard = ({ onDelete, onEdit, title }) => {
+const EditableCard = ({ body, id, onDelete, onEdit, title }) => {
   const handleOnEditClick = e => {
     e.preventDefault();
+    onEdit(id);
   };
 
   const handleOnDeleteClick = e => {
     e.preventDefault();
+    onDelete(id);
   };
 
   return (
@@ -18,10 +20,7 @@ const EditableCard = ({ onDelete, onEdit, title }) => {
       <Card.Body>
         <Card.Title className='text-centered'>{title}</Card.Title>
       </Card.Body>
-      <Card.Text>
-        Some quick example text to build on the card title and make up the bulk
-        of the cards content.
-      </Card.Text>
+      {body}
       <Card.Body>
         <div className='d-flex justify-content-between'>
           <Button variant='link' onClick={handleOnEditClick}>
@@ -37,6 +36,9 @@ const EditableCard = ({ onDelete, onEdit, title }) => {
 };
 
 EditableCard.propTypes = {
+  // eslint-disable-next-line
+  body: object.isRequired,
+  id: string.isRequired,
   title: string.isRequired,
   onEdit: func.isRequired,
   onDelete: func.isRequired

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Button, CardColumns } from 'react-bootstrap';
@@ -10,8 +10,53 @@ import EditableCard from '../../editableCard';
 import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
+  const [addons, setAddons] = useState([]);
+  const [services, setServices] = useState([]);
   const [showAddonModal, setShowAddonModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+    const unsubscribeAddons = firebase.db
+      .collection('myDbName')
+      .doc(user.uid)
+      .collection('addons')
+      .onSnapshot(snapshot => {
+        const tempAddons = [];
+        if (snapshot.size) {
+          snapshot.forEach(doc => {
+            if (doc.active) {
+              tempAddons.push({ title: doc.title, cost: doc.cost, id: doc.id });
+            }
+          });
+          setAddons(tempAddons);
+        }
+      });
+    const unsubscribeServices = firebase.db
+      .collection('myDbName')
+      .doc(user.uid)
+      .collection('services')
+      .onSnapshot(snapshot => {
+        const tempServices = [];
+        if (snapshot.size) {
+          snapshot.forEach(doc => {
+            if (doc.active) {
+              tempServices.push({
+                title: doc.title,
+                time: doc.time,
+                cost: doc.cost,
+                id: doc.id
+              });
+            }
+          });
+          setServices(tempServices);
+        }
+      });
+    return () => {
+      unsubscribeAddons();
+      unsubscribeServices();
+    };
+  }, [firebase]);
 
   const onAddonClick = () => {
     setShowAddonModal(true);
@@ -87,6 +132,7 @@ const Services = ({ firebase }) => {
           title='test1'
           onDelete={onAddonClick}
           onEdit={onAddonClick}
+          body={<Service cost={0.0} length={60} />}
         />
       </CardColumns>
       <Button onClick={onServiceClick}>Add New Service</Button>
