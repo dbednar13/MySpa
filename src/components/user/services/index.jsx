@@ -159,7 +159,7 @@ const Services = ({ firebase }) => {
               <EditableCard
                 key={`Card-Addon-${addon.id}`}
                 id={addon.id}
-                title={addon.title}
+                title={addon.name}
                 onDelete={onAddonClick}
                 onEdit={onAddonClick}
                 body={<Addon id={addon.id} cost={addon.cost} />}
