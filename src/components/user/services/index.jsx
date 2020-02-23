@@ -11,59 +11,57 @@ import EditableCard from '../../editableCard';
 import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
+  const [user, setUser] = useState(null);
   const [addons, setAddons] = useState([]);
   const [services, setServices] = useState([]);
   const [showAddonModal, setShowAddonModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
 
   useEffect(() => {
-    const user = firebase.auth().currentUser;
-    const unsubscribeAddons = fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('addons')
-      .onSnapshot(snapshot => {
-        const tempAddons = [];
-        if (snapshot.size) {
-          snapshot.forEach(doc => {
-            if (doc.active) {
-              tempAddons.push({ title: doc.title, cost: doc.cost, id: doc.id });
-            }
-          });
-          setAddons(tempAddons);
-        }
-      });
-    return () => {
-      unsubscribeAddons();
-    };
+    setUser(firebase.auth().currentUser);
   }, [firebase]);
 
   useEffect(() => {
-    const user = firebase.auth().currentUser;
-    const unsubscribeServices = fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('services')
-      .onSnapshot(snapshot => {
-        const tempServices = [];
-        if (snapshot.size) {
-          snapshot.docs.forEach(doc => {
-            if (doc.active) {
-              tempServices.push({
-                title: doc.title,
-                time: doc.time,
-                cost: doc.cost,
+    if (user) {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('addons')
+        .get()
+        .then(snapshot => {
+          const tempAddons = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.active)
+              tempAddons.push({
+                name: data.name,
+                cost: data.cost,
                 id: doc.id
               });
-            }
+          });
+          setAddons(tempAddons);
+        });
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('services')
+        .get()
+        .then(snapshot => {
+          const tempServices = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.active)
+              tempServices.push({
+                name: data.name,
+                cost: data.cost,
+                duration: data.duration,
+                id: doc.id
+              });
           });
           setServices(tempServices);
-        }
-      });
-    return () => {
-      unsubscribeServices();
-    };
-  }, [firebase]);
+        });
+    }
+  }, [user]);
 
   const onAddonClick = () => {
     setShowAddonModal(true);
@@ -80,39 +78,36 @@ const Services = ({ firebase }) => {
   };
 
   const onSaveAddonClick = (isNew, name, cost, active, id = -1) => {
-    const user = firebase.auth().currentUser;
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
-        .add({ name, cost, active });
+        .add({ name, cost: Number(cost), active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
         .doc(id)
-        .set({ name, cost, active });
+        .set({ name, cost: Number(cost), active });
     }
   };
 
   const onSaveServiceClick = (isNew, name, duration, cost, active, id = -1) => {
-    const user = firebase.auth().currentUser;
-    debugger;
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
-        .add({ name, duration, cost, active });
+        .add({ name, duration: Number(duration), cost: Number(cost), active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
         .doc(id)
-        .set({ name, duration, cost, active });
+        .set({ name, duration: Number(duration), cost: Number(cost), active });
     }
   };
 
@@ -137,11 +132,18 @@ const Services = ({ firebase }) => {
           services.map(service => {
             return (
               <EditableCard
+                key={`Card-Service-${service.id}`}
                 id={service.id}
-                title={service.title}
+                title={service.name}
                 onDelete={onAddonClick}
                 onEdit={onAddonClick}
-                body={<Service cost={service.cost} length={service.length} />}
+                body={
+                  <Service
+                    id={service.id}
+                    cost={service.cost}
+                    length={service.duration}
+                  />
+                }
               />
             );
           })}
@@ -155,11 +157,12 @@ const Services = ({ firebase }) => {
           addons.map(addon => {
             return (
               <EditableCard
+                key={`Card-Addon-${addon.id}`}
                 id={addon.id}
                 title={addon.title}
                 onDelete={onAddonClick}
                 onEdit={onAddonClick}
-                body={<Addon cost={addon.cost} />}
+                body={<Addon id={addon.id} cost={addon.cost} />}
               />
             );
           })}
