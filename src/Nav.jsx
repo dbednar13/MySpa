@@ -31,7 +31,7 @@ function Nav({ authenticated }) {
               className='nav-link'
               activeClassName='nav-link active'
               to='/DashBoard'>
-              DashBoard
+              Dash Board
             </NavLink>
           </div>
         )}

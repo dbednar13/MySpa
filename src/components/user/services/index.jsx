@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Button, CardColumns } from 'react-bootstrap';
 import Divider from '@material-ui/core/Divider';
 import AddonModal from './addonsModal';
+import Addon from './addon';
 import Service from './service';
 import ServiceModal from './serviceModal';
 import EditableCard from '../../editableCard';
@@ -17,8 +18,8 @@ const Services = ({ firebase }) => {
 
   useEffect(() => {
     const user = firebase.auth().currentUser;
-    const unsubscribeAddons = firebase.db
-      .collection('myDbName')
+    const unsubscribeAddons = fireStore
+      .collection('users')
       .doc(user.uid)
       .collection('addons')
       .onSnapshot(snapshot => {
@@ -32,14 +33,21 @@ const Services = ({ firebase }) => {
           setAddons(tempAddons);
         }
       });
-    const unsubscribeServices = firebase.db
-      .collection('myDbName')
+    return () => {
+      unsubscribeAddons();
+    };
+  }, [firebase]);
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+    const unsubscribeServices = fireStore
+      .collection('users')
       .doc(user.uid)
       .collection('services')
       .onSnapshot(snapshot => {
         const tempServices = [];
         if (snapshot.size) {
-          snapshot.forEach(doc => {
+          snapshot.docs.forEach(doc => {
             if (doc.active) {
               tempServices.push({
                 title: doc.title,
@@ -53,7 +61,6 @@ const Services = ({ firebase }) => {
         }
       });
     return () => {
-      unsubscribeAddons();
       unsubscribeServices();
     };
   }, [firebase]);
@@ -79,32 +86,33 @@ const Services = ({ firebase }) => {
         .collection('users')
         .doc(user.uid)
         .collection('addons')
-        .Add({ name, cost, active });
+        .add({ name, cost, active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
         .doc(id)
-        .Set({ name, cost, active });
+        .set({ name, cost, active });
     }
   };
 
   const onSaveServiceClick = (isNew, name, duration, cost, active, id = -1) => {
     const user = firebase.auth().currentUser;
+    debugger;
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
-        .Add({ name, duration, cost, active });
+        .add({ name, duration, cost, active });
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
         .doc(id)
-        .Set({ name, duration, cost, active });
+        .set({ name, duration, cost, active });
     }
   };
 
@@ -124,21 +132,38 @@ const Services = ({ firebase }) => {
         onSave={onSaveAddonClick}
         show={showAddonModal}
       />
-      <div>
-        <Service />
-      </div>
       <CardColumns className='pb-3'>
-        <EditableCard
-          title='test1'
-          onDelete={onAddonClick}
-          onEdit={onAddonClick}
-          body={<Service cost={0.0} length={60} />}
-        />
+        {services.length > 0 &&
+          services.map(service => {
+            return (
+              <EditableCard
+                id={service.id}
+                title={service.title}
+                onDelete={onAddonClick}
+                onEdit={onAddonClick}
+                body={<Service cost={service.cost} length={service.length} />}
+              />
+            );
+          })}
       </CardColumns>
       <Button onClick={onServiceClick}>Add New Service</Button>
       <div className='pt-3 pb-3'>
         <Divider variant='middle' />
       </div>
+      <CardColumns className='pb-3'>
+        {addons.length > 0 &&
+          addons.map(addon => {
+            return (
+              <EditableCard
+                id={addon.id}
+                title={addon.title}
+                onDelete={onAddonClick}
+                onEdit={onAddonClick}
+                body={<Addon cost={addon.cost} />}
+              />
+            );
+          })}
+      </CardColumns>
       <Button onClick={onAddonClick}>Add New Service Addon</Button>
     </>
   );
