@@ -21,45 +21,53 @@ const Services = ({ firebase }) => {
     setUser(firebase.auth().currentUser);
   }, [firebase]);
 
+  const fetchAddons = () => {
+    fireStore
+      .collection('users')
+      .doc(user.uid)
+      .collection('addons')
+      .get()
+      .then(snapshot => {
+        const tempAddons = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.active)
+            tempAddons.push({
+              name: data.name,
+              cost: data.cost,
+              id: doc.id
+            });
+        });
+        setAddons(tempAddons);
+      });
+  };
+
+  const fetchServices = () => {
+    fireStore
+      .collection('users')
+      .doc(user.uid)
+      .collection('services')
+      .get()
+      .then(snapshot => {
+        const tempServices = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.active)
+            tempServices.push({
+              name: data.name,
+              cost: data.cost,
+              duration: data.duration,
+              id: doc.id
+            });
+        });
+        setServices(tempServices);
+      });
+  };
+
   useEffect(() => {
     if (user) {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('addons')
-        .get()
-        .then(snapshot => {
-          const tempAddons = [];
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.active)
-              tempAddons.push({
-                name: data.name,
-                cost: data.cost,
-                id: doc.id
-              });
-          });
-          setAddons(tempAddons);
-        });
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('services')
-        .get()
-        .then(snapshot => {
-          const tempServices = [];
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.active)
-              tempServices.push({
-                name: data.name,
-                cost: data.cost,
-                duration: data.duration,
-                id: doc.id
-              });
-          });
-          setServices(tempServices);
-        });
+      fetchAddons();
+      fetchServices();
     }
   }, [user]);
 
