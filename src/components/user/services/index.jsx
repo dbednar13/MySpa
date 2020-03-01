@@ -85,20 +85,42 @@ const Services = ({ firebase }) => {
     setShowServiceModal(false);
   };
 
+  const onDeleteAddonClick = id => {
+    fireStore
+      .collection('users')
+      .doc(user.uid)
+      .collection('addons')
+      .doc(id)
+      .update({ active: false })
+      .then(fetchAddons);
+  };
+
+  const onDeleteServicesClick = id => {
+    fireStore
+      .collection('users')
+      .doc(user.uid)
+      .collection('services')
+      .doc(id)
+      .update({ active: false })
+      .then(fetchServices);
+  };
+
   const onSaveAddonClick = (isNew, name, cost, active, id = -1) => {
     if (isNew || id === -1) {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
-        .add({ name, cost: Number(cost), active });
+        .add({ name, cost: Number(cost), active })
+        .then(fetchAddons);
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('addons')
         .doc(id)
-        .set({ name, cost: Number(cost), active });
+        .set({ name, cost: Number(cost), active }, { merge: true })
+        .then(fetchAddons);
     }
   };
 
@@ -108,14 +130,19 @@ const Services = ({ firebase }) => {
         .collection('users')
         .doc(user.uid)
         .collection('services')
-        .add({ name, duration: Number(duration), cost: Number(cost), active });
+        .add({ name, duration: Number(duration), cost: Number(cost), active })
+        .then(fetchServices);
     } else {
       fireStore
         .collection('users')
         .doc(user.uid)
         .collection('services')
         .doc(id)
-        .set({ name, duration: Number(duration), cost: Number(cost), active });
+        .set(
+          { name, duration: Number(duration), cost: Number(cost), active },
+          { merge: true }
+        )
+        .then(fetchServices);
     }
   };
 
@@ -143,7 +170,7 @@ const Services = ({ firebase }) => {
                 key={`Card-Service-${service.id}`}
                 id={service.id}
                 title={service.name}
-                onDelete={onAddonClick}
+                onDelete={() => onDeleteServicesClick(service.id)}
                 onEdit={onAddonClick}
                 body={
                   <Service
@@ -168,7 +195,7 @@ const Services = ({ firebase }) => {
                 key={`Card-Addon-${addon.id}`}
                 id={addon.id}
                 title={addon.name}
-                onDelete={onAddonClick}
+                onDelete={() => onDeleteAddonClick(addon.id)}
                 onEdit={onAddonClick}
                 body={<Addon id={addon.id} cost={addon.cost} />}
               />
