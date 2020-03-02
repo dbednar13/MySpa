@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
-import { bool, func, string } from 'prop-types';
+import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const AddonModal = ({ show, title, onClose, onSave }) => {
+const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
   const [cost, setCost] = useState(null);
   const [name, setName] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -41,6 +41,7 @@ const AddonModal = ({ show, title, onClose, onSave }) => {
               type='text'
               placeholder='Serivce Name'
               onChange={e => setName(e.target.value)}
+              value={name}
             />
           </label>
         </div>
@@ -53,16 +54,19 @@ const AddonModal = ({ show, title, onClose, onSave }) => {
               allowNegative={false}
               prefix='$'
               onValueChange={e => setCost(e.value)}
+              value={cost}
             />
           </label>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <div>
-          <Button variant='link' onClick={handleClose}>
-            <DeleteIcon /> Delete
-          </Button>
-        </div>
+        {editMode && (
+          <div>
+            <Button variant='link' onClick={handleClose}>
+              <DeleteIcon /> Delete
+            </Button>
+          </div>
+        )}
 
         <Button variant='secondary' onClick={handleClose}>
           Close
@@ -79,7 +83,15 @@ AddonModal.propTypes = {
   show: bool.isRequired,
   title: string.isRequired,
   onClose: func.isRequired,
-  onSave: func.isRequired
+  onSave: func.isRequired,
+  editMode: bool.isRequired,
+  name: string,
+  cost: number
+};
+
+AddonModal.defaultProps = {
+  name: '',
+  cost: 0.0
 };
 
 export default AddonModal;

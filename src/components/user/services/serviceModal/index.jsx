@@ -3,7 +3,7 @@ import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-const ServiceModal = ({ show, title, onClose, onSave }) => {
+const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
   const [cost, setCost] = useState(null);
   const [duration, setDuration] = useState(null);
   const [name, setName] = useState(null);
@@ -93,7 +93,8 @@ ServiceModal.propTypes = {
   show: bool.isRequired,
   title: string.isRequired,
   onClose: func.isRequired,
-  onSave: func.isRequired
+  onSave: func.isRequired,
+  editMode: bool.isRequired
 };
 
 export default ServiceModal;
