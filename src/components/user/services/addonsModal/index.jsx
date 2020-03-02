@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const AddonModal = ({ show, title, onClose, onSave }) => {
   const [cost, setCost] = useState(null);
@@ -57,6 +58,12 @@ const AddonModal = ({ show, title, onClose, onSave }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
+        <div>
+          <Button variant='link' onClick={handleClose}>
+            <DeleteIcon /> Delete
+          </Button>
+        </div>
+
         <Button variant='secondary' onClick={handleClose}>
           Close
         </Button>
