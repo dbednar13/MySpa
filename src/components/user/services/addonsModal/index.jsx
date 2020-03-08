@@ -5,8 +5,8 @@ import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
-  const [cost, setCost] = useState(null);
-  const [name, setName] = useState(null);
+  const [localCost, setCost] = useState(cost);
+  const [localName, setName] = useState(name);
   const [showAlert, setShowAlert] = useState(false);
 
   const handleClose = () => {
@@ -16,8 +16,13 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
 
   const handleSave = () => {
     setShowAlert(false);
-    if (name && name !== '' && cost !== null && cost > 0.0) {
-      onSave(true, name, cost, true);
+    if (
+      localName &&
+      localName !== '' &&
+      localCost !== null &&
+      localCost > 0.0
+    ) {
+      onSave(true, localName, localCost, true);
       onClose();
     } else {
       setShowAlert(true);
