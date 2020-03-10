@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Button, CardColumns } from 'react-bootstrap';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
 import AddonModal from './addonsModal';
 import Addon from './addon';
@@ -11,6 +12,8 @@ import EditableCard from '../../editableCard';
 import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
+  const [addonsLoading, setAddonsLoading] = useState(true);
+  const [servicesLoading, setServicesLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [addons, setAddons] = useState([]);
   const [services, setServices] = useState([]);
@@ -39,6 +42,7 @@ const Services = ({ firebase }) => {
             });
         });
         setAddons(tempAddons);
+        setAddonsLoading(false);
       });
   };
 
@@ -61,6 +65,7 @@ const Services = ({ firebase }) => {
             });
         });
         setServices(tempServices);
+        setServicesLoading(false);
       });
   };
 
@@ -77,7 +82,6 @@ const Services = ({ firebase }) => {
   const onAddonClose = () => {
     setShowAddonModal(false);
   };
-
   const onServiceClick = () => {
     setShowServiceModal(true);
   };
@@ -162,46 +166,52 @@ const Services = ({ firebase }) => {
         onSave={onSaveAddonClick}
         show={showAddonModal}
       />
-      <CardColumns className='pb-3'>
-        {services.length > 0 &&
-          services.map(service => {
-            return (
-              <EditableCard
-                key={`Card-Service-${service.id}`}
-                id={service.id}
-                title={service.name}
-                onDelete={() => onDeleteServicesClick(service.id)}
-                onEdit={onAddonClick}
-                body={
-                  <Service
-                    id={service.id}
-                    cost={service.cost}
-                    length={service.duration}
-                  />
-                }
-              />
-            );
-          })}
-      </CardColumns>
+      {servicesLoading && <CircularProgress />}
+      {!servicesLoading && (
+        <CardColumns className='pb-3'>
+          {services.length > 0 &&
+            services.map(service => {
+              return (
+                <EditableCard
+                  key={`Card-Service-${service.id}`}
+                  id={service.id}
+                  title={service.name}
+                  onDelete={() => onDeleteServicesClick(service.id)}
+                  onEdit={onServiceClick}
+                  body={
+                    <Service
+                      id={service.id}
+                      cost={service.cost}
+                      length={service.duration}
+                    />
+                  }
+                />
+              );
+            })}
+        </CardColumns>
+      )}
       <Button onClick={onServiceClick}>Add New Service</Button>
       <div className='pt-3 pb-3'>
         <Divider variant='middle' />
       </div>
-      <CardColumns className='pb-3'>
-        {addons.length > 0 &&
-          addons.map(addon => {
-            return (
-              <EditableCard
-                key={`Card-Addon-${addon.id}`}
-                id={addon.id}
-                title={addon.name}
-                onDelete={() => onDeleteAddonClick(addon.id)}
-                onEdit={onAddonClick}
-                body={<Addon id={addon.id} cost={addon.cost} />}
-              />
-            );
-          })}
-      </CardColumns>
+      {addonsLoading && <CircularProgress />}
+      {!addonsLoading && (
+        <CardColumns className='pb-3'>
+          {addons.length > 0 &&
+            addons.map(addon => {
+              return (
+                <EditableCard
+                  key={`Card-Addon-${addon.id}`}
+                  id={addon.id}
+                  title={addon.name}
+                  onDelete={() => onDeleteAddonClick(addon.id)}
+                  onEdit={onAddonClick}
+                  body={<Addon id={addon.id} cost={addon.cost} />}
+                />
+              );
+            })}
+        </CardColumns>
+      )}
       <Button onClick={onAddonClick}>Add New Service Addon</Button>
     </>
   );

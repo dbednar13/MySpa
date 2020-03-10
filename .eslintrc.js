@@ -20,6 +20,7 @@ module.exports = {
     'linebreak-style': 0,
     'react/jsx-closing-bracket-location': 0,
     'react/jsx-one-expression-per-line': 0,
-    'react/jsx-wrap-multilines': 0
+    'react/jsx-wrap-multilines': 0,
+    'react/jsx-curly-newline' : 0
   }
 };

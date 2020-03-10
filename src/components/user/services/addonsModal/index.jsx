@@ -46,7 +46,7 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
               type='text'
               placeholder='Serivce Name'
               onChange={e => setName(e.target.value)}
-              value={name}
+              value={localName}
             />
           </label>
         </div>
@@ -59,12 +59,13 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
               allowNegative={false}
               prefix='$'
               onValueChange={e => setCost(e.value)}
-              value={cost}
+              value={localCost}
             />
           </label>
         </div>
       </Modal.Body>
       <Modal.Footer>
+        debugger;
         {editMode && (
           <div>
             <Button variant='link' onClick={handleClose}>
@@ -72,7 +73,6 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
             </Button>
           </div>
         )}
-
         <Button variant='secondary' onClick={handleClose}>
           Close
         </Button>
@@ -89,14 +89,15 @@ AddonModal.propTypes = {
   title: string.isRequired,
   onClose: func.isRequired,
   onSave: func.isRequired,
-  editMode: bool.isRequired,
+  editMode: bool,
   name: string,
   cost: number
 };
 
 AddonModal.defaultProps = {
   name: '',
-  cost: 0.0
+  cost: 0.0,
+  editMode: false
 };
 
 export default AddonModal;
