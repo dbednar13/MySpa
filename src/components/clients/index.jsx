@@ -77,7 +77,14 @@ const Clients = ({ firebase }) => {
                   title={client.name}
                   onDelete={() => onDeleteClientClick(client.id)}
                   onEdit={onClientClick}
-                  body={<Client id={client.id} cost={client.cost} />}
+                  body={
+                    <Client
+                      id={client.id}
+                      emailAddress={client.emailAddress}
+                      phoneNumber={client.phoneNumber}
+                      discount={client.discount}
+                    />
+                  }
                 />
               );
             })}
