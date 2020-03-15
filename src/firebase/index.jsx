@@ -17,7 +17,8 @@ const config =
  */
 // eslint-disable-next-line no-underscore-dangle
 const Firebase = app.initializeApp(config).firebase_;
+const fireStore = app.firestore();
 
 export default Firebase;
 
-export { FirebaseContext, withFirebase };
+export { FirebaseContext, withFirebase, fireStore };
