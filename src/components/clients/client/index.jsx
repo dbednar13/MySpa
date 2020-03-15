@@ -13,10 +13,10 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
   return (
     <>
       <div className='d-flex pb-2'>
-        <label htmlFor='emailAddress'>
+        <label htmlFor={`emailAddress-${id}`}>
           Email Address:{' '}
           <input
-            id='name'
+            id={`emailAddress-${id}`}
             type='text'
             placeholder='Email'
             onChange={e => setEmail(e.target.value)}

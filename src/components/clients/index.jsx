@@ -8,9 +8,19 @@ import { fireStore } from '../../firebase';
 import Client from './client';
 
 const Clients = ({ firebase }) => {
+  const defaultModalState = {
+    show: false,
+    id: null,
+    name: null,
+    email: null,
+    phoneNumber: null,
+    discount: null,
+    edit: false
+  };
+
   const [clients, setClients] = useState(null);
   const [clientsLoading, setClientsLoading] = useState(true);
-  const [showClientModal, setShowClientModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(defaultModalState);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -48,11 +58,68 @@ const Clients = ({ firebase }) => {
       .then(fetchClients);
   };
 
-  const onClientClick = () => {
-    setShowClientModal(true);
+  const onNewClientClick = () => {
+    const newState = { show: true, ...showClientModal };
+    setShowClientModal(newState);
+  };
+
+  const onClientClick = (id, name, email, phoneNumber, discount) => {
+    setShowClientModal({
+      show: true,
+      id,
+      name,
+      email,
+      phoneNumber,
+      discount,
+      edit: true
+    });
   };
   const onClientClose = () => {
-    setShowClientModal(false);
+    const newState = defaultModalState;
+    newState.show = false;
+    setShowClientModal(newState);
+  };
+
+  const onSaveClientClick = (
+    isNew,
+    name,
+    phoneNumber,
+    emailAddress,
+    discount,
+    active,
+    id = -1
+  ) => {
+    if (isNew || id === -1) {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('clients')
+        .add({
+          name,
+          phoneNumber: Number(phoneNumber),
+          emailAddress,
+          discount: Number(discount),
+          active
+        })
+        .then(fetchClients);
+    } else {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('clients')
+        .doc(id)
+        .set(
+          {
+            name,
+            phoneNumber: Number(phoneNumber),
+            emailAddress,
+            discount: Number(discount),
+            active
+          },
+          { merge: true }
+        )
+        .then(fetchClients);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +133,12 @@ const Clients = ({ firebase }) => {
   ) : (
     <>
       {clientsLoading && <CircularProgress />}
+      <ClientModal
+        title='Client'
+        onClose={onClientClose}
+        onSave={onSaveClientClick}
+        show={showClientModal}
+      />
       {!clientsLoading && (
         <CardColumns className='pb-3'>
           {clients.length > 0 &&
@@ -90,7 +163,7 @@ const Clients = ({ firebase }) => {
             })}
         </CardColumns>
       )}
-      <Button onClick={onClientClick}>Add New Client</Button>
+      <Button onClick={onNewClientClick}>Add New Client</Button>
     </>
   );
 };
