@@ -60,7 +60,7 @@ const Clients = ({ firebase }) => {
   };
 
   const onNewClientClick = () => {
-    const newState = { show: true, ...showClientModal };
+    const newState = { ...showClientModal, show: true };
     setShowClientModal(newState);
   };
 
@@ -90,7 +90,7 @@ const Clients = ({ firebase }) => {
     active,
     id = -1
   ) => {
-    if (isNew || id === -1) {
+    if (isNew || id === 'NaC') {
       fireStore
         .collection('users')
         .doc(user.uid)
@@ -138,7 +138,7 @@ const Clients = ({ firebase }) => {
         title='Client'
         onClose={onClientClose}
         onSave={onSaveClientClick}
-        show={showClientModal}
+        show={showClientModal.show}
       />
       {!clientsLoading && (
         <CardColumns className='pb-3'>

@@ -155,7 +155,7 @@ ClientModal.propTypes = {
 
 ClientModal.defaultProps = {
   name: undefined,
-  id: -1,
+  id: 'NaC',
   phoneNumber: undefined,
   emailAddress: undefined,
   discount: 0,
