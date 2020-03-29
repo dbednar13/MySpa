@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EditableCard from '../editableCard';
 import { fireStore } from '../../firebase';
 import Client from './client';
+import ClientModal from './client/modal';
 
 const Clients = ({ firebase }) => {
   const defaultModalState = {
