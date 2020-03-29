@@ -121,7 +121,6 @@ const ClientModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        debugger;
         {editMode && (
           <div>
             <Button variant='link' onClick={handleClose}>
