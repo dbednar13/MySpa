@@ -35,7 +35,7 @@ const ClientModal = ({
       localEmail &&
       localEmail !== '' &&
       localDiscount !== null &&
-      localDiscount > 0.0 &&
+      localDiscount >= 0.0 &&
       localPhoneNumber !== null &&
       localPhoneNumber > 0.0
     ) {
@@ -149,14 +149,14 @@ ClientModal.propTypes = {
   name: string,
   discount: number,
   emailAddress: string,
-  phoneNumber: number
+  phoneNumber: string
 };
 
 ClientModal.defaultProps = {
-  name: undefined,
+  name: '',
   id: 'NaC',
-  phoneNumber: undefined,
-  emailAddress: undefined,
+  phoneNumber: '',
+  emailAddress: '',
   discount: 0,
   editMode: false
 };

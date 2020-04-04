@@ -50,7 +50,9 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           />
         </label>
       </div>
-      <div>{Notes}</div>
+      <div>
+        <Notes />
+      </div>
     </>
   );
 };

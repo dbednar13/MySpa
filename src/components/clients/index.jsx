@@ -41,7 +41,10 @@ const Clients = ({ firebase }) => {
           if (data.active)
             tempClients.push({
               name: data.name,
-              id: doc.id
+              id: doc.id,
+              emailAddress: data.emailAddress,
+              phoneNumber: data.phoneNumber,
+              discount: data.discount
             });
         });
         setClients(tempClients);
@@ -84,9 +87,9 @@ const Clients = ({ firebase }) => {
   const onSaveClientClick = (
     isNew,
     name,
-    phoneNumber,
-    emailAddress,
     discount,
+    emailAddress,
+    phoneNumber,
     active,
     id = -1
   ) => {
@@ -150,7 +153,15 @@ const Clients = ({ firebase }) => {
                   id={client.id}
                   title={client.name}
                   onDelete={() => onDeleteClientClick(client.id)}
-                  onEdit={onClientClick}
+                  onEdit={() =>
+                    onClientClick(
+                      client.id,
+                      client.name,
+                      client.emailAddress,
+                      client.phoneNumber,
+                      client.discount
+                    )
+                  }
                   body={
                     <Client
                       id={client.id}
