@@ -6,7 +6,7 @@ import Notes from './notes';
 const Client = ({ id, emailAddress, phoneNumber, discount }) => {
   const [localEmail, setLocalEmail] = useState(emailAddress);
 
-  const setEmail = value => {
+  const setEmail = (value) => {
     setLocalEmail(value);
   };
 
@@ -19,7 +19,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
             id={`emailAddress-${id}`}
             type='text'
             placeholder='Email'
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             value={localEmail}
           />
         </label>
@@ -61,14 +61,14 @@ Client.propTypes = {
   id: string,
   phoneNumber: string,
   emailAddress: string,
-  discount: number
+  discount: number,
 };
 
 Client.defaultProps = {
   id: '',
   phoneNumber: '',
   emailAddress: '',
-  discount: 0
+  discount: 0,
 };
 
 export default Client;

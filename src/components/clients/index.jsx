@@ -16,7 +16,7 @@ const Clients = ({ firebase }) => {
     email: null,
     phoneNumber: null,
     discount: null,
-    edit: false
+    edit: false,
   };
 
   const [clients, setClients] = useState(null);
@@ -34,9 +34,9 @@ const Clients = ({ firebase }) => {
       .doc(user.uid)
       .collection('clients')
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         const tempClients = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           if (data.active)
             tempClients.push({
@@ -44,7 +44,7 @@ const Clients = ({ firebase }) => {
               id: doc.id,
               emailAddress: data.emailAddress,
               phoneNumber: data.phoneNumber,
-              discount: data.discount
+              discount: data.discount,
             });
         });
         setClients(tempClients);
@@ -52,7 +52,7 @@ const Clients = ({ firebase }) => {
       });
   };
 
-  const onDeleteClientClick = id => {
+  const onDeleteClientClick = (id) => {
     fireStore
       .collection('users')
       .doc(user.uid)
@@ -75,7 +75,7 @@ const Clients = ({ firebase }) => {
       email,
       phoneNumber,
       discount,
-      edit: true
+      edit: true,
     });
   };
   const onClientClose = () => {
@@ -100,10 +100,10 @@ const Clients = ({ firebase }) => {
         .collection('clients')
         .add({
           name,
-          phoneNumber: Number(phoneNumber),
+          phoneNumber,
           emailAddress,
           discount: Number(discount),
-          active
+          active,
         })
         .then(fetchClients);
     } else {
@@ -115,10 +115,10 @@ const Clients = ({ firebase }) => {
         .set(
           {
             name,
-            phoneNumber: Number(phoneNumber),
+            phoneNumber,
             emailAddress,
             discount: Number(discount),
-            active
+            active,
           },
           { merge: true }
         )
@@ -140,13 +140,20 @@ const Clients = ({ firebase }) => {
       <ClientModal
         title='Client'
         onClose={onClientClose}
+        onDelete={onDeleteClientClick}
         onSave={onSaveClientClick}
         show={showClientModal.show}
+        id={showClientModal.id}
+        name={showClientModal.name}
+        phoneNumber={showClientModal.phoneNumber}
+        emailAddress={showClientModal.email}
+        discount={showClientModal.discount}
+        editMode={showClientModal.edit}
       />
       {!clientsLoading && (
         <CardColumns className='pb-3'>
           {clients.length > 0 &&
-            clients.map(client => {
+            clients.map((client) => {
               return (
                 <EditableCard
                   key={`Card-Client-${client.id}`}
@@ -181,7 +188,7 @@ const Clients = ({ firebase }) => {
 };
 
 Clients.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 
 export default Clients;

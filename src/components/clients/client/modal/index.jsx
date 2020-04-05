@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -12,18 +12,48 @@ const ClientModal = ({
   emailAddress,
   phoneNumber,
   onClose,
+  onDelete,
   onSave,
   id,
-  editMode
+  editMode,
 }) => {
-  const [localDiscount, setLocalDiscount] = useState(discount);
-  const [localEmail, setLocalEmail] = useState(emailAddress);
-  const [localName, setName] = useState(name);
-  const [localPhoneNumber, setLocalPhoneNumber] = useState(phoneNumber);
+  const [localDiscount, setLocalDiscount] = useState(0);
+  const [localEmail, setLocalEmail] = useState('');
+  const [localName, setName] = useState('');
+  const [localPhoneNumber, setLocalPhoneNumber] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    if (editMode) {
+      setName(name);
+    }
+  }, [name]);
+
+  useEffect(() => {
+    if (editMode) {
+      setLocalEmail(emailAddress);
+    }
+  }, [emailAddress]);
+
+  useEffect(() => {
+    if (editMode) {
+      setLocalDiscount(discount);
+    }
+  }, [discount]);
+
+  useEffect(() => {
+    if (editMode) {
+      setLocalPhoneNumber(phoneNumber);
+    }
+  }, [phoneNumber]);
 
   const handleClose = () => {
     setShowAlert(false);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    onDelete(id);
     onClose();
   };
 
@@ -54,7 +84,7 @@ const ClientModal = ({
     }
   };
 
-  const setEmail = value => {
+  const setEmail = (value) => {
     setLocalEmail(value);
   };
 
@@ -71,12 +101,12 @@ const ClientModal = ({
         )}
         <div className='d-flex pb-2'>
           <label htmlFor={`name-${id}`}>
-            Service Name:{' '}
+            Client Name:{' '}
             <input
               id={`name-${id}`}
               type='text'
               placeholder='Serivce Name'
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               value={localName}
             />
           </label>
@@ -88,7 +118,7 @@ const ClientModal = ({
               id={`emailAddress-${id}`}
               type='text'
               placeholder='Email'
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               value={localEmail}
             />
           </label>
@@ -102,7 +132,7 @@ const ClientModal = ({
               allowEmptyFormatting
               mask='_'
               value={localPhoneNumber}
-              onValueChange={e => setLocalPhoneNumber(e.value)}
+              onValueChange={(e) => setLocalPhoneNumber(e.value)}
             />
           </label>
         </div>
@@ -115,7 +145,7 @@ const ClientModal = ({
               allowNegative={false}
               suffix='%'
               value={localDiscount}
-              onValueChange={e => setLocalDiscount(e.value)}
+              onValueChange={(e) => setLocalDiscount(e.value)}
             />
           </label>
         </div>
@@ -123,7 +153,7 @@ const ClientModal = ({
       <Modal.Footer>
         {editMode && (
           <div>
-            <Button variant='link' onClick={handleClose}>
+            <Button variant='link' onClick={handleDelete}>
               <DeleteIcon /> Delete
             </Button>
           </div>
@@ -143,13 +173,14 @@ ClientModal.propTypes = {
   show: bool.isRequired,
   title: string.isRequired,
   onClose: func.isRequired,
+  onDelete: func.isRequired,
   onSave: func.isRequired,
   editMode: bool,
   id: string,
   name: string,
   discount: number,
   emailAddress: string,
-  phoneNumber: string
+  phoneNumber: string,
 };
 
 ClientModal.defaultProps = {
@@ -158,7 +189,7 @@ ClientModal.defaultProps = {
   phoneNumber: '',
   emailAddress: '',
   discount: 0,
-  editMode: false
+  editMode: false,
 };
 
 export default ClientModal;
