@@ -1,31 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
-import { bool, func, string } from 'prop-types';
+import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
-  const [cost, setCost] = useState(null);
-  const [duration, setDuration] = useState(null);
-  const [name, setName] = useState(null);
+const ServiceModal = ({
+  show,
+  title,
+  onClose,
+  onDelete,
+  onSave,
+  editMode,
+  name,
+  id,
+  duration,
+  cost,
+}) => {
+  const [localCost, setCost] = useState(null);
+  const [localDuration, setDuration] = useState(null);
+  const [localName, setName] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    if (editMode) {
+      setCost(cost);
+    }
+  }, [cost]);
+
+  useEffect(() => {
+    if (editMode) {
+      setDuration(duration);
+    }
+  }, [duration]);
+
+  useEffect(() => {
+    if (editMode) {
+      setName(name);
+    }
+  }, [name]);
 
   const handleClose = () => {
     setShowAlert(false);
     onClose();
   };
 
+  const handleDelete = () => {
+    onDelete(id);
+    onClose();
+  };
+
   const handleSave = () => {
     setShowAlert(false);
     if (
-      name &&
-      name !== '' &&
-      cost !== null &&
-      cost > 0.0 &&
-      duration !== null &&
-      duration > 0.0
+      localName &&
+      localName !== '' &&
+      localCost !== null &&
+      localCost > 0.0 &&
+      localDuration !== null &&
+      localDuration > 0.0
     ) {
-      onSave(true, name, duration, cost, true);
+      onSave(!editMode, localName, localDuration, localCost, true, id);
       onClose();
     } else {
       setShowAlert(true);
@@ -50,7 +84,8 @@ const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
               id='name'
               type='text'
               placeholder='Serivce Name'
-              onChange={e => setName(e.target.value)}
+              value={localName}
+              onChange={(e) => setName(e.target.value)}
             />
           </label>
         </div>
@@ -61,7 +96,8 @@ const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
               id='serviceLength'
               decimalScale='0'
               allowNegative={false}
-              onValueChange={e => setDuration(e.value)}
+              value={localDuration}
+              onValueChange={(e) => setDuration(e.value)}
             />
           </label>
         </div>
@@ -73,7 +109,8 @@ const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
               decimalScale='2'
               allowNegative={false}
               prefix='$'
-              onValueChange={e => setCost(e.value)}
+              value={localCost}
+              onValueChange={(e) => setCost(e.value)}
             />
           </label>
         </div>
@@ -81,7 +118,7 @@ const ServiceModal = ({ show, title, onClose, onSave, editMode }) => {
       <Modal.Footer>
         {editMode && (
           <div>
-            <Button variant='link' onClick={handleClose}>
+            <Button variant='link' onClick={handleDelete}>
               <DeleteIcon /> Delete
             </Button>
           </div>
@@ -101,8 +138,20 @@ ServiceModal.propTypes = {
   show: bool.isRequired,
   title: string.isRequired,
   onClose: func.isRequired,
+  onDelete: func.isRequired,
   onSave: func.isRequired,
-  editMode: bool.isRequired
+  editMode: bool.isRequired,
+  id: string,
+  name: string,
+  duration: number,
+  cost: number,
+};
+
+ServiceModal.defaultProps = {
+  name: '',
+  id: 'NaC',
+  duration: 0,
+  cost: 0.0,
 };
 
 export default ServiceModal;

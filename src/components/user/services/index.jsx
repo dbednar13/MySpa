@@ -12,13 +12,30 @@ import EditableCard from '../../editableCard';
 import { fireStore } from '../../../firebase';
 
 const Services = ({ firebase }) => {
+  const defaultAddonState = {
+    show: false,
+    id: null,
+    name: null,
+    cost: null,
+    edit: false,
+  };
+
+  const defaultServiceState = {
+    show: false,
+    id: null,
+    name: null,
+    duration: null,
+    cost: null,
+    edit: false,
+  };
+
   const [addonsLoading, setAddonsLoading] = useState(true);
   const [servicesLoading, setServicesLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [addons, setAddons] = useState([]);
   const [services, setServices] = useState([]);
-  const [showAddonModal, setShowAddonModal] = useState(false);
-  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showAddonModal, setShowAddonModal] = useState(defaultAddonState);
+  const [showServiceModal, setShowServiceModal] = useState(defaultServiceState);
 
   useEffect(() => {
     setUser(firebase.auth().currentUser);
@@ -30,15 +47,15 @@ const Services = ({ firebase }) => {
       .doc(user.uid)
       .collection('addons')
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         const tempAddons = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           if (data.active)
             tempAddons.push({
               name: data.name,
               cost: data.cost,
-              id: doc.id
+              id: doc.id,
             });
         });
         setAddons(tempAddons);
@@ -52,16 +69,16 @@ const Services = ({ firebase }) => {
       .doc(user.uid)
       .collection('services')
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         const tempServices = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           if (data.active)
             tempServices.push({
               name: data.name,
               cost: data.cost,
               duration: data.duration,
-              id: doc.id
+              id: doc.id,
             });
         });
         setServices(tempServices);
@@ -76,20 +93,43 @@ const Services = ({ firebase }) => {
     }
   }, [user]);
 
-  const onAddonClick = () => {
-    setShowAddonModal(true);
+  const onNewAddonClick = () => {
+    const newState = { ...showAddonModal, show: true };
+    setShowAddonModal(newState);
+  };
+  const onEditAddonClick = (addon) => {
+    const newState = {
+      show: true,
+      id: addon.id,
+      name: addon.name,
+      cost: addon.cost,
+      edit: true,
+    };
+    setShowAddonModal(newState);
   };
   const onAddonClose = () => {
-    setShowAddonModal(false);
+    setShowAddonModal(defaultAddonState);
   };
-  const onServiceClick = () => {
-    setShowServiceModal(true);
+  const onNewServiceClick = () => {
+    const newState = { ...showServiceModal, show: true };
+    setShowServiceModal(newState);
+  };
+  const onEditServiceClick = (service) => {
+    const newState = {
+      show: true,
+      id: service.id,
+      name: service.name,
+      duration: service.duration,
+      cost: service.cost,
+      edit: true,
+    };
+    setShowServiceModal(newState);
   };
   const onServiceClose = () => {
-    setShowServiceModal(false);
+    setShowServiceModal(defaultServiceState);
   };
 
-  const onDeleteAddonClick = id => {
+  const onDeleteAddonClick = (id) => {
     fireStore
       .collection('users')
       .doc(user.uid)
@@ -99,7 +139,7 @@ const Services = ({ firebase }) => {
       .then(fetchAddons);
   };
 
-  const onDeleteServicesClick = id => {
+  const onDeleteServicesClick = (id) => {
     fireStore
       .collection('users')
       .doc(user.uid)
@@ -155,29 +195,40 @@ const Services = ({ firebase }) => {
   ) : (
     <>
       <ServiceModal
-        title='Add New Service'
+        title={`${showServiceModal.edit ? 'Edit' : 'Add New'} Service`}
         onClose={onServiceClose}
+        onDelete={onDeleteServicesClick}
         onSave={onSaveServiceClick}
-        show={showServiceModal}
+        show={showServiceModal.show}
+        id={showServiceModal.id}
+        name={showServiceModal.name}
+        cost={showServiceModal.cost}
+        duration={showServiceModal.duration}
+        editMode={showServiceModal.edit}
       />
       <AddonModal
-        title='Add New Service Addon'
+        title={`${showAddonModal.edit ? 'Edit' : 'Add New'} Service Addon`}
         onClose={onAddonClose}
+        onDelete={onDeleteAddonClick}
         onSave={onSaveAddonClick}
-        show={showAddonModal}
+        show={showAddonModal.show}
+        id={showAddonModal.id}
+        name={showAddonModal.name}
+        cost={showAddonModal.cost}
+        editMode={showAddonModal.edit}
       />
       {servicesLoading && <CircularProgress />}
       {!servicesLoading && (
         <CardColumns className='pb-3'>
           {services.length > 0 &&
-            services.map(service => {
+            services.map((service) => {
               return (
                 <EditableCard
                   key={`Card-Service-${service.id}`}
                   id={service.id}
                   title={service.name}
                   onDelete={() => onDeleteServicesClick(service.id)}
-                  onEdit={onServiceClick}
+                  onEdit={() => onEditServiceClick(service)}
                   body={
                     <Service
                       id={service.id}
@@ -190,7 +241,7 @@ const Services = ({ firebase }) => {
             })}
         </CardColumns>
       )}
-      <Button onClick={onServiceClick}>Add New Service</Button>
+      <Button onClick={onNewServiceClick}>Add New Service</Button>
       <div className='pt-3 pb-3'>
         <Divider variant='middle' />
       </div>
@@ -198,27 +249,27 @@ const Services = ({ firebase }) => {
       {!addonsLoading && (
         <CardColumns className='pb-3'>
           {addons.length > 0 &&
-            addons.map(addon => {
+            addons.map((addon) => {
               return (
                 <EditableCard
                   key={`Card-Addon-${addon.id}`}
                   id={addon.id}
                   title={addon.name}
                   onDelete={() => onDeleteAddonClick(addon.id)}
-                  onEdit={onAddonClick}
+                  onEdit={() => onEditAddonClick(addon)}
                   body={<Addon id={addon.id} cost={addon.cost} />}
                 />
               );
             })}
         </CardColumns>
       )}
-      <Button onClick={onAddonClick}>Add New Service Addon</Button>
+      <Button onClick={onNewAddonClick}>Add New Service Addon</Button>
     </>
   );
 };
 
 Services.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 
 export default Services;

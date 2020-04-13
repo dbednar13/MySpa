@@ -1,16 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
-  const [localCost, setCost] = useState(cost);
-  const [localName, setName] = useState(name);
+const AddonModal = ({
+  show,
+  id,
+  title,
+  name,
+  cost,
+  onClose,
+  onDelete,
+  onSave,
+  editMode,
+}) => {
+  const [localCost, setCost] = useState(0.0);
+  const [localName, setName] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    if (editMode) {
+      setName(name);
+    }
+  }, [name]);
+
+  useEffect(() => {
+    if (editMode) {
+      setName(cost);
+    }
+  }, [cost]);
 
   const handleClose = () => {
     setShowAlert(false);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    onDelete(id);
     onClose();
   };
 
@@ -45,7 +72,7 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
               id='name'
               type='text'
               placeholder='Serivce Name'
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               value={localName}
             />
           </label>
@@ -58,17 +85,16 @@ const AddonModal = ({ show, title, name, cost, onClose, onSave, editMode }) => {
               decimalScale='2'
               allowNegative={false}
               prefix='$'
-              onValueChange={e => setCost(e.value)}
+              onValueChange={(e) => setCost(e.value)}
               value={localCost}
             />
           </label>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        debugger;
         {editMode && (
           <div>
-            <Button variant='link' onClick={handleClose}>
+            <Button variant='link' onClick={handleDelete}>
               <DeleteIcon /> Delete
             </Button>
           </div>
@@ -88,16 +114,19 @@ AddonModal.propTypes = {
   show: bool.isRequired,
   title: string.isRequired,
   onClose: func.isRequired,
+  onDelete: func.isRequired,
   onSave: func.isRequired,
+  id: string,
   editMode: bool,
   name: string,
-  cost: number
+  cost: number,
 };
 
 AddonModal.defaultProps = {
+  id: 'NaA',
   name: '',
   cost: 0.0,
-  editMode: false
+  editMode: false,
 };
 
 export default AddonModal;
