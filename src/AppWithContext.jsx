@@ -8,7 +8,7 @@ import Home from './components/home';
 import Login from './components/logIn';
 import SignOut from './components/signOut';
 import Clients from './components/clients';
-import Services from './components/user/services';
+import UserServices from './components/user/services';
 import User from './components/user';
 import Nav from './Nav';
 import { withFirebase, fireStore } from './firebase';
@@ -19,7 +19,7 @@ import './css/index.css';
 const AppWithContext = ({ firebase }) => {
   const [currentUser, setCurrentUser] = useState({
     authenticated: false,
-    user: null
+    user: null,
   });
   const NavWithFirebase = withFirebase(Nav);
 
@@ -33,7 +33,7 @@ const AppWithContext = ({ firebase }) => {
           .collection('users')
           .doc(user.uid)
           .get()
-          .then(doc => {
+          .then((doc) => {
             if (!doc.exists) {
               fireStore
                 .collection('users')
@@ -41,7 +41,7 @@ const AppWithContext = ({ firebase }) => {
                 .set({
                   email: user.email,
                   firstName: user.displayName.substring(0, index),
-                  lastName: user.displayName.substring(index + 1)
+                  lastName: user.displayName.substring(index + 1),
                 });
             } else if (
               !user.displayName.startsWith(doc.firstName) ||
@@ -54,7 +54,7 @@ const AppWithContext = ({ firebase }) => {
                   {
                     email: user.email,
                     firstName: user.displayName.substring(0, index),
-                    lastName: user.displayName.substring(index + 1)
+                    lastName: user.displayName.substring(index + 1),
                   },
                   { merge: true }
                 );
@@ -67,7 +67,7 @@ const AppWithContext = ({ firebase }) => {
             {
               email: user.email,
               firstName: user.displayName.substring(0, index),
-              lastName: user.displayName.substring(index + 1)
+              lastName: user.displayName.substring(index + 1),
             },
             { merge: true }
           );
@@ -91,7 +91,10 @@ const AppWithContext = ({ firebase }) => {
             <Route path='/dashboard' component={withFirebase(Dashboard)} />
             <Route path='/Login' component={withFirebase(Login)} />
             <Route path='/SignOut' component={withFirebase(SignOut)} />
-            <Route path='/User/Services' component={withFirebase(Services)} />
+            <Route
+              path='/User/Services'
+              component={withFirebase(UserServices)}
+            />
             <Route path='/User/Clients' component={withFirebase(Clients)} />
             <Route component={withFirebase(Home)} />
           </Switch>
@@ -102,7 +105,7 @@ const AppWithContext = ({ firebase }) => {
 };
 
 AppWithContext.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 
 export default AppWithContext;
