@@ -91,21 +91,28 @@ const AddonModal = ({
           </label>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        {editMode && (
-          <div>
+      <Modal.Footer />
+      <div className='d-flex justify-content-between pb-2'>
+        <div>
+          {editMode && (
             <Button variant='link' onClick={handleDelete}>
               <DeleteIcon /> Delete
             </Button>
+          )}
+        </div>
+        <div className='d-flex pr-2'>
+          <div className='pr-2'>
+            <Button variant='secondary' onClick={handleClose}>
+              Close
+            </Button>
           </div>
-        )}
-        <Button variant='secondary' onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant='primary' onClick={handleSave}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
+          <div>
+            <Button variant='primary' onClick={handleSave}>
+              Save
+            </Button>
+          </div>
+        </div>
+      </div>
     </Modal>
   );
 };
