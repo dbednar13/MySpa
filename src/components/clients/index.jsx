@@ -6,11 +6,22 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EditableCard from '../editableCard';
 import { fireStore } from '../../firebase';
 import Client from './client';
+import ClientModal from './client/modal';
 
 const Clients = ({ firebase }) => {
+  const defaultModalState = {
+    show: false,
+    id: null,
+    name: null,
+    email: null,
+    phoneNumber: null,
+    discount: null,
+    edit: false,
+  };
+
   const [clients, setClients] = useState(null);
   const [clientsLoading, setClientsLoading] = useState(true);
-  const [showClientModal, setShowClientModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(defaultModalState);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -23,14 +34,17 @@ const Clients = ({ firebase }) => {
       .doc(user.uid)
       .collection('clients')
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         const tempClients = [];
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           const data = doc.data();
           if (data.active)
             tempClients.push({
               name: data.name,
-              id: doc.id
+              id: doc.id,
+              emailAddress: data.emailAddress,
+              phoneNumber: data.phoneNumber,
+              discount: data.discount,
             });
         });
         setClients(tempClients);
@@ -38,7 +52,7 @@ const Clients = ({ firebase }) => {
       });
   };
 
-  const onDeleteClientClick = id => {
+  const onDeleteClientClick = (id) => {
     fireStore
       .collection('users')
       .doc(user.uid)
@@ -48,11 +62,68 @@ const Clients = ({ firebase }) => {
       .then(fetchClients);
   };
 
-  const onClientClick = () => {
-    setShowClientModal(true);
+  const onNewClientClick = () => {
+    const newState = { ...showClientModal, show: true };
+    setShowClientModal(newState);
+  };
+
+  const onClientClick = (id, name, email, phoneNumber, discount) => {
+    setShowClientModal({
+      show: true,
+      id,
+      name,
+      email,
+      phoneNumber,
+      discount,
+      edit: true,
+    });
   };
   const onClientClose = () => {
-    setShowClientModal(false);
+    const newState = defaultModalState;
+    newState.show = false;
+    setShowClientModal(newState);
+  };
+
+  const onSaveClientClick = (
+    isNew,
+    name,
+    discount,
+    emailAddress,
+    phoneNumber,
+    active,
+    id = -1
+  ) => {
+    if (isNew || id === 'NaC') {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('clients')
+        .add({
+          name,
+          phoneNumber,
+          emailAddress,
+          discount: Number(discount),
+          active,
+        })
+        .then(fetchClients);
+    } else {
+      fireStore
+        .collection('users')
+        .doc(user.uid)
+        .collection('clients')
+        .doc(id)
+        .set(
+          {
+            name,
+            phoneNumber,
+            emailAddress,
+            discount: Number(discount),
+            active,
+          },
+          { merge: true }
+        )
+        .then(fetchClients);
+    }
   };
 
   useEffect(() => {
@@ -66,30 +137,58 @@ const Clients = ({ firebase }) => {
   ) : (
     <>
       {clientsLoading && <CircularProgress />}
+      <ClientModal
+        title='Client'
+        onClose={onClientClose}
+        onDelete={onDeleteClientClick}
+        onSave={onSaveClientClick}
+        show={showClientModal.show}
+        id={showClientModal.id}
+        name={showClientModal.name}
+        phoneNumber={showClientModal.phoneNumber}
+        emailAddress={showClientModal.email}
+        discount={showClientModal.discount}
+        editMode={showClientModal.edit}
+      />
       {!clientsLoading && (
         <CardColumns className='pb-3'>
           {clients.length > 0 &&
-            clients.map(client => {
+            clients.map((client) => {
               return (
                 <EditableCard
                   key={`Card-Client-${client.id}`}
                   id={client.id}
                   title={client.name}
                   onDelete={() => onDeleteClientClick(client.id)}
-                  onEdit={onClientClick}
-                  body={<Client id={client.id} cost={client.cost} />}
+                  onEdit={() =>
+                    onClientClick(
+                      client.id,
+                      client.name,
+                      client.emailAddress,
+                      client.phoneNumber,
+                      client.discount
+                    )
+                  }
+                  body={
+                    <Client
+                      id={client.id}
+                      emailAddress={client.emailAddress}
+                      phoneNumber={client.phoneNumber}
+                      discount={client.discount}
+                    />
+                  }
                 />
               );
             })}
         </CardColumns>
       )}
-      <Button onClick={onClientClick}>Add New Client</Button>
+      <Button onClick={onNewClientClick}>Add New Client</Button>
     </>
   );
 };
 
 Clients.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 
 export default Clients;
