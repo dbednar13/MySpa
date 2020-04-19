@@ -8,9 +8,9 @@ const LogIn = ({ firebase }) => {
     signInFlow: 'popup',
     signInSuccessUrl: '/dashboard',
     signInOptions: [
-      firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID
-    ]
+      // firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
   };
 
   return (
@@ -22,6 +22,6 @@ const LogIn = ({ firebase }) => {
 };
 
 LogIn.propTypes = {
-  firebase: shape({}).isRequired
+  firebase: shape({}).isRequired,
 };
 export default LogIn;
