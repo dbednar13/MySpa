@@ -1,7 +1,10 @@
 import React from 'react';
 
 const Contact = () => (
-  <>Haha! Good Try! But seriously contact info will come later.</>
+  <>
+    For questions, comments, feedback or anything else related to My Spa, you
+    can contact Dan at dbednar.consulting@gmail.com
+  </>
 );
 
 export default Contact;

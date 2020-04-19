@@ -6,10 +6,10 @@ const AboutUs = () => (
       This app was created by Dan Bednar. It was inspired by his wonderful wife
       and favorite Licensed Massage Therapist, Michelle. After watching Michelle
       make notes on seemingly random notebooks and having no consistant way to
-      get credit card payments for her clients Dan knew there had to be a better
-      way. He looked online and there was a lot of options for businesses and
-      managers, but nothing for independant contractors or people running a side
-      gig. At least, nothing affordable.
+      get credit card payments for her clients, Dan knew there had to be a
+      better way. He looked online and there was a lot of options for businesses
+      and managers, but nothing for independant contractors or people running a
+      side gig. At least, nothing affordable.
     </p>
     <br />
     <br />
