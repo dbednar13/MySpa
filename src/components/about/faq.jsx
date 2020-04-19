@@ -9,10 +9,14 @@ const FAQ = () => (
     </p>
     <br />
     <br />
+    <h2>What features will require a subscription?</h2>
+    <p>Feature lists, both free and paid, are still a work in progress.</p>
+    <br />
+    <br />
     <h2>How do I get paid?</h2>
     <p>
       You handle cash and check like you do today. As part of your account setup
-      you can setup a Stripeaccount for credit card payments. You can control
+      you can setup a Stripe account for credit card payments. You can control
       how often you get a payout within your Stripe account. Within Stripeyou
       You can find more details and up to date fees by checking out Strip&apos;s
       site{' '}
@@ -53,6 +57,24 @@ const FAQ = () => (
       you&apos;re working. Apps are coming, eventually. The focus is to give you
       one solid platform that&apos;ll work for all devices instead of a website
       and 2 apps that only kind of work.
+    </p>
+    <br />
+    <br />
+    <h2>How can I help?</h2>
+    <p>
+      If you&apos;re reading this, then this project is still very much a work
+      in progress. There are 2 ways you can assist in making this the best
+      platform for you:
+      <br />
+      Contact us with desired features, and feedback.
+      <br />
+      Consider <a href='paypal.me/dbednar13'>donating</a> to help cover
+      development and hosting costs.
+      <br />
+      Donations are definitely appreciated to help cover costs between now and
+      the project going live. For legal reasons I&apos;m required to say that
+      donating won&apos;t gurantee any specificly requested features, nor any
+      delivery timeline.
     </p>
   </>
 );
