@@ -6,7 +6,7 @@ import { shape } from 'prop-types';
 import Addon from './addon';
 import AddonModal from './addonModal';
 import EditableCard from '../../../editableCard';
-import { fireStore } from '../../../../firebase';
+import { deleteAddon, fetchAddons, saveAddon } from '../../../../api/addons';
 
 const Addons = ({ user }) => {
   const defaultAddonState = {
@@ -21,31 +21,26 @@ const Addons = ({ user }) => {
   const [addons, setAddons] = useState([]);
   const [addonModalState, setAddonModalState] = useState(defaultAddonState);
 
-  const fetchAddons = () => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('addons')
-      .get()
-      .then((snapshot) => {
-        const tempAddons = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.active)
-            tempAddons.push({
-              name: data.name,
-              cost: data.cost,
-              id: doc.id,
-            });
-        });
-        setAddons(tempAddons);
-        setAddonsLoading(false);
+  const getAddons = () => {
+    fetchAddons(user.uid).then((snapshot) => {
+      const tempAddons = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.active)
+          tempAddons.push({
+            name: data.name,
+            cost: data.cost,
+            id: doc.id,
+          });
       });
+      setAddons(tempAddons);
+      setAddonsLoading(false);
+    });
   };
 
   useEffect(() => {
     if (user) {
-      fetchAddons();
+      getAddons();
     }
   }, [user]);
 
@@ -68,32 +63,11 @@ const Addons = ({ user }) => {
   };
 
   const onDeleteAddonClick = (id) => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('addons')
-      .doc(id)
-      .update({ active: false })
-      .then(fetchAddons);
+    deleteAddon(user.uid, id).then(getAddons);
   };
 
   const onSaveAddonClick = (isNew, name, cost, active, id = -1) => {
-    if (isNew || id === -1) {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('addons')
-        .add({ name, cost: Number(cost), active })
-        .then(fetchAddons);
-    } else {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('addons')
-        .doc(id)
-        .set({ name, cost: Number(cost), active }, { merge: true })
-        .then(fetchAddons);
-    }
+    saveAddon(user.uid, isNew, name, cost, active, id).then(getAddons);
   };
 
   return (

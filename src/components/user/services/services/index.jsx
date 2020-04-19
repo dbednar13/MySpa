@@ -6,7 +6,11 @@ import { shape } from 'prop-types';
 import Service from './service';
 import ServiceModal from './serviceModal';
 import EditableCard from '../../../editableCard';
-import { fireStore } from '../../../../firebase';
+import {
+  deleteService,
+  fetchServices,
+  saveService,
+} from '../../../../api/services';
 
 const Services = ({ user }) => {
   const defaultServiceState = {
@@ -24,32 +28,27 @@ const Services = ({ user }) => {
     defaultServiceState
   );
 
-  const fetchServices = () => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('services')
-      .get()
-      .then((snapshot) => {
-        const tempServices = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.active)
-            tempServices.push({
-              name: data.name,
-              cost: data.cost,
-              duration: data.duration,
-              id: doc.id,
-            });
-        });
-        setServices(tempServices);
-        setServicesLoading(false);
+  const getServices = () => {
+    fetchServices(user.uid).then((snapshot) => {
+      const tempServices = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.active)
+          tempServices.push({
+            name: data.name,
+            cost: data.cost,
+            duration: data.duration,
+            id: doc.id,
+          });
       });
+      setServices(tempServices);
+      setServicesLoading(false);
+    });
   };
 
   useEffect(() => {
     if (user) {
-      fetchServices();
+      getServices();
     }
   }, [user]);
 
@@ -73,35 +72,13 @@ const Services = ({ user }) => {
   };
 
   const onDeleteServicesClick = (id) => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('services')
-      .doc(id)
-      .update({ active: false })
-      .then(fetchServices);
+    deleteService(user.uid, id).then(getServices);
   };
 
   const onSaveServiceClick = (isNew, name, duration, cost, active, id = -1) => {
-    if (isNew || id === -1) {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('services')
-        .add({ name, duration: Number(duration), cost: Number(cost), active })
-        .then(fetchServices);
-    } else {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('services')
-        .doc(id)
-        .set(
-          { name, duration: Number(duration), cost: Number(cost), active },
-          { merge: true }
-        )
-        .then(fetchServices);
-    }
+    saveService(user.uid, isNew, name, duration, cost, active, id).then(
+      getServices
+    );
   };
 
   return (

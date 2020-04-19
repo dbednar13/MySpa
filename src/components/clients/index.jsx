@@ -3,10 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
 import { Button, CardColumns } from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import EditableCard from '../editableCard';
-import { fireStore } from '../../firebase';
 import Client from './client';
 import ClientModal from './client/modal';
+import { deleteClient, fetchClients, saveClient } from '../../api/clients';
 
 const Clients = ({ firebase }) => {
   const defaultModalState = {
@@ -28,43 +29,33 @@ const Clients = ({ firebase }) => {
     setUser(firebase.auth().currentUser);
   }, [firebase]);
 
-  const fetchClients = () => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('clients')
-      .get()
-      .then((snapshot) => {
-        const tempClients = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.active)
-            tempClients.push({
-              name: data.name,
-              id: doc.id,
-              emailAddress: data.emailAddress,
-              phoneNumber: data.phoneNumber,
-              discount: data.discount,
-            });
-        });
-        setClients(tempClients);
-        setClientsLoading(false);
+  const getClients = () => {
+    fetchClients(user.uid).then((snapshot) => {
+      const tempClients = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.active)
+          tempClients.push({
+            name: data.name,
+            id: doc.id,
+            emailAddress: data.emailAddress,
+            phoneNumber: data.phoneNumber,
+            discount: data.discount,
+          });
       });
+      setClients(tempClients);
+      setClientsLoading(false);
+    });
   };
+
+  useEffect(() => {
+    if (user) {
+      getClients();
+    }
+  }, [user]);
 
   const onDeleteClientClick = (id) => {
-    fireStore
-      .collection('users')
-      .doc(user.uid)
-      .collection('clients')
-      .doc(id)
-      .update({ active: false })
-      .then(fetchClients);
-  };
-
-  const onNewClientClick = () => {
-    const newState = { ...showClientModal, show: true };
-    setShowClientModal(newState);
+    deleteClient(user.uid, id).then(getClients);
   };
 
   const onClientClick = (id, name, email, phoneNumber, discount) => {
@@ -78,9 +69,15 @@ const Clients = ({ firebase }) => {
       edit: true,
     });
   };
+
   const onClientClose = () => {
     const newState = defaultModalState;
     newState.show = false;
+    setShowClientModal(newState);
+  };
+
+  const onNewClientClick = () => {
+    const newState = { ...showClientModal, show: true };
     setShowClientModal(newState);
   };
 
@@ -93,44 +90,17 @@ const Clients = ({ firebase }) => {
     active,
     id = -1
   ) => {
-    if (isNew || id === 'NaC') {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('clients')
-        .add({
-          name,
-          phoneNumber,
-          emailAddress,
-          discount: Number(discount),
-          active,
-        })
-        .then(fetchClients);
-    } else {
-      fireStore
-        .collection('users')
-        .doc(user.uid)
-        .collection('clients')
-        .doc(id)
-        .set(
-          {
-            name,
-            phoneNumber,
-            emailAddress,
-            discount: Number(discount),
-            active,
-          },
-          { merge: true }
-        )
-        .then(fetchClients);
-    }
+    saveClient(
+      user.uid,
+      isNew,
+      name,
+      discount,
+      emailAddress,
+      phoneNumber,
+      active,
+      id
+    ).then(getClients);
   };
-
-  useEffect(() => {
-    if (user) {
-      fetchClients();
-    }
-  }, [user]);
 
   return !firebase.auth().currentUser ? (
     <Redirect to='/Home' />
