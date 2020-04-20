@@ -17,9 +17,8 @@ const FAQ = () => (
     <p>
       You handle cash and check like you do today. As part of your account setup
       you can setup a Stripe account for credit card payments. You can control
-      how often you get a payout within your Stripe account. Within Stripeyou
-      You can find more details and up to date fees by checking out Strip&apos;s
-      site{' '}
+      how often you get a payout within your Stripe account. You can find more
+      details and up to date fees by checking out Strip&apos;s site{' '}
       <a href='https://stripe.com/docs/payouts#payout-schedule'>
         https://stripe.com/docs/payouts#payout-schedule
       </a>
