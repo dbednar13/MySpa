@@ -30,14 +30,30 @@ const AppWithContext = ({ firebase }) => {
   });
   const NavWithFirebase = withFirebase(Nav);
 
-  const fetchCallback = (doc) => {
+  const messageCheck = (doc) => {
+    if (!doc.exists || doc.hipaaNotice !== false) {
+      // todo - popup hipaa notice & acceptance.
+      // eslint-disable-next-line no-console
+      console.log('messageCheck');
+    }
+  };
+
+  const fetchCallback = (user, doc) => {
     if (!doc.exists) {
-      createUser(currentUser.uid, createUserObject(currentUser.displayName));
-    } else if (
-      !currentUser.displayName.startsWith(doc.firstName) ||
-      !currentUser.displayName.endsWith(doc.lastName)
-    ) {
-      updateUser(currentUser.uid, createUserObject(currentUser.displayName));
+      createUser(
+        currentUser.uid,
+        createUserObject(currentUser.displayName),
+        messageCheck(doc)
+      );
+    } else {
+      const data = doc.data();
+      if (
+        !user.displayName.startsWith(data.firstName) ||
+        !user.displayName.endsWith(data.lastName)
+      ) {
+        updateUser(user.uid, createUserObject(user.displayName));
+      }
+      messageCheck(doc);
     }
   };
 
@@ -46,7 +62,9 @@ const AppWithContext = ({ firebase }) => {
     if (currentUser.user !== user) {
       if (user) {
         setCurrentUser({ authenticated: true, user });
-        fetchUser(user.uid, fetchCallback);
+        fetchUser(user.uid).then((doc) => {
+          fetchCallback(user, doc);
+        });
       } else {
         setCurrentUser({ authenticated: false, user: null });
       }

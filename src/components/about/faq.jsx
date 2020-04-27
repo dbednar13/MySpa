@@ -51,6 +51,19 @@ const FAQ = () => (
     </p>
     <br />
     <br />
+    <h2>Are you HIPAA Compliant?</h2>
+    <p>
+      The short answer is not yet. We are working on all of the paperwork and
+      processes to make that happen. Our hosting service and database are HIPAA
+      compliant and only you have access to the data you enter. What&apos;s left
+      is the paperwork.
+      <br />
+      In the mean time we highly suggest not entering any protected personal
+      information into this service. We understand for some users medical
+      history is very important and this is getting the highest priority.
+    </p>
+    <br />
+    <br />
     <h2>Where are the apps?</h2>
     <p>
       I get it, apps are nice and your go to for pretty much everything when

@@ -9,8 +9,8 @@ export function createUserObject(displayName, email) {
   };
 }
 
-export function fetchUser(uid, callback) {
-  fireStore.collection('users').doc(uid).get().then(callback);
+export function fetchUser(uid) {
+  return fireStore.collection('users').doc(uid).get();
 }
 
 export function createUser(uid, user, callback) {
