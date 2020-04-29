@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { func, string } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 
 const ConfirmModal = ({
   title,
   bodyText,
   onClose,
   onOk,
+  show,
   closeText,
   okText,
 }) => {
-  const [show, setShow] = useState(true);
-
   const handleClose = () => {
-    setShow(false);
     onClose();
   };
 
   const handleSave = () => {
-    setShow(false);
     onOk();
   };
 
@@ -50,6 +47,7 @@ ConfirmModal.propTypes = {
   bodyText: string.isRequired,
   onClose: func.isRequired,
   onOk: func.isRequired,
+  show: bool.isRequired,
   closeText: string,
   okText: string,
 };
