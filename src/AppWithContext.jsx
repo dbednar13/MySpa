@@ -35,6 +35,11 @@ const AppWithContext = ({ firebase }) => {
       // todo - popup hipaa notice & acceptance.
       // eslint-disable-next-line no-console
       console.log('messageCheck');
+
+      if (!doc.exists || !doc.data().hipaaConsent) {
+        // eslint-disable-next-line no-console
+        console.log('popup for hipaa consent');
+      }
     }
   };
 

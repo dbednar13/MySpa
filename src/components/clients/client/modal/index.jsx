@@ -105,7 +105,7 @@ const ClientModal = ({
             <input
               id={`name-${id}`}
               type='text'
-              placeholder='Serivce Name'
+              placeholder='Service Name'
               onChange={(e) => setName(e.target.value)}
               value={localName}
             />
