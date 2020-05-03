@@ -10,6 +10,7 @@ import {
   updateUser,
   updateUserNotice,
 } from './api/user';
+import { hipaaNoticeText } from './constants/textConstants';
 import About from './components/about';
 import Dashboard from './components/dashboard';
 import Home from './components/home';
@@ -33,15 +34,6 @@ const AppWithContext = ({ firebase }) => {
   const [showModal, setShowModal] = useState(false);
   const NavWithFirebase = withFirebase(Nav);
 
-  const hipaaBodyText = (
-    <p>
-      While your data is secured, this service is not yet compliant with Health
-      Insurance Portability and Accountability Act (HIPAA). We cannot be held
-      responsible for any of your clients Protected Personal Information (PPI).
-      Please do not enter any PPI until our certification process is completed
-    </p>
-  );
-
   const onModalReject = () => {
     firebase
       .auth()
@@ -53,20 +45,12 @@ const AppWithContext = ({ firebase }) => {
   };
 
   const onModalAccept = () => {
-    updateUserNotice(
-      currentUser.user.uid,
-      'hipaa',
-      JSON.stringify(hipaaBodyText)
-    );
+    updateUserNotice(currentUser.user.uid, 'hipaa', hipaaNoticeText);
     setShowModal(false);
   };
 
   const messageCheck = (doc) => {
     if (!doc.exists || doc.hipaaNotice !== false) {
-      // todo - popup hipaa notice & acceptance.
-      // eslint-disable-next-line no-console
-      console.log('messageCheck');
-
       if (!doc.exists || !doc.data().hipaaConsent) {
         setShowModal(true);
       }
@@ -109,7 +93,7 @@ const AppWithContext = ({ firebase }) => {
     <div className='App'>
       <ConfirmModal
         show={showModal}
-        bodyText={hipaaBodyText}
+        bodyText={hipaaNoticeText}
         title='HIPAA NOTICE'
         onClose={onModalReject}
         onOk={onModalAccept}

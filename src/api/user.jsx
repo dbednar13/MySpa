@@ -41,13 +41,13 @@ export function updateUser(user, uid, callback) {
 }
 
 export function updateUserNotice(userId, type, notice) {
-  const date = new Date();
+  const dateAccepted = new Date();
 
   fireStore
     .collection('users')
     .doc(userId)
     .collection('notifications')
-    .add({ type, notice, date });
+    .add({ type, notice, dateAccepted });
 
   return fireStore.collection('users').doc(userId).set(
     {

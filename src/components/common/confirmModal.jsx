@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { bool, func, object, string } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 
 const ConfirmModal = ({
   title,
@@ -24,7 +24,9 @@ const ConfirmModal = ({
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{bodyText}</Modal.Body>
+      <Modal.Body>
+        <p>{bodyText}</p>
+      </Modal.Body>
       <Modal.Footer />
       <div className='d-flex justify-content-between pb-2 pl-2 pr-2'>
         <div>
@@ -44,8 +46,7 @@ const ConfirmModal = ({
 
 ConfirmModal.propTypes = {
   title: string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  bodyText: object.isRequired,
+  bodyText: string.isRequired,
   onClose: func.isRequired,
   onOk: func.isRequired,
   show: bool.isRequired,
