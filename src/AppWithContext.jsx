@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import {
   createUser,
   createUserObject,
   fetchUser,
   updateUser,
+  updateUserNotice,
 } from './api/user';
 import About from './components/about';
 import Dashboard from './components/dashboard';
@@ -42,14 +43,21 @@ const AppWithContext = ({ firebase }) => {
   );
 
   const onModalReject = () => {
-    firebase.auth().signOut();
-    setShowModal(false);
-    return <Redirect to='/Home' />;
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setShowModal(false);
+        window.location.assign('/Home');
+      });
   };
 
   const onModalAccept = () => {
-    // TODO
-    // Update User
+    updateUserNotice(
+      currentUser.user.uid,
+      'hipaa',
+      JSON.stringify(hipaaBodyText)
+    );
     setShowModal(false);
   };
 

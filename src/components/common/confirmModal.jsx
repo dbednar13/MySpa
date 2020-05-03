@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { bool, func, string } from 'prop-types';
+import { bool, func, object, string } from 'prop-types';
 
 const ConfirmModal = ({
   title,
@@ -44,7 +44,8 @@ const ConfirmModal = ({
 
 ConfirmModal.propTypes = {
   title: string.isRequired,
-  bodyText: string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  bodyText: object.isRequired,
   onClose: func.isRequired,
   onOk: func.isRequired,
   show: bool.isRequired,
