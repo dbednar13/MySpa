@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
-import Notes from './notes';
+import { Divider, TextField } from '@material-ui/core';
 
 const Client = ({ id, emailAddress, phoneNumber, discount }) => {
   const [localEmail, setLocalEmail] = useState(emailAddress);
@@ -21,6 +21,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
             placeholder='Email'
             onChange={(e) => setEmail(e.target.value)}
             value={localEmail}
+            disabled
           />
         </label>
       </div>
@@ -50,8 +51,17 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           />
         </label>
       </div>
-      <div>
-        <Notes />
+      <Divider variant='middle' />
+      <div className='d-flex pb-2 pl-2'>
+        <TextField
+          id={`ClientNotes-${id}`}
+          label='Client Notes'
+          disabled
+          multiline
+          rows={4}
+          maxRows={4}
+          fullWidth
+        />
       </div>
     </>
   );

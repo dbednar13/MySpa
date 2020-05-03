@@ -17,6 +17,7 @@ const Clients = ({ firebase }) => {
     email: null,
     phoneNumber: null,
     discount: null,
+    notes: '',
     edit: false,
   };
 
@@ -41,6 +42,7 @@ const Clients = ({ firebase }) => {
             emailAddress: data.emailAddress,
             phoneNumber: data.phoneNumber,
             discount: data.discount,
+            notes: data.notes,
           });
       });
       setClients(tempClients);
@@ -58,7 +60,7 @@ const Clients = ({ firebase }) => {
     deleteClient(user.uid, id).then(getClients);
   };
 
-  const onClientClick = (id, name, email, phoneNumber, discount) => {
+  const onClientClick = (id, name, email, phoneNumber, discount, notes) => {
     setShowClientModal({
       show: true,
       id,
@@ -66,6 +68,7 @@ const Clients = ({ firebase }) => {
       email,
       phoneNumber,
       discount,
+      notes,
       edit: true,
     });
   };
@@ -87,6 +90,7 @@ const Clients = ({ firebase }) => {
     discount,
     emailAddress,
     phoneNumber,
+    notes,
     active,
     id = -1
   ) => {
@@ -97,6 +101,7 @@ const Clients = ({ firebase }) => {
       discount,
       emailAddress,
       phoneNumber,
+      notes,
       active,
       id
     ).then(getClients);
@@ -119,6 +124,7 @@ const Clients = ({ firebase }) => {
         emailAddress={showClientModal.email}
         discount={showClientModal.discount}
         editMode={showClientModal.edit}
+        notes={showClientModal.notes}
       />
       {!clientsLoading && (
         <CardColumns className='pb-3'>
@@ -136,7 +142,8 @@ const Clients = ({ firebase }) => {
                       client.name,
                       client.emailAddress,
                       client.phoneNumber,
-                      client.discount
+                      client.discount,
+                      client.notes
                     )
                   }
                   body={
