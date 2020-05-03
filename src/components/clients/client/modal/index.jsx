@@ -3,6 +3,7 @@ import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Divider from '@material-ui/core/Divider';
 
 const ClientModal = ({
   show,
@@ -147,6 +148,12 @@ const ClientModal = ({
               value={localDiscount}
               onValueChange={(e) => setLocalDiscount(e.value)}
             />
+          </label>
+        </div>
+        <Divider variant='middle' />
+        <div className='d-flex pb-2'>
+          <label htmlFor={`clientNotes-${id}`}>
+            <TextField id={`clientNotes-${id}`} />
           </label>
         </div>
       </Modal.Body>
