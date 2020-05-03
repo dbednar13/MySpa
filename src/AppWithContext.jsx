@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import {
+  createUser,
+  createUserObject,
+  fetchUser,
+  updateUser,
+  updateUserNotice,
+} from './api/user';
+import { hipaaNoticeText } from './constants/textConstants';
 import About from './components/about';
 import Dashboard from './components/dashboard';
 import Home from './components/home';
@@ -11,7 +20,8 @@ import Clients from './components/clients';
 import UserServices from './components/user/services';
 import User from './components/user';
 import Nav from './Nav';
-import { withFirebase, fireStore } from './firebase';
+import { withFirebase } from './firebase';
+import ConfirmModal from './components/common/confirmModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
@@ -21,56 +31,59 @@ const AppWithContext = ({ firebase }) => {
     authenticated: false,
     user: null,
   });
+  const [showModal, setShowModal] = useState(false);
   const NavWithFirebase = withFirebase(Nav);
+
+  const onModalReject = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setShowModal(false);
+        window.location.assign('/Home');
+      });
+  };
+
+  const onModalAccept = () => {
+    updateUserNotice(currentUser.user.uid, 'hipaa', hipaaNoticeText);
+    setShowModal(false);
+  };
+
+  const messageCheck = (doc) => {
+    if (!doc.exists || doc.hipaaNotice !== false) {
+      if (!doc.exists || !doc.data().hipaaConsent) {
+        setShowModal(true);
+      }
+    }
+  };
+
+  const fetchCallback = (user, doc) => {
+    if (!doc.exists) {
+      createUser(
+        currentUser.uid,
+        createUserObject(currentUser.displayName),
+        messageCheck(doc)
+      );
+    } else {
+      const data = doc.data();
+      if (
+        !user.displayName.startsWith(data.firstName) ||
+        !user.displayName.endsWith(data.lastName)
+      ) {
+        updateUser(user.uid, createUserObject(user.displayName));
+      }
+      messageCheck(doc);
+    }
+  };
 
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
       if (user) {
         setCurrentUser({ authenticated: true, user });
-        const index = user.displayName.indexOf(' ');
-        fireStore
-          .collection('users')
-          .doc(user.uid)
-          .get()
-          .then((doc) => {
-            if (!doc.exists) {
-              fireStore
-                .collection('users')
-                .doc(user.uid)
-                .set({
-                  email: user.email,
-                  firstName: user.displayName.substring(0, index),
-                  lastName: user.displayName.substring(index + 1),
-                });
-            } else if (
-              !user.displayName.startsWith(doc.firstName) ||
-              !user.displayName.endsWith(doc.lastName)
-            ) {
-              fireStore
-                .collection('users')
-                .doc(user.uid)
-                .set(
-                  {
-                    email: user.email,
-                    firstName: user.displayName.substring(0, index),
-                    lastName: user.displayName.substring(index + 1),
-                  },
-                  { merge: true }
-                );
-            }
-          });
-        fireStore
-          .collection('users')
-          .doc(user.uid)
-          .set(
-            {
-              email: user.email,
-              firstName: user.displayName.substring(0, index),
-              lastName: user.displayName.substring(index + 1),
-            },
-            { merge: true }
-          );
+        fetchUser(user.uid).then((doc) => {
+          fetchCallback(user, doc);
+        });
       } else {
         setCurrentUser({ authenticated: false, user: null });
       }
@@ -78,6 +91,13 @@ const AppWithContext = ({ firebase }) => {
   });
   return (
     <div className='App'>
+      <ConfirmModal
+        show={showModal}
+        bodyText={hipaaNoticeText}
+        title='HIPAA NOTICE'
+        onClose={onModalReject}
+        onOk={onModalAccept}
+      />
       <Router>
         <div className='pb-3'>
           <NavWithFirebase authenticated={currentUser.authenticated} />

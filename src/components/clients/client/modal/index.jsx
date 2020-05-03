@@ -3,6 +3,7 @@ import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { Divider, TextField } from '@material-ui/core';
 
 const ClientModal = ({
   show,
@@ -14,6 +15,7 @@ const ClientModal = ({
   onClose,
   onDelete,
   onSave,
+  notes,
   id,
   editMode,
 }) => {
@@ -21,6 +23,7 @@ const ClientModal = ({
   const [localEmail, setLocalEmail] = useState('');
   const [localName, setName] = useState('');
   const [localPhoneNumber, setLocalPhoneNumber] = useState('');
+  const [localNotes, setLocalNotes] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
@@ -34,6 +37,12 @@ const ClientModal = ({
       setLocalEmail(emailAddress);
     }
   }, [emailAddress]);
+
+  useEffect(() => {
+    if (notes) {
+      setLocalNotes(notes);
+    }
+  }, [notes]);
 
   useEffect(() => {
     if (editMode) {
@@ -75,6 +84,7 @@ const ClientModal = ({
         localDiscount,
         localEmail,
         localPhoneNumber,
+        localNotes,
         true,
         id
       );
@@ -105,7 +115,7 @@ const ClientModal = ({
             <input
               id={`name-${id}`}
               type='text'
-              placeholder='Serivce Name'
+              placeholder='Service Name'
               onChange={(e) => setName(e.target.value)}
               value={localName}
             />
@@ -149,6 +159,18 @@ const ClientModal = ({
             />
           </label>
         </div>
+        <Divider variant='middle' />
+        <div className='d-flex pb-2'>
+          <TextField
+            id={`clientNotes-${id}`}
+            label='Client Notes'
+            placeholder='Notes'
+            fullWidth
+            multiline
+            rows={4}
+            value={localNotes}
+          />
+        </div>
       </Modal.Body>
       <Modal.Footer />
       <div className='d-flex justify-content-between pb-2'>
@@ -188,6 +210,7 @@ ClientModal.propTypes = {
   discount: number,
   emailAddress: string,
   phoneNumber: string,
+  notes: string,
 };
 
 ClientModal.defaultProps = {
@@ -195,6 +218,7 @@ ClientModal.defaultProps = {
   id: 'NaC',
   phoneNumber: '',
   emailAddress: '',
+  notes: '',
   discount: 0,
   editMode: false,
 };
