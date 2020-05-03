@@ -39,3 +39,20 @@ export function updateUser(user, uid, callback) {
     )
     .then(callback);
 }
+
+export function updateUserNotice(userId, type, notice) {
+  const date = new Date();
+
+  fireStore.collection('users').doc(userId).set(
+    {
+      hipaaConsent: true,
+    },
+    { merge: true }
+  );
+  return fireStore
+    .collection('users')
+    .doc(userId)
+    .collection('notifications')
+    .doc(type)
+    .add({ type, notice, date });
+}

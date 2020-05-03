@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 import {
   createUser,
@@ -32,7 +32,7 @@ const AppWithContext = ({ firebase }) => {
   const [showModal, setShowModal] = useState(false);
   const NavWithFirebase = withFirebase(Nav);
 
-  const bodyText = (
+  const hipaaBodyText = (
     <p>
       While your data is secured, this service is not yet compliant with Health
       Insurance Portability and Accountability Act (HIPAA). We cannot be held
@@ -42,9 +42,9 @@ const AppWithContext = ({ firebase }) => {
   );
 
   const onModalReject = () => {
-    // TODO
-    // Sign out
+    firebase.auth().signOut();
     setShowModal(false);
+    return <Redirect to='/Home' />;
   };
 
   const onModalAccept = () => {
@@ -60,7 +60,7 @@ const AppWithContext = ({ firebase }) => {
       console.log('messageCheck');
 
       if (!doc.exists || !doc.data().hipaaConsent) {
-        setShowModal(false);
+        setShowModal(true);
       }
     }
   };
@@ -101,7 +101,7 @@ const AppWithContext = ({ firebase }) => {
     <div className='App'>
       <ConfirmModal
         show={showModal}
-        bodyText={bodyText}
+        bodyText={hipaaBodyText}
         title='HIPAA NOTICE'
         onClose={onModalReject}
         onOk={onModalAccept}

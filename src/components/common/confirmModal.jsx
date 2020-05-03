@@ -26,7 +26,7 @@ const ConfirmModal = ({
       </Modal.Header>
       <Modal.Body>{bodyText}</Modal.Body>
       <Modal.Footer />
-      <div className='d-flex justify-content-between pb-2'>
+      <div className='d-flex justify-content-between pb-2 pl-2 pr-2'>
         <div>
           <Button variant='secondary' onClick={handleClose}>
             {closeText}
@@ -56,3 +56,5 @@ ConfirmModal.defaultProps = {
   closeText: 'I do not accept',
   okText: 'I accept',
 };
+
+export default ConfirmModal;
