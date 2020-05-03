@@ -12,7 +12,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
 
   return (
     <>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`emailAddress-${id}`}>
           Email Address:{' '}
           <input
@@ -24,7 +24,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           />
         </label>
       </div>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`phoneNumber-${id}`}>
           Phone Number:{' '}
           <NumberFormat
@@ -37,7 +37,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           />
         </label>
       </div>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`discount-${id}`}>
           Service Discount:{' '}
           <NumberFormat

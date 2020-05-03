@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 const Service = ({ length, cost, id }) => {
   return (
     <>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`serviceLength-${id}`}>
           Service length (minutes):{' '}
           <NumberFormat
@@ -17,7 +17,7 @@ const Service = ({ length, cost, id }) => {
           />
         </label>
       </div>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`cost-${id}`}>
           Service cost:{' '}
           <NumberFormat
@@ -37,7 +37,7 @@ const Service = ({ length, cost, id }) => {
 Service.propTypes = {
   id: string.isRequired,
   length: number.isRequired,
-  cost: number.isRequired
+  cost: number.isRequired,
 };
 
 export default Service;

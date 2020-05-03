@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 const Addon = ({ cost, id }) => {
   return (
     <>
-      <div className='d-flex pb-2'>
+      <div className='d-flex pb-2 pl-2'>
         <label htmlFor={`cost-${id}`}>
           Service cost:{' '}
           <NumberFormat
@@ -24,7 +24,7 @@ const Addon = ({ cost, id }) => {
 
 Addon.propTypes = {
   id: string.isRequired,
-  cost: number.isRequired
+  cost: number.isRequired,
 };
 
 export default Addon;
