@@ -17,9 +17,9 @@ const AboutUs = () => (
       From there the idea was born. Dan is a software engineer and had the
       know-how. Fortunately for him he had easy access to multiple massage
       therapists - including one who worked at his office and could speak his
-      &quote;techy&quote; language. With this kind of access to end users Dan
-      was able to make sure what he was building was what was needed every step
-      of the way.
+      &quot;techy&quot; language. With this kind of access to end users Dan was
+      able to make sure what he was building was what was needed every step of
+      the way.
     </p>
     <br />
     <br />
