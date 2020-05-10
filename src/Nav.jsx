@@ -1,81 +1,68 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { bool } from 'prop-types';
-import { Navbar, NavDropdown, Dropdown } from 'react-bootstrap';
+import { Navbar, NavItem, NavDropdown, Dropdown } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 function Nav({ authenticated }) {
   return (
     <Navbar bg='dark' variant='dark' sticky='top'>
       <Navbar.Brand href='/Home'>My Spa Assistant</Navbar.Brand>
       <Navbar.Collapse>
-        <div className='nav-item'>
-          <NavLink
-            className='nav-link'
-            exact
-            activeClassName='nav-link active'
-            to='/'>
+        <div>
+          <Link className='nav-link' to='/'>
             Home
-          </NavLink>
+          </Link>
         </div>
-        <div className='nav-item'>
-          <NavLink
-            className='nav-link'
-            activeClassName='nav-link active'
-            to='/About'>
+        <div>
+          <Link className='nav-link' to='/About'>
             About
-          </NavLink>
+          </Link>
         </div>
         {authenticated && (
-          <div className='nav-item'>
-            <NavLink
-              className='nav-link'
-              activeClassName='nav-link active'
-              to='/DashBoard'>
+          <div>
+            <Link className='nav-link' to='/DashBoard'>
               Dashboard
-            </NavLink>
+            </Link>
           </div>
         )}
       </Navbar.Collapse>
       <Navbar.Collapse className='justify-content-end'>
         {!authenticated && (
           <div className='nav-item'>
-            <NavLink
-              className='nav-link'
-              activeClassName='nav-link active'
-              to='/Login'>
+            <Link className='nav-link' to='/Login'>
               Log In
-            </NavLink>
+            </Link>
           </div>
         )}
         {authenticated && (
           <div className='row'>
             <NavDropdown title='Account' id='collasible-nav-dropdown'>
               <NavDropdown.Item>
-                <NavLink to='/User' disabled={!authenticated}>
-                  My Account
-                </NavLink>
+                <LinkContainer to='/User'>
+                  <NavItem>My Account</NavItem>
+                </LinkContainer>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <NavLink to='/User/Services' disabled={!authenticated}>
-                  My Services
-                </NavLink>
+                <LinkContainer to='/User/Services'>
+                  <NavItem>My Services</NavItem>
+                </LinkContainer>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <NavLink to='/User/Clients' disabled={!authenticated}>
-                  Clients
-                </NavLink>
+                <LinkContainer to='/User/Clients'>
+                  <NavItem>Clients</NavItem>
+                </LinkContainer>
               </NavDropdown.Item>
               <Dropdown.Divider />
               <NavDropdown.Item>
-                <NavLink to='/SignOut'>Sign Out</NavLink>
+                <LinkContainer to='/SignOut'>
+                  <NavItem>Sign Out</NavItem>
+                </LinkContainer>
               </NavDropdown.Item>
             </NavDropdown>
-            <NavLink
-              className='nav-link'
-              activeClassName='nav-link active'
-              to='/SignOut'>
+            <Link className='nav-link' to='/SignOut'>
               Sign out
-            </NavLink>
+            </Link>
           </div>
         )}
       </Navbar.Collapse>
@@ -84,7 +71,7 @@ function Nav({ authenticated }) {
 }
 
 Nav.propTypes = {
-  authenticated: bool.isRequired
+  authenticated: bool.isRequired,
 };
 
 export default Nav;
