@@ -17,8 +17,9 @@ const FAQ = () => (
     <p>
       You handle cash and check like you do today. As part of your account setup
       you can setup a Stripe account for credit card payments. You can control
-      how often you get a payout within your Stripe account. You can find more
-      details and up to date fees by checking out Strip&apos;s site{' '}
+      how often you get a payout within your Stripe account. Within Stripe you
+      You can find more details and up to date fees by checking out Strip&apos;s
+      site{' '}
       <a href='https://stripe.com/docs/payouts#payout-schedule'>
         https://stripe.com/docs/payouts#payout-schedule
       </a>
@@ -50,6 +51,19 @@ const FAQ = () => (
     </p>
     <br />
     <br />
+    <h2>Are you HIPAA Compliant?</h2>
+    <p>
+      The short answer is not yet. We are working on all of the paperwork and
+      processes to make that happen. Our hosting service and database are HIPAA
+      compliant and only you have access to the data you enter. What&apos;s left
+      is the paperwork.
+      <br />
+      In the mean time we highly suggest not entering any protected personal
+      information into this service. We understand for some users medical
+      history is very important and this is getting the highest priority.
+    </p>
+    <br />
+    <br />
     <h2>Where are the apps?</h2>
     <p>
       I get it, apps are nice and your go to for pretty much everything when
@@ -72,7 +86,7 @@ const FAQ = () => (
       <br />
       Donations are definitely appreciated to help cover costs between now and
       the project going live. For legal reasons I&apos;m required to say that
-      donating won&apos;t gurantee any specificly requested features, nor any
+      donating won&apos;t guarantee any specifically requested features, nor any
       delivery timeline.
     </p>
   </>

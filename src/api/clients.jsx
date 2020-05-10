@@ -20,6 +20,7 @@ export function saveClient(
   discount,
   emailAddress,
   phoneNumber,
+  notes,
   active,
   id
 ) {
@@ -33,6 +34,7 @@ export function saveClient(
         phoneNumber,
         emailAddress,
         discount: Number(discount),
+        notes,
         active,
       });
   }
@@ -47,6 +49,7 @@ export function saveClient(
         phoneNumber,
         emailAddress,
         discount: Number(discount),
+        notes,
         active,
       },
       { merge: true }
