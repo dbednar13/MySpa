@@ -3,8 +3,7 @@ import React from 'react';
 import { func } from 'prop-types';
 import NumberFormat from 'react-number-format';
 
-function CustomNumberField(props) {
-  const { inputRef, onChange, ...rest } = props;
+function CustomNumberField({ inputRef, onChange, ...rest }) {
   return (
     <NumberFormat
       getInputRef={inputRef}

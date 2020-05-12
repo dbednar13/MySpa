@@ -41,7 +41,6 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
         </label>
       </div>
       <div className='pb-2'>
-        //TODO Ask Milian here.
         <NumberField
           id={`discount-${id}`}
           label='Service Discount:'
@@ -49,7 +48,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           allowNegative={false}
           suffix='%'
           value={discount}
-          disabled
+          disabled          
         />
       </div>
       <Divider variant='middle' />

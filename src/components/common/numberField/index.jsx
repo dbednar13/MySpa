@@ -4,15 +4,13 @@ import TextField from '@material-ui/core/TextField';
 
 import CustomNumberField from './customNumberField';
 
-const NumberField = (props) => {
-  const { label, id, ...other } = props;
+const NumberField = ({ label, id, disabled, ...rest}) => {
   return (
     <TextField
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...other}
       label={label}
       id={id}
-      InputProps={{ inputComponent: CustomNumberField }}
+      InputProps={{ inputComponent: CustomNumberField, inputProps: {...rest} }}      
+      disabled={disabled}
     />
   );
 };
@@ -24,7 +22,7 @@ NumberField.propTypes = {
 };
 
 NumberField.defaultProps = {
-  disabled: false,
+  disabled: false
 };
 
 export default NumberField;
