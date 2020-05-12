@@ -1,22 +1,18 @@
 import React from 'react';
 import { number, string } from 'prop-types';
-import NumberFormat from 'react-number-format';
+
+import CurrencyField from '../../../common/currencyField';
 
 const Addon = ({ cost, id }) => {
   return (
     <>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`cost-${id}`}>
-          Service cost:{' '}
-          <NumberFormat
-            id={`cost-${id}`}
-            decimalScale='2'
-            allowNegative={false}
-            prefix='$'
-            value={cost}
-            disabled
-          />
-        </label>
+      <div className='pb-2'>
+        <CurrencyField
+          id={`cost-${id}`}
+          label='Addon Cost:'
+          value={cost}
+          disabled
+        />
       </div>
     </>
   );

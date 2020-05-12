@@ -4,6 +4,8 @@ import { bool, func, string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import CurrencyField from '../../../../common/currencyField';
+
 const ServiceModal = ({
   show,
   title,
@@ -83,7 +85,7 @@ const ServiceModal = ({
             <input
               id='name'
               type='text'
-              placeholder='Serivce Name'
+              placeholder='Service Name'
               value={localName}
               onChange={(e) => setName(e.target.value)}
             />
@@ -101,18 +103,15 @@ const ServiceModal = ({
             />
           </label>
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor='cost'>
-            Service cost:{' '}
-            <NumberFormat
-              id='cost'
-              decimalScale='2'
-              allowNegative={false}
-              prefix='$'
-              value={localCost}
-              onValueChange={(e) => setCost(e.value)}
-            />
-          </label>
+        <div className='pb-2'>
+          <CurrencyField
+            label='Service cost:'
+            id='cost'
+            value={localCost}
+            onChange={(e) => {
+              setCost(e.value);
+            }}
+          />
         </div>
       </Modal.Body>
       <Modal.Footer />

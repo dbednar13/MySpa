@@ -2,6 +2,8 @@ import React from 'react';
 import { number, string } from 'prop-types';
 import NumberFormat from 'react-number-format';
 
+import CurrencyField from '../../../common/currencyField';
+
 const Service = ({ length, cost, id }) => {
   return (
     <>
@@ -17,19 +19,12 @@ const Service = ({ length, cost, id }) => {
           />
         </label>
       </div>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`cost-${id}`}>
-          Service cost:{' '}
-          <NumberFormat
-            id={`cost-${id}`}
-            decimalScale='2'
-            allowNegative={false}
-            prefix='$'
-            value={cost}
-            disabled
-          />
-        </label>
-      </div>
+      <CurrencyField
+        label=' Service Cost:'
+        id={`cost-${id}`}
+        value={cost}
+        disabled
+      />
     </>
   );
 };

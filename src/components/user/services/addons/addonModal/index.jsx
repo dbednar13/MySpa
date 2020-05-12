@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
-import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+import CurrencyField from '../../../../common/currencyField';
 
 const AddonModal = ({
   show,
@@ -27,7 +28,7 @@ const AddonModal = ({
 
   useEffect(() => {
     if (editMode) {
-      setName(cost);
+      setCost(cost);
     }
   }, [cost]);
 
@@ -49,7 +50,7 @@ const AddonModal = ({
       localCost !== null &&
       localCost > 0.0
     ) {
-      onSave(true, localName, localCost, true);
+      onSave(!editMode, localName, localCost, true);
       onClose();
     } else {
       setShowAlert(true);
@@ -67,28 +68,23 @@ const AddonModal = ({
         )}
         <div className='d-flex pb-2'>
           <label htmlFor='name'>
-            Service Name:{' '}
+            Addon Name:{' '}
             <input
               id='name'
               type='text'
-              placeholder='Serivce Name'
+              placeholder='Service Name'
               onChange={(e) => setName(e.target.value)}
               value={localName}
             />
           </label>
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor='cost'>
-            Service cost:{' '}
-            <NumberFormat
-              id='cost'
-              decimalScale='2'
-              allowNegative={false}
-              prefix='$'
-              onValueChange={(e) => setCost(e.value)}
-              value={localCost}
-            />
-          </label>
+        <div className='pb-2'>
+          <CurrencyField
+            id='cost'
+            label='Service cost:'
+            onChange={(e) => setCost(e.value)}
+            value={localCost}
+          />
         </div>
       </Modal.Body>
       <Modal.Footer />
