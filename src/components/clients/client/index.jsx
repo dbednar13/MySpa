@@ -3,6 +3,8 @@ import { string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { Divider, TextField } from '@material-ui/core';
 
+import NumberField from '../../common/numberField';
+
 const Client = ({ id, emailAddress, phoneNumber, discount }) => {
   const [localEmail, setLocalEmail] = useState(emailAddress);
 
@@ -38,18 +40,17 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           />
         </label>
       </div>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`discount-${id}`}>
-          Service Discount:{' '}
-          <NumberFormat
-            id={`discount-${id}`}
-            decimalScale='0'
-            allowNegative={false}
-            suffix='%'
-            value={discount}
-            disabled
-          />
-        </label>
+      <div className='pb-2'>
+        //TODO Ask Milian here.
+        <NumberField
+          id={`discount-${id}`}
+          label='Service Discount:'
+          decimalScale='0'
+          allowNegative={false}
+          suffix='%'
+          value={discount}
+          disabled
+        />
       </div>
       <Divider variant='middle' />
       <div className='d-flex pb-2 pl-2'>
@@ -59,7 +60,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           disabled
           multiline
           rows={4}
-          maxRows={4}
+          rowsMax={4}
           fullWidth
         />
       </div>

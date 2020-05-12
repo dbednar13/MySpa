@@ -2,30 +2,29 @@ import React from 'react';
 import { bool, string } from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
-import CustomMoneyFormat from './customMoneyFormat';
+import CustomNumberField from './customNumberField';
 
-const CurrencyField = (props) => {
+const NumberField = (props) => {
   const { label, id, ...other } = props;
   return (
     <TextField
-      label={label}
-      id={id}
-      InputProps={{ inputComponent: CustomMoneyFormat }}
-      placeholder='$XX.XX'
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...other}
+      label={label}
+      id={id}
+      InputProps={{ inputComponent: CustomNumberField }}
     />
   );
 };
 
-CurrencyField.propTypes = {
+NumberField.propTypes = {
   id: string.isRequired,
   label: string.isRequired,
   disabled: bool,
 };
 
-CurrencyField.defaultProps = {
+NumberField.defaultProps = {
   disabled: false,
 };
 
-export default CurrencyField;
+export default NumberField;
