@@ -13,7 +13,6 @@ function CustomMoneyFormat(props) {
       onValueChange={(e) => {
         onChange(e);
       }}
-      prefix='$'
       thousandSeparator=','
       decimalSeparator='.'
       decimalScale={2}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { string, number } from 'prop-types';
 import NumberFormat from 'react-number-format';
-import { Divider, TextField } from '@material-ui/core';
+import { Divider, InputAdornment, TextField } from '@material-ui/core';
 
 import NumberField from '../../common/numberField';
 
@@ -46,9 +46,11 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           label='Service Discount:'
           decimalScale='0'
           allowNegative={false}
-          suffix='%'
           value={discount}
-          disabled          
+          disabled
+          adornment={{
+            endAdornment: <InputAdornment position='end'>%</InputAdornment>,
+          }}
         />
       </div>
       <Divider variant='middle' />

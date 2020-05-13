@@ -1,6 +1,6 @@
 import React from 'react';
 import { bool, string } from 'prop-types';
-import TextField from '@material-ui/core/TextField';
+import { InputAdornment, TextField } from '@material-ui/core';
 
 import CustomMoneyFormat from './customMoneyFormat';
 
@@ -10,8 +10,11 @@ const CurrencyField = (props) => {
     <TextField
       label={label}
       id={id}
-      InputProps={{ inputComponent: CustomMoneyFormat }}
-      placeholder='$XX.XX'
+      InputProps={{
+        inputComponent: CustomMoneyFormat,
+        startAdornment: <InputAdornment position='start'>$</InputAdornment>,
+      }}
+      placeholder='XXX.XX'
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...other}
     />
