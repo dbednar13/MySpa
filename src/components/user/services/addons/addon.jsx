@@ -6,7 +6,7 @@ import CurrencyField from '../../../common/currencyField';
 const Addon = ({ cost, id }) => {
   return (
     <>
-      <div className='pb-2'>
+      <div className='pb-3'>
         <CurrencyField
           id={`cost-${id}`}
           label='Addon Cost:'

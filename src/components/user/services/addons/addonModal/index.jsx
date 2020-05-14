@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
+import { TextField } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import CurrencyField from '../../../../common/currencyField';
@@ -66,19 +67,16 @@ const AddonModal = ({
         {showAlert && (
           <Alert variant='danger'>Please enter a name and a cost</Alert>
         )}
-        <div className='d-flex pb-2'>
-          <label htmlFor='name'>
-            Addon Name:{' '}
-            <input
-              id='name'
-              type='text'
-              placeholder='Service Name'
-              onChange={(e) => setName(e.target.value)}
-              value={localName}
-            />
-          </label>
+        <div className='pb-3'>
+          <TextField
+            label='Addon Name:'
+            id='name'
+            placeholder='Addon Name'
+            onChange={(e) => setName(e.target.value)}
+            value={localName}
+          />
         </div>
-        <div className='pb-2'>
+        <div className='pb-3'>
           <CurrencyField
             id='cost'
             label='Service cost:'
@@ -88,7 +86,7 @@ const AddonModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer />
-      <div className='d-flex justify-content-between pb-2'>
+      <div className='d-flex justify-content-between pb-3'>
         <div>
           {editMode && (
             <Button variant='link' onClick={handleDelete}>

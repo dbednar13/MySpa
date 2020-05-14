@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
-import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { TextField } from '@material-ui/core';
 import CurrencyField from '../../../../common/currencyField';
+import NumberField from '../../../../common/numberField';
 
 const ServiceModal = ({
   show,
@@ -79,31 +80,27 @@ const ServiceModal = ({
             Please enter a name, duration and a cost
           </Alert>
         )}
-        <div className='d-flex pb-2'>
-          <label htmlFor='name'>
-            Service Name:{' '}
-            <input
-              id='name'
-              type='text'
-              placeholder='Service Name'
-              value={localName}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
+        <div className='pb-3'>
+          <TextField
+            id='name'
+            placeholder='Service Name'
+            value={localName}
+            onChange={(e) => setName(e.target.value)}
+            label='Service Name:'
+          />
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor='serviceLength'>
-            Service length (minutes):{' '}
-            <NumberFormat
-              id='serviceLength'
-              decimalScale='0'
-              allowNegative={false}
-              value={localDuration}
-              onValueChange={(e) => setDuration(e.value)}
-            />
-          </label>
+        <div className='pb-3'>
+          <NumberField
+            label='Service length (minutes):'
+            id='serviceLength'
+            decimalScale='0'
+            allowNegative={false}
+            value={localDuration}
+            onChange={(e) => setDuration(e.value)}
+            disabled
+          />
         </div>
-        <div className='pb-2'>
+        <div className='pb-3'>
           <CurrencyField
             label='Service cost:'
             id='cost'
@@ -115,7 +112,7 @@ const ServiceModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer />
-      <div className='d-flex justify-content-between pb-2'>
+      <div className='d-flex justify-content-between pb-3'>
         <div>
           {editMode && (
             <Button variant='link' onClick={handleDelete}>

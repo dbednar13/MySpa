@@ -1,23 +1,21 @@
 import React from 'react';
 import { number, string } from 'prop-types';
-import NumberFormat from 'react-number-format';
 
 import CurrencyField from '../../../common/currencyField';
+import NumberField from '../../../common/numberField';
 
 const Service = ({ length, cost, id }) => {
   return (
     <>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`serviceLength-${id}`}>
-          Service length (minutes):{' '}
-          <NumberFormat
-            id={`serviceLength-${id}`}
-            decimalScale='0'
-            allowNegative={false}
-            value={length}
-            disabled
-          />
-        </label>
+      <div className='pb-3'>
+        <NumberField
+          label='Service length (minutes):'
+          id={`serviceLength-${id}`}
+          decimalScale='0'
+          allowNegative={false}
+          value={length}
+          disabled
+        />
       </div>
       <CurrencyField
         label=' Service Cost:'

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
 import { bool, func, string, number } from 'prop-types';
-import NumberFormat from 'react-number-format';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Divider, TextField } from '@material-ui/core';
+import { Divider, InputAdornment, TextField } from '@material-ui/core';
+
+import NumberField from '../../../common/numberField';
+import PhoneField from '../../../common/phoneField';
 
 const ClientModal = ({
   show,
@@ -109,58 +111,47 @@ const ClientModal = ({
         {showAlert && (
           <Alert variant='danger'>Please enter a all information</Alert>
         )}
-        <div className='d-flex pb-2'>
-          <label htmlFor={`name-${id}`}>
-            Client Name:{' '}
-            <input
-              id={`name-${id}`}
-              type='text'
-              placeholder='Service Name'
-              onChange={(e) => setName(e.target.value)}
-              value={localName}
-            />
-          </label>
+        <div className='pb-3'>
+          <TextField
+            label='Client Name:'
+            id={`name-${id}`}
+            placeholder='Service Name'
+            onChange={(e) => setName(e.target.value)}
+            value={localName}
+          />
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor={`emailAddress-${id}`}>
-            Email Address:{' '}
-            <input
-              id={`emailAddress-${id}`}
-              type='text'
-              placeholder='Email'
-              onChange={(e) => setEmail(e.target.value)}
-              value={localEmail}
-            />
-          </label>
+        <div className='pb-3'>
+          <TextField
+            label='Email Address:'
+            id={`emailAddress-${id}`}
+            placeholder='Email'
+            onChange={(e) => setEmail(e.target.value)}
+            value={localEmail}
+            fullWidth
+          />
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor={`phoneNumber-${id}`}>
-            Phone Number:{' '}
-            <NumberFormat
-              id={`phoneNumber-${id}`}
-              format='+1 (###) ###-####'
-              allowEmptyFormatting
-              mask='_'
-              value={localPhoneNumber}
-              onValueChange={(e) => setLocalPhoneNumber(e.value)}
-            />
-          </label>
+        <div className='pb-3'>
+          <PhoneField
+            id={`phoneNumber-${id}`}
+            label='Phone Number:'
+            onChange={(e) => setLocalPhoneNumber(e.value)}
+            value={localPhoneNumber}
+          />
         </div>
-        <div className='d-flex pb-2'>
-          <label htmlFor={`discount-${id}`}>
-            Service Discount:{' '}
-            <NumberFormat
-              id={`discount-${id}`}
-              decimalScale='0'
-              allowNegative={false}
-              suffix='%'
-              value={localDiscount}
-              onValueChange={(e) => setLocalDiscount(e.value)}
-            />
-          </label>
+        <div className='pb-3'>
+          <NumberField
+            id={`discount-${id}`}
+            label='Service Discount:'
+            decimalScale='0'
+            allowNegative={false}
+            value={discount}
+            adornment={{
+              endAdornment: <InputAdornment position='end'>%</InputAdornment>,
+            }}
+          />
         </div>
         <Divider variant='middle' />
-        <div className='d-flex pb-2'>
+        <div className='pb-3'>
           <TextField
             id={`clientNotes-${id}`}
             label='Client Notes'
@@ -173,7 +164,7 @@ const ClientModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer />
-      <div className='d-flex justify-content-between pb-2'>
+      <div className='justify-content-between pb-3'>
         <div>
           {editMode && (
             <Button variant='link' onClick={handleDelete}>
@@ -181,7 +172,7 @@ const ClientModal = ({
             </Button>
           )}
         </div>
-        <div className='d-flex pr-2'>
+        <div className='pr-2'>
           <div className='pr-2'>
             <Button variant='secondary' onClick={handleClose}>
               Close

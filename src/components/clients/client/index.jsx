@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { string, number } from 'prop-types';
-import NumberFormat from 'react-number-format';
 import { Divider, InputAdornment, TextField } from '@material-ui/core';
 
 import NumberField from '../../common/numberField';
+import PhoneField from '../../common/phoneField';
 
 const Client = ({ id, emailAddress, phoneNumber, discount }) => {
   const [localEmail, setLocalEmail] = useState(emailAddress);
@@ -14,33 +14,26 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
 
   return (
     <>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`emailAddress-${id}`}>
-          Email Address:{' '}
-          <input
-            id={`emailAddress-${id}`}
-            type='text'
-            placeholder='Email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={localEmail}
-            disabled
-          />
-        </label>
+      <div className='pb-3'>
+        <TextField
+          label='Email Address:'
+          id={`emailAddress-${id}`}
+          placeholder='Email'
+          onChange={(e) => setEmail(e.target.value)}
+          value={localEmail}
+          fullWidth
+          disabled
+        />
       </div>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`phoneNumber-${id}`}>
-          Phone Number:{' '}
-          <NumberFormat
-            id={`phoneNumber-${id}`}
-            format='+1 (###) ###-####'
-            allowEmptyFormatting
-            mask='_'
-            value={phoneNumber}
-            disabled
-          />
-        </label>
+      <div className='pb-3'>
+        <PhoneField
+          id={`phoneNumber-${id}`}
+          label='Phone Number:'
+          value={phoneNumber}
+          disabled
+        />
       </div>
-      <div className='pb-2'>
+      <div className='pb-3'>
         <NumberField
           id={`discount-${id}`}
           label='Service Discount:'
@@ -54,7 +47,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
         />
       </div>
       <Divider variant='middle' />
-      <div className='d-flex pb-2 pl-2'>
+      <div className='pb-3'>
         <TextField
           id={`ClientNotes-${id}`}
           label='Client Notes'
