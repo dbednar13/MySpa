@@ -1,79 +1,44 @@
 import React, { useState } from 'react';
-import { string, number } from 'prop-types';
-import { Divider, InputAdornment, TextField } from '@material-ui/core';
+import { func } from 'prop-types';
 
-import NumberField from '../../common/numberField';
-import PhoneField from '../../common/phoneField';
+import { clientPropType } from './clientPropType';
+import ClientData from './clientData';
+import ClientModal from './clientModal';
+import EditableCard from '../../editableCard';
 
-const Client = ({ id, emailAddress, phoneNumber, discount }) => {
-  const [localEmail, setLocalEmail] = useState(emailAddress);
+const Client = ({ client, onSave, onDelete }) => {
+  const [openModal, setOpenModal] = useState(false);
 
-  const setEmail = (value) => {
-    setLocalEmail(value);
+  const onClientSave = () => {
+    onSave(client, false);
   };
 
   return (
     <>
-      <div className='pb-3 pr-3 pl-3'>
-        <TextField
-          label='Email Address:'
-          id={`emailAddress-${id}`}
-          placeholder='Email'
-          onChange={(e) => setEmail(e.target.value)}
-          value={localEmail}
-          fullWidth
-          disabled
-        />
-      </div>
-      <div className='pb-3 pr-3 pl-3'>
-        <PhoneField
-          id={`phoneNumber-${id}`}
-          label='Phone Number:'
-          value={phoneNumber}
-          disabled
-        />
-      </div>
-      <div className='pb-3 pr-3 pl-3'>
-        <NumberField
-          id={`discount-${id}`}
-          label='Service Discount:'
-          decimalScale='0'
-          allowNegative={false}
-          value={discount}
-          disabled
-          adornment={{
-            endAdornment: <InputAdornment position='end'>%</InputAdornment>,
-          }}
-        />
-      </div>
-      <Divider variant='middle' />
-      <div className='pb-3 pr-3 pl-3'>
-        <TextField
-          id={`ClientNotes-${id}`}
-          label='Client Notes'
-          disabled
-          multiline
-          rows={4}
-          rowsMax={4}
-          fullWidth
-        />
-      </div>
+      <ClientModal
+        onClose={() => setOpenModal(false)}
+        onDelete={() => onDelete(client.id)}
+        onSave={onClientSave}
+        show={openModal}
+        client={client}
+        editMode
+      />
+      <EditableCard
+        key={`Card-Client-${client.id}`}
+        id={`card-${client.id}`}
+        title={client.name}
+        onDelete={() => onDelete(client.id)}
+        onEdit={() => setOpenModal(true)}
+        body={<ClientData client={client} />}
+      />
     </>
   );
 };
 
 Client.propTypes = {
-  id: string,
-  phoneNumber: string,
-  emailAddress: string,
-  discount: number,
-};
-
-Client.defaultProps = {
-  id: '',
-  phoneNumber: '',
-  emailAddress: '',
-  discount: 0,
+  client: clientPropType.isRequired,
+  onDelete: func.isRequired,
+  onSave: func.isRequired,
 };
 
 export default Client;

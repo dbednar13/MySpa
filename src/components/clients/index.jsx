@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
+import { Formik } from 'formik';
 import { Button, CardColumns } from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import EditableCard from '../editableCard';
 import Client from './client';
-import ClientModal from './client/modal';
 import { deleteClient, fetchClients, saveClient } from '../../api/clients';
 
 const Clients = ({ firebase }) => {
-  const defaultModalState = {
-    show: false,
-    id: null,
-    name: null,
-    email: null,
-    phoneNumber: null,
-    discount: null,
-    notes: '',
-    edit: false,
-  };
-
   const [clients, setClients] = useState(null);
   const [clientsLoading, setClientsLoading] = useState(true);
-  const [showClientModal, setShowClientModal] = useState(defaultModalState);
+  const [showClientModal, setShowClientModal] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -60,23 +48,8 @@ const Clients = ({ firebase }) => {
     deleteClient(user.uid, id).then(getClients);
   };
 
-  const onClientClick = (id, name, email, phoneNumber, discount, notes) => {
-    setShowClientModal({
-      show: true,
-      id,
-      name,
-      email,
-      phoneNumber,
-      discount,
-      notes,
-      edit: true,
-    });
-  };
-
   const onClientClose = () => {
-    const newState = defaultModalState;
-    newState.show = false;
-    setShowClientModal(newState);
+    setShowClientModal(false);
   };
 
   const onNewClientClick = () => {
@@ -84,26 +57,16 @@ const Clients = ({ firebase }) => {
     setShowClientModal(newState);
   };
 
-  const onSaveClientClick = (
-    isNew,
-    name,
-    discount,
-    emailAddress,
-    phoneNumber,
-    notes,
-    active,
-    id = -1
-  ) => {
+  const onSave = (client, isNew) => {
     saveClient(
       user.uid,
       isNew,
-      name,
-      discount,
-      emailAddress,
-      phoneNumber,
-      notes,
-      active,
-      id
+      client.name,
+      client.discount,
+      client.emailAddress,
+      client.phoneNumber,
+      client.notes,
+      client.id
     ).then(getClients);
   };
 
@@ -112,52 +75,30 @@ const Clients = ({ firebase }) => {
   ) : (
     <>
       {clientsLoading && <CircularProgress />}
-      <ClientModal
-        title='Client'
-        onClose={onClientClose}
-        onDelete={onDeleteClientClick}
-        onSave={onSaveClientClick}
-        show={showClientModal.show}
-        id={showClientModal.id}
-        name={showClientModal.name}
-        phoneNumber={showClientModal.phoneNumber}
-        emailAddress={showClientModal.email}
-        discount={showClientModal.discount}
-        editMode={showClientModal.edit}
-        notes={showClientModal.notes}
-      />
       {!clientsLoading && (
-        <CardColumns className='pb-3'>
-          {clients.length > 0 &&
-            clients.map((client) => {
-              return (
-                <EditableCard
-                  key={`Card-Client-${client.id}`}
-                  id={client.id}
-                  title={client.name}
-                  onDelete={() => onDeleteClientClick(client.id)}
-                  onEdit={() =>
-                    onClientClick(
-                      client.id,
-                      client.name,
-                      client.emailAddress,
-                      client.phoneNumber,
-                      client.discount,
-                      client.notes
-                    )
-                  }
-                  body={
-                    <Client
-                      id={client.id}
-                      emailAddress={client.emailAddress}
-                      phoneNumber={client.phoneNumber}
-                      discount={client.discount}
-                    />
-                  }
-                />
-              );
-            })}
-        </CardColumns>
+        <Formik
+          initialValues={{ clients }}
+          onSubmit={onSave}
+          enableReinitialize>
+          {({ values }) => (
+            <form>
+              <CardColumns className='pb-3'>
+                {values.clients.length > 0 &&
+                  values.clients.map((client) => {
+                    return (
+                      <Client
+                        key={client.id}
+                        id={client.id}
+                        client={client}
+                        onSave={onSave}
+                        onDelete={onDeleteClientClick}
+                      />
+                    );
+                  })}
+              </CardColumns>
+            </form>
+          )}
+        </Formik>
       )}
       <Button onClick={onNewClientClick}>Add New Client</Button>
     </>
