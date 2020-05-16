@@ -14,7 +14,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
 
   return (
     <>
-      <div className='pb-3'>
+      <div className='pb-3 pr-3 pl-3'>
         <TextField
           label='Email Address:'
           id={`emailAddress-${id}`}
@@ -25,7 +25,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           disabled
         />
       </div>
-      <div className='pb-3'>
+      <div className='pb-3 pr-3 pl-3'>
         <PhoneField
           id={`phoneNumber-${id}`}
           label='Phone Number:'
@@ -33,7 +33,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
           disabled
         />
       </div>
-      <div className='pb-3'>
+      <div className='pb-3 pr-3 pl-3'>
         <NumberField
           id={`discount-${id}`}
           label='Service Discount:'
@@ -47,7 +47,7 @@ const Client = ({ id, emailAddress, phoneNumber, discount }) => {
         />
       </div>
       <Divider variant='middle' />
-      <div className='pb-3'>
+      <div className='pb-3 pr-3 pl-3'>
         <TextField
           id={`ClientNotes-${id}`}
           label='Client Notes'

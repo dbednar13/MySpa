@@ -7,7 +7,7 @@ import NumberField from '../../../common/numberField';
 const Service = ({ length, cost, id }) => {
   return (
     <>
-      <div className='pb-3'>
+      <div className='pb-3 pr-3 pl-3'>
         <NumberField
           label='Service length (minutes):'
           id={`serviceLength-${id}`}

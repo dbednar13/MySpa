@@ -67,7 +67,7 @@ const AddonModal = ({
         {showAlert && (
           <Alert variant='danger'>Please enter a name and a cost</Alert>
         )}
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <TextField
             label='Addon Name:'
             id='name'
@@ -76,7 +76,7 @@ const AddonModal = ({
             value={localName}
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <CurrencyField
             id='cost'
             label='Service cost:'

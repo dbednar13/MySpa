@@ -80,7 +80,7 @@ const ServiceModal = ({
             Please enter a name, duration and a cost
           </Alert>
         )}
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <TextField
             id='name'
             placeholder='Service Name'
@@ -89,7 +89,7 @@ const ServiceModal = ({
             label='Service Name:'
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <NumberField
             label='Service length (minutes):'
             id='serviceLength'
@@ -100,7 +100,7 @@ const ServiceModal = ({
             disabled
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <CurrencyField
             label='Service cost:'
             id='cost'

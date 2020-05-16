@@ -111,7 +111,7 @@ const ClientModal = ({
         {showAlert && (
           <Alert variant='danger'>Please enter a all information</Alert>
         )}
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <TextField
             label='Client Name:'
             id={`name-${id}`}
@@ -120,7 +120,7 @@ const ClientModal = ({
             value={localName}
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <TextField
             label='Email Address:'
             id={`emailAddress-${id}`}
@@ -130,7 +130,7 @@ const ClientModal = ({
             fullWidth
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <PhoneField
             id={`phoneNumber-${id}`}
             label='Phone Number:'
@@ -138,7 +138,7 @@ const ClientModal = ({
             value={localPhoneNumber}
           />
         </div>
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <NumberField
             id={`discount-${id}`}
             label='Service Discount:'
@@ -151,7 +151,7 @@ const ClientModal = ({
           />
         </div>
         <Divider variant='middle' />
-        <div className='pb-3'>
+        <div className='pb-3 pr-3 pl-3'>
           <TextField
             id={`clientNotes-${id}`}
             label='Client Notes'
