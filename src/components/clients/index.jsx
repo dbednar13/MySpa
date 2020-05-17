@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
-import { Formik } from 'formik';
 import { Button, CardColumns } from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -48,10 +47,6 @@ const Clients = ({ firebase }) => {
     deleteClient(user.uid, id).then(getClients);
   };
 
-  const onClientClose = () => {
-    setShowClientModal(false);
-  };
-
   const onNewClientClick = () => {
     const newState = { ...showClientModal, show: true };
     setShowClientModal(newState);
@@ -76,29 +71,20 @@ const Clients = ({ firebase }) => {
     <>
       {clientsLoading && <CircularProgress />}
       {!clientsLoading && (
-        <Formik
-          initialValues={{ clients }}
-          onSubmit={onSave}
-          enableReinitialize>
-          {({ values }) => (
-            <form>
-              <CardColumns className='pb-3'>
-                {clients.length > 0 &&
-                  clients.map((client) => {
-                    return (
-                      <Client
-                        key={client.id}
-                        id={client.id}
-                        client={client}
-                        onSave={() => onSave(values)}
-                        onDelete={onDeleteClientClick}
-                      />
-                    );
-                  })}
-              </CardColumns>
-            </form>
-          )}
-        </Formik>
+        <CardColumns className='pb-3'>
+          {clients.length > 0 &&
+            clients.map((client) => {
+              return (
+                <Client
+                  key={client.id}
+                  id={client.id}
+                  client={client}
+                  onSave={onSave}
+                  onDelete={onDeleteClientClick}
+                />
+              );
+            })}
+        </CardColumns>
       )}
       <Button onClick={onNewClientClick}>Add New Client</Button>
     </>
