@@ -60,7 +60,7 @@ const Clients = ({ firebase }) => {
       client.discount,
       client.emailAddress,
       client.phoneNumber,
-      client.notes,
+      client.notes || '',
       client.id
     ).then(getClients);
   };

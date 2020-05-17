@@ -5,7 +5,7 @@ const clientPropType = shape({
   phoneNumber: string,
   emailAddress: string,
   discount: number,
-  clientNotes: string,
+  notes: string,
 });
 
 const clientDefaultProps = {
@@ -13,7 +13,7 @@ const clientDefaultProps = {
   phoneNumber: '',
   emailAddress: '',
   discount: 0,
-  clientNotes: '',
+  notes: '',
 }
 
 export {clientPropType, clientDefaultProps};

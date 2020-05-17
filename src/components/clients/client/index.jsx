@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { func } from 'prop-types';
+import { Formik } from 'formik';
 
 import { clientPropType } from './clientPropType';
 import ClientData from './clientData';
@@ -9,29 +10,33 @@ import EditableCard from '../../editableCard';
 const Client = ({ client, onSave, onDelete }) => {
   const [openModal, setOpenModal] = useState(false);
 
-  const onClientSave = () => {
-    onSave(client, false);
+  const onClientSave = (values) => {
+    onSave(values.client, false);
   };
 
   return (
-    <>
-      <ClientModal
-        onClose={() => setOpenModal(false)}
-        onDelete={() => onDelete(client.id)}
-        onSave={onClientSave}
-        show={openModal}
-        client={client}
-        editMode
-      />
-      <EditableCard
-        key={`Card-Client-${client.id}`}
-        id={`card-${client.id}`}
-        title={client.name}
-        onDelete={() => onDelete(client.id)}
-        onEdit={() => setOpenModal(true)}
-        body={<ClientData client={client} />}
-      />
-    </>
+    <Formik initialValues={{ client }}>
+      {({ values }) => (
+        <form>
+          <ClientModal
+            onClose={() => setOpenModal(false)}
+            onDelete={() => onDelete(client.id)}
+            onSave={() => onClientSave(values)}
+            show={openModal}
+            client={client}
+            editMode
+          />
+          <EditableCard
+            key={`Card-Client-${client.id}`}
+            id={`card-${client.id}`}
+            title={client.name}
+            onDelete={() => onDelete(client.id)}
+            onEdit={() => setOpenModal(true)}
+            body={<ClientData client={client} />}
+          />
+        </form>
+      )}
+    </Formik>
   );
 };
 
