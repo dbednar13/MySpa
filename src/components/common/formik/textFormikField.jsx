@@ -15,8 +15,7 @@ export default function TextFormikField({ name, validate, textField }) {
         const error = getIn(errors, name);
 
         function handleOnChange(input) {
-          console.log(name, input);
-          setFieldValue(name, input);
+          setFieldValue(name, input.target.value);
         }
 
         return (
