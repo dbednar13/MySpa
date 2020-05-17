@@ -83,14 +83,14 @@ const Clients = ({ firebase }) => {
           {({ values }) => (
             <form>
               <CardColumns className='pb-3'>
-                {values.clients.length > 0 &&
-                  values.clients.map((client) => {
+                {clients.length > 0 &&
+                  clients.map((client) => {
                     return (
                       <Client
                         key={client.id}
                         id={client.id}
                         client={client}
-                        onSave={onSave}
+                        onSave={() => onSave(values)}
                         onDelete={onDeleteClientClick}
                       />
                     );

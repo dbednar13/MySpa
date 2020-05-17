@@ -5,6 +5,7 @@ import { Divider, InputAdornment, TextField } from '@material-ui/core';
 import { clientPropType, clientDefaultProps } from '../clientPropType';
 import NumberField from '../../../common/numberField';
 import PhoneField from '../../../common/phoneField';
+import TextFormikField from '../../../common/formik/textFormikField';
 
 const ClientData = ({ client, isModal }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
@@ -12,12 +13,14 @@ const ClientData = ({ client, isModal }) => {
     <>
       {isModal && (
         <div className='pb-3 pr-3 pl-3'>
-          <TextField
+          <TextFormikField
             name='client.name'
-            label='Client Name:'
-            id={`client.name${idSuffix}`}
-            placeholder='Service Name'
-            disabled={!isModal}
+            textField={{
+              label: 'Client Name:',
+              id: `client.name${idSuffix}`,
+              placeholder: 'Client Name',
+              disabled: !isModal,
+            }}
           />
         </div>
       )}
