@@ -17,7 +17,10 @@ const ClientModal = ({
   resetForm,
 }) => {
   const [showAlert, setShowAlert] = useState(false);
-  const hasErrors = errors.client && errors.client.name !== '';
+  const hasErrors =
+    errors.client &&
+    ((errors.client.name && errors.client.name !== '') ||
+      (errors.client.emailAddress && errors.client.emailAddress !== ''));
 
   const handleClose = () => {
     resetForm();

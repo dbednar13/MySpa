@@ -1,6 +1,7 @@
 import React from 'react';
 import { bool } from 'prop-types';
 import { Divider, InputAdornment } from '@material-ui/core';
+import * as EmailValidator from 'email-validator';
 
 import { clientPropType, clientDefaultProps } from '../clientPropType';
 import NumberField from '../../../common/numberField';
@@ -10,14 +11,34 @@ import TextFormikField from '../../../common/formik/textFormikField';
 const ClientData = ({ client, isModal }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
 
-  const validateName = (value) => {
-    if (value === undefined) {
-      return 'Please enter a name';
+  const validateName = (validate, value) => {
+    if (validate) {
+      if (value === undefined) {
+        return 'Please enter a name';
+      }
+      const name = value.trim();
+      if (name === '' || name.length < 1) {
+        return 'Please enter a name';
+      }
     }
-    const name = value.trim();
-    if (name === '' || name.length < 1) {
-      return 'Please enter a name';
+    return '';
+  };
+
+  const validateEmail = (validate, value) => {
+    if (validate) {
+      if (value === undefined) {
+        return 'Please enter an email';
+      }
+      const email = value.trim();
+      if (email === '') {
+        return 'Please enter an email';
+      }
+
+      if (!EmailValidator.validate(email)) {
+        return 'Please enter a valid email address';
+      }
     }
+
     return '';
   };
 
@@ -34,7 +55,7 @@ const ClientData = ({ client, isModal }) => {
               disabled: !isModal,
             }}
             validate={(value) => {
-              return validateName(value);
+              return validateName(isModal, value);
             }}
           />
         </div>
@@ -48,6 +69,9 @@ const ClientData = ({ client, isModal }) => {
             placeholder: 'Email',
             fullWidth: true,
             disabled: !isModal,
+          }}
+          validate={(value) => {
+            return validateEmail(isModal, value);
           }}
         />
       </div>
