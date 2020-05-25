@@ -2,9 +2,9 @@ import React from 'react';
 import { useField } from 'formik';
 import { string, shape, func } from 'prop-types';
 
-import TextField from '@material-ui/core/TextField';
+import NumberField from '../numberField';
 
-export default function TextFormikField({ name, validate, textField }) {
+export default function NumberFormikField({ name, validate, numberField }) {
   const [field, meta, helpers] = useField({ name, validate });
   const { value } = field;
   const { error, touched } = meta;
@@ -12,9 +12,9 @@ export default function TextFormikField({ name, validate, textField }) {
 
   const handleOnChange = (input) => {
     setTouched(true);
-    setValue(input.target.value);
+    setValue(input.floatValue);
     if (validate) {
-      setError(validate(input.target.value));
+      setError(validate(input.floatValue));
     }
   };
 
@@ -23,25 +23,25 @@ export default function TextFormikField({ name, validate, textField }) {
   };
 
   return (
-    <TextField
+    <NumberField
       onChange={handleOnChange}
       value={value}
       error={error !== undefined && error !== ''}
       helperText={helperText()}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...textField}
+      {...numberField}
     />
   );
 }
 
-TextFormikField.propTypes = {
+NumberFormikField.propTypes = {
   name: string.isRequired,
-  textField: shape({}).isRequired,
+  numberField: shape({}).isRequired,
   errorText: string,
   validate: func,
 };
 
-TextFormikField.defaultProps = {
+NumberFormikField.defaultProps = {
   errorText: '',
   validate: undefined,
 };

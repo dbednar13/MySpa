@@ -4,9 +4,8 @@ import { Divider, InputAdornment } from '@material-ui/core';
 import * as EmailValidator from 'email-validator';
 
 import { clientPropType, clientDefaultProps } from '../clientPropType';
-import NumberField from '../../../common/numberField';
 import PhoneField from '../../../common/phoneField';
-import TextFormikField from '../../../common/formik/textFormikField';
+import { NumberFormikField, TextFormikField } from '../../../common/formik';
 
 const ClientData = ({ client, isModal }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
@@ -84,16 +83,18 @@ const ClientData = ({ client, isModal }) => {
         />
       </div>
       <div className='pb-3 pr-3 pl-3'>
-        <NumberField
+        <NumberFormikField
           name='client.discount'
-          id={`client.discount${idSuffix}`}
-          label='Service Discount:'
-          decimalScale='0'
-          allowNegative={false}
-          adornment={{
-            endAdornment: <InputAdornment position='end'>%</InputAdornment>,
+          numberField={{
+            id: `client.discount${idSuffix}`,
+            label: 'Service Discount:',
+            decimalScale: '0',
+            allowNegative: false,
+            adornment: {
+              endAdornment: <InputAdornment position='end'>%</InputAdornment>,
+            },
+            disabled: !isModal,
           }}
-          disabled={!isModal}
         />
       </div>
       <Divider variant='middle' />
