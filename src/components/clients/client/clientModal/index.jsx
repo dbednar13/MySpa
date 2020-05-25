@@ -6,9 +6,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ClientData from '../clientData';
 import { clientPropType, clientDefaultProps } from '../clientPropType';
 
-const ClientModal = ({ client, show, onClose, onDelete, onSave, editMode }) => {
+const ClientModal = ({
+  client,
+  show,
+  onClose,
+  onDelete,
+  onSave,
+  editMode,
+  resetForm,
+}) => {
   const [showAlert, setShowAlert] = useState(false);
+  const [errorFields, setErrorFields] = useState([]);
+
   const handleClose = () => {
+    resetForm();
     setShowAlert(false);
     onClose();
   };
@@ -18,25 +29,23 @@ const ClientModal = ({ client, show, onClose, onDelete, onSave, editMode }) => {
     onClose();
   };
 
+  const handleError = (name, error) => {
+    let array = errorFields;
+    if (error !== '') {
+      array.push(name);
+    } else {
+      array = errorFields.filter((e) => e !== name);
+    }
+    setErrorFields(array);
+  };
+
   const handleSave = () => {
     setShowAlert(false);
-    if (
-      true
-      /*
-      TODO:  validate.
-      localName &&
-      localName !== '' &&
-      localEmail &&
-      localEmail !== '' &&
-      localDiscount !== null &&
-      localDiscount >= 0.0 &&
-      localPhoneNumber !== null &&
-      localPhoneNumber > 0.0 */
-    ) {
+    if (errorFields.length > 0) {
+      setShowAlert(true);
+    } else {
       onSave();
       onClose();
-    } else {
-      setShowAlert(true);
     }
   };
 
@@ -51,7 +60,7 @@ const ClientModal = ({ client, show, onClose, onDelete, onSave, editMode }) => {
         {showAlert && (
           <Alert variant='danger'>Please enter a all information</Alert>
         )}
-        <ClientData client={client} isModal />
+        <ClientData client={client} setError={handleError} isModal />
       </Modal.Body>
       <Modal.Footer />
       <div className='d-flex justify-content-between pb-2'>
@@ -69,7 +78,10 @@ const ClientModal = ({ client, show, onClose, onDelete, onSave, editMode }) => {
             </Button>
           </div>
           <div>
-            <Button variant='primary' onClick={handleSave}>
+            <Button
+              variant='primary'
+              onClick={handleSave}
+              disabled={errorFields.length > 0}>
               Save
             </Button>
           </div>
@@ -84,6 +96,7 @@ ClientModal.propTypes = {
   onClose: func.isRequired,
   onDelete: func.isRequired,
   onSave: func.isRequired,
+  resetForm: func.isRequired,
   client: clientPropType,
   editMode: bool,
 };

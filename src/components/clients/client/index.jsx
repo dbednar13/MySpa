@@ -15,8 +15,12 @@ const Client = ({ client, onSave, onDelete }) => {
   };
 
   return (
-    <Formik initialValues={{ client }}>
-      {({ values }) => (
+    <Formik
+      initialValues={{ client }}
+      validateOnBlur={false}
+      validateOnChange={false}
+      enableReinitialize>
+      {({ values, resetForm }) => (
         <form>
           <ClientModal
             onClose={() => setOpenModal(false)}
@@ -24,6 +28,7 @@ const Client = ({ client, onSave, onDelete }) => {
             onSave={() => onClientSave(values)}
             show={openModal}
             client={client}
+            resetForm={resetForm}
             editMode
           />
           <EditableCard

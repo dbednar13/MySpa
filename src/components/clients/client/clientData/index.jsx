@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool } from 'prop-types';
+import { bool, func } from 'prop-types';
 import { Divider, InputAdornment } from '@material-ui/core';
 
 import { clientPropType, clientDefaultProps } from '../clientPropType';
@@ -7,8 +7,23 @@ import NumberField from '../../../common/numberField';
 import PhoneField from '../../../common/phoneField';
 import TextFormikField from '../../../common/formik/textFormikField';
 
-const ClientData = ({ client, isModal }) => {
+const ClientData = ({ client, isModal, setError }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
+
+  const validateName = (value) => {
+    if (value === undefined) {
+      setError('client.name', 'Please enter a Name');
+      return 'Please enter a name';
+    }
+    const name = value.trim();
+    if (name === '' || name.length < 1) {
+      setError('client.name', 'Please enter a Name');
+      return 'Please enter a name';
+    }
+    setError('client.name', '');
+    return '';
+  };
+
   return (
     <>
       {isModal && (
@@ -20,6 +35,9 @@ const ClientData = ({ client, isModal }) => {
               id: `client.name${idSuffix}`,
               placeholder: 'Client Name',
               disabled: !isModal,
+            }}
+            validate={(value) => {
+              return validateName(value);
             }}
           />
         </div>
@@ -77,11 +95,13 @@ const ClientData = ({ client, isModal }) => {
 };
 
 ClientData.propTypes = {
+  setError: func,
   client: clientPropType,
   isModal: bool,
 };
 
 ClientData.defaultProps = {
+  setError: undefined,
   client: clientDefaultProps,
   isModal: false,
 };
