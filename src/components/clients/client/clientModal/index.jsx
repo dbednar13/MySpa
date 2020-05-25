@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Alert } from 'react-bootstrap';
-import { bool, func } from 'prop-types';
+import { bool, func, shape } from 'prop-types';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import ClientData from '../clientData';
@@ -13,10 +13,11 @@ const ClientModal = ({
   onDelete,
   onSave,
   editMode,
+  errors,
   resetForm,
 }) => {
   const [showAlert, setShowAlert] = useState(false);
-  const [errorFields, setErrorFields] = useState([]);
+  const hasErrors = errors.client && errors.client.name !== '';
 
   const handleClose = () => {
     resetForm();
@@ -29,19 +30,9 @@ const ClientModal = ({
     onClose();
   };
 
-  const handleError = (name, error) => {
-    let array = errorFields;
-    if (error !== '') {
-      array.push(name);
-    } else {
-      array = errorFields.filter((e) => e !== name);
-    }
-    setErrorFields(array);
-  };
-
   const handleSave = () => {
     setShowAlert(false);
-    if (errorFields.length > 0) {
+    if (hasErrors) {
       setShowAlert(true);
     } else {
       onSave();
@@ -60,7 +51,7 @@ const ClientModal = ({
         {showAlert && (
           <Alert variant='danger'>Please enter a all information</Alert>
         )}
-        <ClientData client={client} setError={handleError} isModal />
+        <ClientData client={client} isModal />
       </Modal.Body>
       <Modal.Footer />
       <div className='d-flex justify-content-between pb-2'>
@@ -81,7 +72,8 @@ const ClientModal = ({
             <Button
               variant='primary'
               onClick={handleSave}
-              disabled={errorFields.length > 0}>
+              // disabled={errorFields.length > 0}>
+              disabled={hasErrors}>
               Save
             </Button>
           </div>
@@ -99,11 +91,13 @@ ClientModal.propTypes = {
   resetForm: func.isRequired,
   client: clientPropType,
   editMode: bool,
+  errors: shape({}),
 };
 
 ClientModal.defaultProps = {
   client: clientDefaultProps,
   editMode: false,
+  errors: undefined,
 };
 
 export default ClientModal;

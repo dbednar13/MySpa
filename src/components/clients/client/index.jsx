@@ -20,7 +20,7 @@ const Client = ({ client, onSave, onDelete }) => {
       validateOnBlur={false}
       validateOnChange={false}
       enableReinitialize>
-      {({ values, resetForm }) => (
+      {({ values, resetForm, errors }) => (
         <form>
           <ClientModal
             onClose={() => setOpenModal(false)}
@@ -29,6 +29,7 @@ const Client = ({ client, onSave, onDelete }) => {
             show={openModal}
             client={client}
             resetForm={resetForm}
+            errors={errors}
             editMode
           />
           <EditableCard

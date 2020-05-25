@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
+import { bool } from 'prop-types';
 import { Divider, InputAdornment } from '@material-ui/core';
 
 import { clientPropType, clientDefaultProps } from '../clientPropType';
@@ -7,20 +7,17 @@ import NumberField from '../../../common/numberField';
 import PhoneField from '../../../common/phoneField';
 import TextFormikField from '../../../common/formik/textFormikField';
 
-const ClientData = ({ client, isModal, setError }) => {
+const ClientData = ({ client, isModal }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
 
   const validateName = (value) => {
     if (value === undefined) {
-      setError('client.name', 'Please enter a Name');
       return 'Please enter a name';
     }
     const name = value.trim();
     if (name === '' || name.length < 1) {
-      setError('client.name', 'Please enter a Name');
       return 'Please enter a name';
     }
-    setError('client.name', '');
     return '';
   };
 
@@ -95,13 +92,11 @@ const ClientData = ({ client, isModal, setError }) => {
 };
 
 ClientData.propTypes = {
-  setError: func,
   client: clientPropType,
   isModal: bool,
 };
 
 ClientData.defaultProps = {
-  setError: undefined,
   client: clientDefaultProps,
   isModal: false,
 };
