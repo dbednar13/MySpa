@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 import CustomPhoneField from './customPhoneField';
 
-const NumberField = ({ label, id, disabled, ...rest }) => {
+const NumberField = ({ label, id, disabled, error, helperText, ...rest }) => {
   return (
     <TextField
       label={label}
@@ -14,6 +14,8 @@ const NumberField = ({ label, id, disabled, ...rest }) => {
         inputProps: { ...rest },
       }}
       disabled={disabled}
+      error={error}
+      helperText={helperText}
     />
   );
 };
@@ -23,11 +25,15 @@ NumberField.propTypes = {
   adornment: shape({}),
   label: string.isRequired,
   disabled: bool,
+  error: bool,
+  helperText: string,
 };
 
 NumberField.defaultProps = {
   adornment: undefined,
   disabled: false,
+  error: false,
+  helperText: '',
 };
 
 export default NumberField;

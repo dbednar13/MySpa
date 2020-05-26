@@ -20,7 +20,8 @@ const ClientModal = ({
   const hasErrors =
     errors.client &&
     ((errors.client.name && errors.client.name !== '') ||
-      (errors.client.emailAddress && errors.client.emailAddress !== ''));
+      (errors.client.emailAddress && errors.client.emailAddress !== '') ||
+      (errors.client.phoneNumber && errors.client.phoneNumber !== ''));
 
   const handleClose = () => {
     resetForm();
