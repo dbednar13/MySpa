@@ -13,18 +13,18 @@ export function fetchAddons(userId) {
   return fireStore.collection('users').doc(userId).collection('addons').get();
 }
 
-export function saveAddon(userId, isNew, name, cost, active, id = -1) {
+export function saveAddon(userId, isNew, name, cost, id = -1) {
   if (isNew || id === -1) {
     return fireStore
       .collection('users')
       .doc(userId)
       .collection('addons')
-      .add({ name, cost: Number(cost), active });
+      .add({ name, cost: Number(cost), active: true });
   }
   return fireStore
     .collection('users')
     .doc(userId)
     .collection('addons')
     .doc(id)
-    .set({ name, cost: Number(cost), active }, { merge: true });
+    .set({ name, cost: Number(cost) }, { merge: true });
 }
