@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
 import { Button, CardColumns } from 'react-bootstrap';
+import { Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Client from './client';
+import ClientModal from './client/clientModal';
 import { deleteClient, fetchClients, saveClient } from '../../api/clients';
 
 const Clients = ({ firebase }) => {
@@ -69,6 +71,25 @@ const Clients = ({ firebase }) => {
     <Redirect to='/Home' />
   ) : (
     <>
+      <Formik
+        initialValues={{}}
+        validateOnBlur={false}
+        validateOnChange={false}
+        enableReinitialize>
+        {({ values, resetForm, errors }) => (
+          <form>
+            <ClientModal
+              onClose={() => setShowClientModal(false)}
+              onDelete={() => onDeleteClientClick()}
+              onSave={() => onSave(values, true)}
+              show={showClientModal}
+              resetForm={resetForm}
+              errors={errors}
+              editMode
+            />
+          </form>
+        )}
+      </Formik>
       {clientsLoading && <CircularProgress />}
       {!clientsLoading && (
         <CardColumns className='pb-3'>
