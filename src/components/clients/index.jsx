@@ -8,6 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Client from './client';
 import ClientModal from './client/clientModal';
 import { deleteClient, fetchClients, saveClient } from '../../api/clients';
+import { clientDefaultProps } from './client/clientPropType';
 
 const Clients = ({ firebase }) => {
   const [clients, setClients] = useState(null);
@@ -50,8 +51,7 @@ const Clients = ({ firebase }) => {
   };
 
   const onNewClientClick = () => {
-    const newState = { ...showClientModal, show: true };
-    setShowClientModal(newState);
+    setShowClientModal(true);
   };
 
   const onSave = (client, isNew) => {
@@ -67,12 +67,14 @@ const Clients = ({ firebase }) => {
     ).then(getClients);
   };
 
+  const defaultNewClient = { client: clientDefaultProps };
+
   return !firebase.auth().currentUser ? (
     <Redirect to='/Home' />
   ) : (
     <>
       <Formik
-        initialValues={{}}
+        initialValues={defaultNewClient}
         validateOnBlur={false}
         validateOnChange={false}
         enableReinitialize>
@@ -81,9 +83,10 @@ const Clients = ({ firebase }) => {
             <ClientModal
               onClose={() => setShowClientModal(false)}
               onDelete={() => onDeleteClientClick()}
-              onSave={() => onSave(values, true)}
+              onSave={() => onSave(values.client, true)}
               show={showClientModal}
               resetForm={resetForm}
+              client={defaultNewClient}
               errors={errors}
               editMode
             />

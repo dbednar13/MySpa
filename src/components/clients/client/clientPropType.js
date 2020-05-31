@@ -2,6 +2,7 @@ import {shape, number, string} from "prop-types";
 
 const clientPropType = shape({
   id: string,
+  name: string,
   phoneNumber: string,
   emailAddress: string,
   discount: number,
@@ -10,6 +11,7 @@ const clientPropType = shape({
 
 const clientDefaultProps = {
   id: '',
+  name: '',
   phoneNumber: '',
   emailAddress: '',
   discount: 0,
