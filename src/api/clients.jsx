@@ -21,7 +21,6 @@ export function saveClient(
   emailAddress,
   phoneNumber,
   notes,
-  active,
   id
 ) {
   if (isNew || id === 'NaC') {
@@ -35,7 +34,7 @@ export function saveClient(
         emailAddress,
         discount: Number(discount),
         notes,
-        active,
+        active: true,
       });
   }
   return fireStore
@@ -50,7 +49,6 @@ export function saveClient(
         emailAddress,
         discount: Number(discount),
         notes,
-        active,
       },
       { merge: true }
     );

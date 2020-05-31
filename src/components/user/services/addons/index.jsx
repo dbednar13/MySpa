@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { shape } from 'prop-types';
 import { Button, CardColumns } from 'react-bootstrap';
+import { Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { shape } from 'prop-types';
 import Addon from './addon';
-import AddonModal from './addonModal';
-import EditableCard from '../../../editableCard';
+import AddonModal from './addon/addonModal';
+import { addonDefaultProps } from './addon/addonPropType';
 import { deleteAddon, fetchAddons, saveAddon } from '../../../../api/addons';
 
 const Addons = ({ user }) => {
-  const defaultAddonState = {
-    show: false,
-    id: null,
-    name: null,
-    cost: null,
-    edit: false,
-  };
-
   const [addonsLoading, setAddonsLoading] = useState(true);
   const [addons, setAddons] = useState([]);
-  const [addonModalState, setAddonModalState] = useState(defaultAddonState);
+  const [showAddonModal, setShowAddonModal] = useState(false);
 
   const getAddons = () => {
     fetchAddons(user.uid).then((snapshot) => {
@@ -45,63 +38,63 @@ const Addons = ({ user }) => {
   }, [user]);
 
   const onNewAddonClick = () => {
-    const newState = { ...addonModalState, show: true };
-    setAddonModalState(newState);
-  };
-  const onEditAddonClick = (addon) => {
-    const newState = {
-      show: true,
-      id: addon.id,
-      name: addon.name,
-      cost: addon.cost,
-      edit: true,
-    };
-    setAddonModalState(newState);
-  };
-  const onAddonClose = () => {
-    setAddonModalState(defaultAddonState);
+    setShowAddonModal(true);
   };
 
   const onDeleteAddonClick = (id) => {
     deleteAddon(user.uid, id).then(getAddons);
   };
 
-  const onSaveAddonClick = (isNew, name, cost, active, id = -1) => {
-    saveAddon(user.uid, isNew, name, cost, active, id).then(getAddons);
+  const onSaveAddonClick = (addon, isNew) => {
+    saveAddon(user.uid, isNew, addon.name, addon.cost, addon.id).then(
+      getAddons
+    );
   };
+
+  const defaultNewAddon = { addon: addonDefaultProps };
 
   return (
     <>
-      <AddonModal
-        title={`${addonModalState.edit ? 'Edit' : 'Add New'} Service Addon`}
-        onClose={onAddonClose}
-        onDelete={onDeleteAddonClick}
-        onSave={onSaveAddonClick}
-        show={addonModalState.show}
-        id={addonModalState.id}
-        name={addonModalState.name}
-        cost={addonModalState.cost}
-        editMode={addonModalState.edit}
-      />
+      <Formik
+        initialValues={defaultNewAddon}
+        validateOnBlur={false}
+        validateOnChange={false}
+        enableReinitialize>
+        {({ values, resetForm, errors }) => (
+          <form>
+            <AddonModal
+              onClose={() => setShowAddonModal(false)}
+              onDelete={() => onDeleteAddonClick()}
+              onSave={() => onSaveAddonClick(values.addon, true)}
+              show={showAddonModal}
+              resetForm={resetForm}
+              addon={defaultNewAddon}
+              errors={errors}
+              editMode
+            />
+          </form>
+        )}
+      </Formik>
       {addonsLoading && <CircularProgress />}
       {!addonsLoading && (
         <CardColumns className='pb-3'>
           {addons.length > 0 &&
             addons.map((addon) => {
               return (
-                <EditableCard
-                  key={`Card-Addon-${addon.id}`}
+                <Addon
+                  key={addon.id}
                   id={addon.id}
-                  title={addon.name}
-                  onDelete={() => onDeleteAddonClick(addon.id)}
-                  onEdit={() => onEditAddonClick(addon)}
-                  body={<Addon id={addon.id} cost={addon.cost} />}
+                  addon={addon}
+                  onSave={onSaveAddonClick}
+                  onDelete={onDeleteAddonClick}
                 />
               );
             })}
         </CardColumns>
       )}
-      <Button onClick={onNewAddonClick}>Add New Service Addon</Button>
+      <div className='pb-3'>
+        <Button onClick={onNewAddonClick}>Add New Service Addon</Button>
+      </div>
     </>
   );
 };

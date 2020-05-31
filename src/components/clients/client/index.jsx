@@ -1,84 +1,55 @@
 import React, { useState } from 'react';
-import { string, number } from 'prop-types';
-import NumberFormat from 'react-number-format';
-import { Divider, TextField } from '@material-ui/core';
+import { func } from 'prop-types';
+import { Formik } from 'formik';
 
-const Client = ({ id, emailAddress, phoneNumber, discount }) => {
-  const [localEmail, setLocalEmail] = useState(emailAddress);
+import { clientPropType } from './clientPropType';
+import ClientData from './clientData';
+import ClientModal from './clientModal';
+import EditableCard from '../../editableCard';
 
-  const setEmail = (value) => {
-    setLocalEmail(value);
+const Client = ({ client, onSave, onDelete }) => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const onClientSave = (values) => {
+    onSave(values.client, false);
   };
 
   return (
-    <>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`emailAddress-${id}`}>
-          Email Address:{' '}
-          <input
-            id={`emailAddress-${id}`}
-            type='text'
-            placeholder='Email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={localEmail}
-            disabled
+    <Formik
+      initialValues={{ client }}
+      validateOnBlur={false}
+      validateOnChange={false}
+      enableReinitialize>
+      {({ values, resetForm, errors }) => (
+        <form>
+          <ClientModal
+            onClose={() => setOpenModal(false)}
+            onDelete={() => onDelete(client.id)}
+            onSave={() => onClientSave(values)}
+            show={openModal}
+            client={client}
+            resetForm={resetForm}
+            errors={errors}
+            editMode
           />
-        </label>
-      </div>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`phoneNumber-${id}`}>
-          Phone Number:{' '}
-          <NumberFormat
-            id={`phoneNumber-${id}`}
-            format='+1 (###) ###-####'
-            allowEmptyFormatting
-            mask='_'
-            value={phoneNumber}
-            disabled
+          <EditableCard
+            key={`Card-Client-${client.id}`}
+            id={`card-${client.id}`}
+            title={client.name}
+            onDelete={() => onDelete(client.id)}
+            onEdit={() => setOpenModal(true)}
+            body={<ClientData client={client} />}
           />
-        </label>
-      </div>
-      <div className='d-flex pb-2 pl-2'>
-        <label htmlFor={`discount-${id}`}>
-          Service Discount:{' '}
-          <NumberFormat
-            id={`discount-${id}`}
-            decimalScale='0'
-            allowNegative={false}
-            suffix='%'
-            value={discount}
-            disabled
-          />
-        </label>
-      </div>
-      <Divider variant='middle' />
-      <div className='d-flex pb-2 pl-2'>
-        <TextField
-          id={`ClientNotes-${id}`}
-          label='Client Notes'
-          disabled
-          multiline
-          rows={4}
-          maxRows={4}
-          fullWidth
-        />
-      </div>
-    </>
+        </form>
+      )}
+    </Formik>
   );
 };
 
 Client.propTypes = {
-  id: string,
-  phoneNumber: string,
-  emailAddress: string,
-  discount: number,
-};
-
-Client.defaultProps = {
-  id: '',
-  phoneNumber: '',
-  emailAddress: '',
-  discount: 0,
+  client: clientPropType.isRequired,
+  onDelete: func.isRequired,
+  onSave: func.isRequired,
 };
 
 export default Client;
