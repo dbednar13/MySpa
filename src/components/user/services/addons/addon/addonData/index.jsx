@@ -11,6 +11,13 @@ import {
 const AddonData = ({ addon, isModal }) => {
   const idSuffix = isModal ? '' : `-${addon.id}`;
 
+  const validateCost = (value) => {
+    if (value === undefined || value <= 0) {
+      return 'A cost is required';
+    }
+    return '';
+  };
+
   const validateName = (value) => {
     if (value === undefined) {
       return 'Please enter a name';
@@ -58,6 +65,9 @@ const AddonData = ({ addon, isModal }) => {
                 <InputAdornment position='start'>$</InputAdornment>
               ),
             },
+          }}
+          validate={(value) => {
+            return validateCost(value);
           }}
         />
       </div>

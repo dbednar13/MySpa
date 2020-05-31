@@ -11,6 +11,20 @@ import {
 const ServiceData = ({ service, isModal }) => {
   const idSuffix = isModal ? '' : `-${service.id}`;
 
+  const validateCost = (value) => {
+    if (value === undefined || value <= 0) {
+      return 'A cost is required';
+    }
+    return '';
+  };
+
+  const validateDuration = (value) => {
+    if (value === undefined || value < 1) {
+      return 'Please enter a duration';
+    }
+    return '';
+  };
+
   const validateName = (value) => {
     if (value === undefined) {
       return 'Please enter a name';
@@ -52,6 +66,9 @@ const ServiceData = ({ service, isModal }) => {
             allowNegative: false,
             disabled: !isModal,
           }}
+          validate={(value) => {
+            return validateDuration(value);
+          }}
         />
       </div>
       <div className='pb-3 pr-3 pl-3'>
@@ -71,6 +88,9 @@ const ServiceData = ({ service, isModal }) => {
                 <InputAdornment position='start'>$</InputAdornment>
               ),
             },
+          }}
+          validate={(value) => {
+            return validateCost(value);
           }}
         />
       </div>
