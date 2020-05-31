@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Button, Modal, Alert } from 'react-bootstrap';
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { bool, func, shape } from 'prop-types';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import ClientData from '../clientData';
-import { clientPropType, clientDefaultProps } from '../clientPropType';
+import ServiceData from '../serviceData';
+import { servicePropType, serviceDefaultProps } from '../servicePropType';
 
-const ClientModal = ({
-  client,
+const ServiceModal = ({
+  service,
   show,
   onClose,
   onDelete,
@@ -16,35 +16,28 @@ const ClientModal = ({
   errors,
   resetForm,
 }) => {
-  const [showAlert, setShowAlert] = useState(false);
   const hasErrors =
-    errors.client &&
-    ((errors.client.name && errors.client.name !== '') ||
-      (errors.client.emailAddress && errors.client.emailAddress !== '') ||
-      (errors.client.phoneNumber && errors.client.phoneNumber !== ''));
+    errors.service &&
+    ((errors.service.name && errors.service.name !== '') ||
+      (errors.service.duration && errors.service.duration !== '') ||
+      (errors.service.cost && errors.service.cost !== ''));
 
   const handleClose = () => {
     resetForm();
-    setShowAlert(false);
     onClose();
   };
 
   const handleDelete = () => {
-    onDelete(client.id);
+    onDelete(service.id);
     onClose();
   };
 
   const handleSave = () => {
-    setShowAlert(false);
-    if (hasErrors) {
-      setShowAlert(true);
-    } else {
-      onSave();
-      onClose();
-    }
+    onSave();
+    onClose();
   };
 
-  const formattedTitle = `${editMode ? 'Edit ' : 'Create '}Client`;
+  const formattedTitle = `${editMode ? 'Edit ' : 'Create '}Service`;
 
   return (
     <Modal centered show={show} onHide={handleClose}>
@@ -52,10 +45,7 @@ const ClientModal = ({
         <Modal.Title>{formattedTitle}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {showAlert && (
-          <Alert variant='danger'>Please enter a all information</Alert>
-        )}
-        <ClientData client={client} isModal />
+        <ServiceData service={service} isModal />
       </Modal.Body>
       <Modal.Footer />
       <div className='d-flex justify-content-between pb-2'>
@@ -83,21 +73,21 @@ const ClientModal = ({
   );
 };
 
-ClientModal.propTypes = {
+ServiceModal.propTypes = {
   show: bool.isRequired,
   onClose: func.isRequired,
   onDelete: func.isRequired,
   onSave: func.isRequired,
   resetForm: func.isRequired,
-  client: clientPropType,
+  service: servicePropType,
   editMode: bool,
   errors: shape({}),
 };
 
-ClientModal.defaultProps = {
-  client: clientDefaultProps,
+ServiceModal.defaultProps = {
+  service: serviceDefaultProps,
   editMode: false,
   errors: undefined,
 };
 
-export default ClientModal;
+export default ServiceModal;
