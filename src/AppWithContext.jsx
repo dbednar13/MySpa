@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -11,20 +11,24 @@ import {
   updateUserNotice,
 } from './api/user';
 import { hipaaNoticeText } from './constants/textConstants';
-import About from './components/about';
-import Dashboard from './components/dashboard';
-import Home from './components/home';
-import Login from './components/logIn';
-import SignOut from './components/signOut';
-import Clients from './components/clients';
-import UserServices from './components/user/services';
-import User from './components/user';
-import Nav from './Nav';
 import { withFirebase } from './firebase';
 import ConfirmModal from './components/common/confirmModal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
+
+/* eslint-disable */
+// lint likes to bitch about the imports like this.  ignore it.
+const About = lazy(() => import('./components/about'));
+const Dashboard = lazy(() => import('./components/dashboard'));
+const Home = lazy(() => import('./components/home'));
+const Login = lazy(() => import('./components/logIn'));
+const SignOut = lazy(() => import('./components/signOut'));
+const Clients = lazy(() => import('./components/clients'));
+const UserServices = lazy(() => import('./components/user/services'));
+const User = lazy(() => import('./components/user'));
+const Nav = lazy(() => import('./Nav'));
+/* eslint-enable */
 
 const AppWithContext = ({ firebase }) => {
   const [currentUser, setCurrentUser] = useState({
@@ -98,28 +102,30 @@ const AppWithContext = ({ firebase }) => {
         onClose={onModalReject}
         onOk={onModalAccept}
       />
-      <Router>
-        <div className='pb-3'>
-          <NavWithFirebase authenticated={currentUser.authenticated} />
-        </div>
-        <div className='container'>
-          <Switch>
-            <Route exact path='/' component={withFirebase(Home)} />
-            <Route exact path='/User' component={withFirebase(User)} />
-            <Route path='/About' component={withFirebase(About)} />
-            <Route path='/Dashboard' component={withFirebase(Dashboard)} />
-            <Route path='/dashboard' component={withFirebase(Dashboard)} />
-            <Route path='/Login' component={withFirebase(Login)} />
-            <Route path='/SignOut' component={withFirebase(SignOut)} />
-            <Route
-              path='/User/Services'
-              component={withFirebase(UserServices)}
-            />
-            <Route path='/User/Clients' component={withFirebase(Clients)} />
-            <Route component={withFirebase(Home)} />
-          </Switch>
-        </div>
-      </Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Router>
+          <div className='pb-3'>
+            <NavWithFirebase authenticated={currentUser.authenticated} />
+          </div>
+          <div className='container'>
+            <Switch>
+              <Route exact path='/' component={withFirebase(Home)} />
+              <Route exact path='/User' component={withFirebase(User)} />
+              <Route path='/About' component={withFirebase(About)} />
+              <Route path='/Dashboard' component={withFirebase(Dashboard)} />
+              <Route path='/dashboard' component={withFirebase(Dashboard)} />
+              <Route path='/Login' component={withFirebase(Login)} />
+              <Route path='/SignOut' component={withFirebase(SignOut)} />
+              <Route
+                path='/User/Services'
+                component={withFirebase(UserServices)}
+              />
+              <Route path='/User/Clients' component={withFirebase(Clients)} />
+              <Route component={withFirebase(Home)} />
+            </Switch>
+          </div>
+        </Router>
+      </Suspense>
     </div>
   );
 };

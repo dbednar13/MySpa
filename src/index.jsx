@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppContainer } from 'react-hot-loader';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Firebase, { FirebaseContext } from './firebase';
@@ -6,7 +7,9 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <FirebaseContext.Provider value={Firebase}>
-    <App />
+    <AppContainer>
+      <App />
+    </AppContainer>
   </FirebaseContext.Provider>,
   document.getElementById('root')
 );
