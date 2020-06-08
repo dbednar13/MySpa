@@ -17,8 +17,6 @@ import ConfirmModal from './components/common/confirmModal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 
-/* eslint-disable */
-// lint likes to bitch about the imports like this.  ignore it.
 const About = lazy(() => import('./components/about'));
 const Dashboard = lazy(() => import('./components/dashboard'));
 const Home = lazy(() => import('./components/home'));
@@ -28,7 +26,6 @@ const Clients = lazy(() => import('./components/clients'));
 const UserServices = lazy(() => import('./components/user/services'));
 const User = lazy(() => import('./components/user'));
 const Nav = lazy(() => import('./Nav'));
-/* eslint-enable */
 
 const AppWithContext = ({ firebase }) => {
   const [currentUser, setCurrentUser] = useState({

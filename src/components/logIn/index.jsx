@@ -4,9 +4,18 @@ import { StyledFirebaseAuth } from 'react-firebaseui';
 
 const LogIn = ({ firebase }) => {
   const uiConfig = {
-    // Popup signin flow rather than redirect flow.
+    // Popup sign in flow rather than redirect flow.
     signInFlow: 'popup',
-    signInSuccessUrl: '/dashboard',
+    signInSuccessUrl: '/Dashboard',
+    callbacks: {
+      // Might need this later if we ever have to override and go back to where we came from.  Save it.
+      // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+      signInSuccessWithAuthResult: (authResult) => {
+        // TODO do cookie related things with the auth result.
+
+        return true;
+      },
+    },
     signInOptions: [
       // firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,

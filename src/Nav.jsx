@@ -21,7 +21,7 @@ function Nav({ authenticated }) {
         </div>
         {authenticated && (
           <div>
-            <Link className='nav-link' to='/DashBoard'>
+            <Link className='nav-link' to='/Dashboard'>
               Dashboard
             </Link>
           </div>
