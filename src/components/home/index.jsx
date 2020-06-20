@@ -4,8 +4,8 @@ const Home = () => (
   <>
     <p>Welcome to My Spa Assistant!</p>
     <p>
-      Our goal is to give Massage Therapists, Hair Stylists, Manacurists and
-      other independant spa employees a way to track their clients and take
+      Our goal is to give Massage Therapists, Hair Stylists, Manicurists and
+      other independent spa employees a way to track their clients and take
       payment.
     </p>
     <p>

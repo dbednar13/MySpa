@@ -77,14 +77,19 @@ const AppWithContext = ({ firebase }) => {
     }
   };
 
+  const tokenCallback = (user, idToken) => {
+    setCurrentUser({ authenticated: true, user });
+    fetchUser(user.uid).then((doc) => {
+      fetchCallback(user, doc);
+    });
+    console.log('found token: ', idToken);
+  };
+
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
       if (user) {
-        setCurrentUser({ authenticated: true, user });
-        fetchUser(user.uid).then((doc) => {
-          fetchCallback(user, doc);
-        });
+        getUserIdToken(user, tokenCallback);
       } else {
         setCurrentUser({ authenticated: false, user: null });
       }

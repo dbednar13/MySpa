@@ -1,6 +1,7 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { StyledFirebaseAuth } from 'react-firebaseui';
+import { getUserIdToken, setCookie } from '../../helpers/cookieHelper';
 
 const LogIn = ({ firebase }) => {
   const uiConfig = {
@@ -11,7 +12,9 @@ const LogIn = ({ firebase }) => {
       // Might need this later if we ever have to override and go back to where we came from.  Save it.
       // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
       signInSuccessWithAuthResult: (authResult) => {
-        // TODO do cookie related things with the auth result.
+        getUserIdToken(authResult.user, (idToken) => {
+          setCookie(idToken);
+        });
 
         return true;
       },
