@@ -18,6 +18,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "npm:@hot-loader/react-dom",
     "react-firebaseui": "^4.1.0",
     "react-hot-loader": "^4.12.21",
@@ -55,7 +56,7 @@
   "devDependencies": {
     "@neutrinojs/compile-loader": "^9.2.0",
     "@neutrinojs/react": "^9.2.0",
-    "eslint": "^7.3.0",
+    "eslint": "7.2.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.21.2",

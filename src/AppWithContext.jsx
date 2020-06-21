@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 
 import {
   createUser,
@@ -10,10 +11,10 @@ import {
   updateUser,
   updateUserNotice,
 } from './api/user';
-import { hipaaNoticeText } from './constants/textConstants';
+import getCookieData from './helpers/cookieHelper';
+import { cookieName, hipaaNoticeText } from './constants/textConstants';
 import { withFirebase } from './firebase';
 import ConfirmModal from './components/common/confirmModal';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 
@@ -27,7 +28,7 @@ const UserServices = lazy(() => import('./components/user/services'));
 const User = lazy(() => import('./components/user'));
 const Nav = lazy(() => import('./Nav'));
 
-const AppWithContext = ({ firebase }) => {
+const AppWithContext = ({ firebase, cookies }) => {
   const [currentUser, setCurrentUser] = useState({
     authenticated: false,
     user: null,
@@ -77,21 +78,25 @@ const AppWithContext = ({ firebase }) => {
     }
   };
 
-  const tokenCallback = (user, idToken) => {
-    setCurrentUser({ authenticated: true, user });
-    fetchUser(user.uid).then((doc) => {
-      fetchCallback(user, doc);
-    });
-    console.log('found token: ', idToken);
-  };
-
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
-      if (user) {
-        getUserIdToken(user, tokenCallback);
+      const cookie = cookies.get(cookieName);
+      if (user && !cookie) {
+        // user is logged into firebase but no valid cookie, sign them out.
+        cookies.remove(cookieName);
+        firebase.auth().signOut();
+        window.location.assign('/Home');
+      } else if (user && cookie) {
+        const cookieData = getCookieData(user);
+        cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
+        setCurrentUser({ authenticated: true, user });
+        fetchUser(user.uid).then((doc) => {
+          fetchCallback(user, doc);
+        });
       } else {
         setCurrentUser({ authenticated: false, user: null });
+        cookies.remove(cookieName);
       }
     }
   });
@@ -133,7 +138,8 @@ const AppWithContext = ({ firebase }) => {
 };
 
 AppWithContext.propTypes = {
+  cookies: shape({}).isRequired,
   firebase: shape({}).isRequired,
 };
 
-export default AppWithContext;
+export default withCookies(AppWithContext);

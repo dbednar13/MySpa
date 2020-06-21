@@ -1,9 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
+import { withCookies } from 'react-cookie';
 
-const SignOut = ({ firebase }) => {
+import { cookieName } from '../../constants/textConstants';
+
+const SignOut = ({ firebase, cookies }) => {
   if (firebase.auth().currentUser) {
+    cookies.remove(cookieName);
     firebase.auth().signOut();
   }
 
@@ -11,7 +15,8 @@ const SignOut = ({ firebase }) => {
 };
 
 SignOut.propTypes = {
-  firebase: shape({}).isRequired
+  cookies: shape({}).isRequired,
+  firebase: shape({}).isRequired,
 };
 
-export default SignOut;
+export default withCookies(SignOut);

@@ -1,9 +1,11 @@
 import React from 'react';
 import { shape } from 'prop-types';
 import { StyledFirebaseAuth } from 'react-firebaseui';
-import { getUserIdToken, setCookie } from '../../helpers/cookieHelper';
+import { withCookies } from 'react-cookie';
 
-const LogIn = ({ firebase }) => {
+import getCookieData from '../../helpers/cookieHelper';
+
+const LogIn = ({ firebase, cookies }) => {
   const uiConfig = {
     // Popup sign in flow rather than redirect flow.
     signInFlow: 'popup',
@@ -12,9 +14,8 @@ const LogIn = ({ firebase }) => {
       // Might need this later if we ever have to override and go back to where we came from.  Save it.
       // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
       signInSuccessWithAuthResult: (authResult) => {
-        getUserIdToken(authResult.user, (idToken) => {
-          setCookie(idToken);
-        });
+        const cookieData = getCookieData(authResult.user);
+        cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
 
         return true;
       },
@@ -34,6 +35,7 @@ const LogIn = ({ firebase }) => {
 };
 
 LogIn.propTypes = {
+  cookies: shape({}).isRequired,
   firebase: shape({}).isRequired,
 };
-export default LogIn;
+export default withCookies(LogIn);
