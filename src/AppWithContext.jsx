@@ -11,7 +11,7 @@ import {
   updateUser,
   updateUserNotice,
 } from './api/user';
-import getCookieData from './helpers/cookieHelper';
+import { getCookieData } from './helpers/cookieHelper';
 import { cookieName, hipaaNoticeText } from './constants/textConstants';
 import { withFirebase } from './firebase';
 import ConfirmModal from './components/common/confirmModal';
@@ -86,7 +86,9 @@ const AppWithContext = ({ firebase, cookies }) => {
         // user is logged into firebase but no valid cookie, sign them out.
         cookies.remove(cookieName);
         firebase.auth().signOut();
-        window.location.assign('/Home');
+        if (window.location.pathname !== '/Home') {
+          window.location.assign('/Home');
+        }
       } else if (user && cookie) {
         const cookieData = getCookieData(user);
         cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
@@ -97,6 +99,9 @@ const AppWithContext = ({ firebase, cookies }) => {
       } else {
         setCurrentUser({ authenticated: false, user: null });
         cookies.remove(cookieName);
+        if (window.location.pathname !== '/Home') {
+          window.location.assign('/Home');
+        }
       }
     }
   });

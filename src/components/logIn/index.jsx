@@ -3,7 +3,7 @@ import { shape } from 'prop-types';
 import { StyledFirebaseAuth } from 'react-firebaseui';
 import { withCookies } from 'react-cookie';
 
-import getCookieData from '../../helpers/cookieHelper';
+import { getCookieData } from '../../helpers/cookieHelper';
 
 const LogIn = ({ firebase, cookies }) => {
   const uiConfig = {

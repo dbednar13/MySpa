@@ -1,9 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 import { shape } from 'prop-types';
 
-const User = ({ firebase }) => {
-  return !firebase.auth().currentUser ? (
+import { isLoggedIn } from '../../helpers/cookieHelper';
+
+const User = ({ firebase, cookies }) => {
+  return !isLoggedIn(cookies, firebase) ? (
     <Redirect to='/Home' />
   ) : (
     <>Maintain a User - aka profile</>
@@ -11,7 +14,8 @@ const User = ({ firebase }) => {
 };
 
 User.propTypes = {
-  firebase: shape({}).isRequired
+  cookies: shape({}).isRequired,
+  firebase: shape({}).isRequired,
 };
 
-export default User;
+export default withCookies(User);
