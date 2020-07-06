@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
+import { withCookies } from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import Addons from './addons';
 import Services from './services';
+import { isLoggedIn } from '../../../helpers/cookieHelper';
 
-const UserServices = ({ firebase }) => {
+const UserServices = ({ cookies, firebase }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     setUser(firebase.auth().currentUser);
   }, [firebase]);
 
-  return !firebase.auth().currentUser ? (
+  return !isLoggedIn(cookies, firebase) ? (
     <Redirect to='/Home' />
   ) : (
     <>
@@ -26,7 +28,8 @@ const UserServices = ({ firebase }) => {
 };
 
 UserServices.propTypes = {
+  cookies: shape({}).isRequired,
   firebase: shape({}).isRequired,
 };
 
-export default UserServices;
+export default withCookies(UserServices);
