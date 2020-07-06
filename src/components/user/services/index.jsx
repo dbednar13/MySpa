@@ -18,11 +18,15 @@ const UserServices = ({ cookies, firebase }) => {
     <Redirect to='/Home' />
   ) : (
     <>
-      <Services user={user} />
-      <div className='pt-3 pb-3'>
-        <Divider variant='middle' />
-      </div>
-      <Addons user={user} />
+      {user && (
+        <>
+          <Services user={user} />
+          <div className='pt-3 pb-3'>
+            <Divider variant='middle' />
+          </div>
+          <Addons user={user} />
+        </>
+      )}
     </>
   );
 };
