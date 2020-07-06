@@ -15,7 +15,7 @@ const UserServices = ({ cookies, firebase }) => {
   }, [firebase]);
 
   return !isLoggedIn(cookies, firebase) ? (
-    <Redirect to='/Home' />
+    <Redirect to='/SignOut' />
   ) : (
     <>
       {user && (

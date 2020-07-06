@@ -7,11 +7,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Service from './service';
 import ServiceModal from './service/serviceModal';
 import { serviceDefaultProps } from './service/servicePropType';
-import {
-  deleteService,
-  fetchServices,
-  saveService,
-} from '../../../../api/services';
+import { deleteService, saveService } from '../../../../api/services';
+import { fireStore } from '../../../../firebase';
 
 const Services = ({ user }) => {
   const [servicesLoading, setServicesLoading] = useState(true);
@@ -19,7 +16,8 @@ const Services = ({ user }) => {
   const [services, setServices] = useState([]);
 
   const getServices = () => {
-    fetchServices(user.uid).then((snapshot) => {
+    const collection = fireStore.collection(`users/${user.uid}/services`);
+    return collection.onSnapshot((snapshot) => {
       const tempServices = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -47,7 +45,7 @@ const Services = ({ user }) => {
   };
 
   const onDeleteServicesClick = (id) => {
-    deleteService(user.uid, id).then(getServices);
+    deleteService(user.uid, id);
   };
 
   const onSave = (service, isNew) => {
@@ -58,7 +56,7 @@ const Services = ({ user }) => {
       service.duration,
       service.cost,
       service.id
-    ).then(getServices);
+    );
   };
 
   const defaultNewService = { service: serviceDefaultProps };

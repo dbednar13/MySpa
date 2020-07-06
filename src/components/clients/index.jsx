@@ -8,9 +8,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Client from './client';
 import ClientModal from './client/clientModal';
-import { deleteClient, fetchClients, saveClient } from '../../api/clients';
+import { deleteClient, saveClient } from '../../api/clients';
 import { clientDefaultProps } from './client/clientPropType';
 
+import { fireStore } from '../../firebase';
 import { isLoggedIn } from '../../helpers/cookieHelper';
 
 const Clients = ({ firebase, cookies }) => {
@@ -24,7 +25,8 @@ const Clients = ({ firebase, cookies }) => {
   }, [firebase]);
 
   const getClients = () => {
-    fetchClients(user.uid).then((snapshot) => {
+    const collection = fireStore.collection(`users/${user.uid}/clients`);
+    return collection.onSnapshot((snapshot) => {
       const tempClients = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -73,7 +75,7 @@ const Clients = ({ firebase, cookies }) => {
   const defaultNewClient = { client: clientDefaultProps };
 
   return !isLoggedIn(cookies, firebase) ? (
-    <Redirect to='/Home' />
+    <Redirect to='/SignOut' />
   ) : (
     <>
       <Formik
