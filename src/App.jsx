@@ -1,4 +1,5 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import AppWithContext from './AppWithContext';
 import { FirebaseContext } from './firebase';
 
@@ -8,11 +9,11 @@ import './css/index.css';
 const App = () => {
   return (
     <FirebaseContext.Consumer>
-      {firebase => {
+      {(firebase) => {
         return <AppWithContext firebase={firebase} />;
       }}
     </FirebaseContext.Consumer>
   );
 };
 
-export default App;
+export default hot(module)(App);

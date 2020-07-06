@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withCookies } from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 import { shape } from 'prop-types';
 import { Button, CardColumns } from 'react-bootstrap';
@@ -10,7 +11,9 @@ import ClientModal from './client/clientModal';
 import { deleteClient, fetchClients, saveClient } from '../../api/clients';
 import { clientDefaultProps } from './client/clientPropType';
 
-const Clients = ({ firebase }) => {
+import { isLoggedIn } from '../../helpers/cookieHelper';
+
+const Clients = ({ firebase, cookies }) => {
   const [clients, setClients] = useState(null);
   const [clientsLoading, setClientsLoading] = useState(true);
   const [showClientModal, setShowClientModal] = useState(false);
@@ -69,7 +72,7 @@ const Clients = ({ firebase }) => {
 
   const defaultNewClient = { client: clientDefaultProps };
 
-  return !firebase.auth().currentUser ? (
+  return !isLoggedIn(cookies, firebase) ? (
     <Redirect to='/Home' />
   ) : (
     <>
@@ -116,7 +119,8 @@ const Clients = ({ firebase }) => {
 };
 
 Clients.propTypes = {
+  cookies: shape({}).isRequired,
   firebase: shape({}).isRequired,
 };
 
-export default Clients;
+export default withCookies(Clients);
