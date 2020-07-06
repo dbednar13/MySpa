@@ -35,8 +35,9 @@ const Addons = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      getAddons();
+      return getAddons();
     }
+    return () => {};
   }, [user]);
 
   const onNewAddonClick = () => {

@@ -47,8 +47,9 @@ const Clients = ({ firebase, cookies }) => {
 
   useEffect(() => {
     if (user) {
-      getClients();
+      return getClients();
     }
+    return () => {};
   }, [user]);
 
   const onDeleteClientClick = (id) => {

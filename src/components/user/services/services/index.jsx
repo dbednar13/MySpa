@@ -36,8 +36,9 @@ const Services = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      getServices();
+      return getServices();
     }
+    return () => {};
   }, [user]);
 
   const onNewServiceClick = () => {
