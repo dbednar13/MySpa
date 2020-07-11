@@ -53,7 +53,7 @@ const Clients = ({ firebase, cookies }) => {
   }, [user]);
 
   const onDeleteClientClick = (id) => {
-    deleteClient(user.uid, id).then(getClients);
+    deleteClient(user.uid, id);
   };
 
   const onNewClientClick = () => {
@@ -70,7 +70,7 @@ const Clients = ({ firebase, cookies }) => {
       client.phoneNumber,
       client.notes || '',
       client.id
-    ).then(getClients);
+    );
   };
 
   const defaultNewClient = { client: clientDefaultProps };
