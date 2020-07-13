@@ -52,7 +52,10 @@ const AppWithContext = ({ firebase, cookies }) => {
 
   const handleLogout = () => {
     cookies.remove(cookieName);
-    idleTimer.pause();
+    if (idleTimer) {
+      idleTimer.pause();
+    }
+
     if (window.location.pathname !== '/Home') {
       window.location.assign('/Home');
     }
@@ -91,14 +94,19 @@ const AppWithContext = ({ firebase, cookies }) => {
   };
 
   const onTimerAction = () => {
-    console.log('action');
+    const cookieData = getCookieData(currentUser.user);
+    cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
   };
 
   const onTimerActive = () => {
-    console.log('active');
+    const cookieData = getCookieData(currentUser.user);
+    cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
   };
   const onTimerIdle = () => {
-    console.log('Idle');
+    idleTimer.pause();
+    if (currentUser.authenticated) {
+      handleLogout();
+    }
   };
 
   firebase.auth().onAuthStateChanged(() => {
