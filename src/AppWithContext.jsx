@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import IdleTimer from 'react-idle-timer';
 import { withCookies } from 'react-cookie';
 
 import {
@@ -12,7 +13,7 @@ import {
   updateUserNotice,
 } from './api/user';
 import { getCookieData } from './helpers/cookieHelper';
-// import { maxAge } from './constants/numberConstants';
+import { maxAge } from './constants/numberConstants';
 import { cookieName, hipaaNoticeText } from './constants/textConstants';
 import { withFirebase } from './firebase';
 import ConfirmModal from './components/common/confirmModal';
@@ -37,6 +38,8 @@ const AppWithContext = ({ firebase, cookies }) => {
   const [showModal, setShowModal] = useState(false);
   const NavWithFirebase = withFirebase(Nav);
 
+  let idleTimer = React.createRef();
+
   const onModalReject = () => {
     firebase
       .auth()
@@ -49,6 +52,7 @@ const AppWithContext = ({ firebase, cookies }) => {
 
   const handleLogout = () => {
     cookies.remove(cookieName);
+    idleTimer.pause();
     if (window.location.pathname !== '/Home') {
       window.location.assign('/Home');
     }
@@ -86,6 +90,17 @@ const AppWithContext = ({ firebase, cookies }) => {
     }
   };
 
+  const onTimerAction = () => {
+    console.log('action');
+  };
+
+  const onTimerActive = () => {
+    console.log('active');
+  };
+  const onTimerIdle = () => {
+    console.log('Idle');
+  };
+
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
@@ -96,6 +111,7 @@ const AppWithContext = ({ firebase, cookies }) => {
         handleLogout();
       } else if (user && cookie) {
         const cookieData = getCookieData(user);
+        idleTimer.reset();
         cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
         setCurrentUser({ authenticated: true, user });
         fetchUser(user.uid).then((doc) => {
@@ -109,6 +125,25 @@ const AppWithContext = ({ firebase, cookies }) => {
   });
   return (
     <>
+      <IdleTimer
+        ref={(ref) => {
+          idleTimer = ref;
+        }}
+        element={document}
+        onActive={onTimerActive}
+        onIdle={onTimerIdle}
+        onAction={onTimerAction}
+        debounce={250}
+        timeout={1000 * maxAge}
+        events={[
+          'keydown',
+          'wheel',
+          'DOMMouseScroll',
+          'mouseWheel',
+          'mousedown',
+        ]}
+        stopOnIdle
+      />
       <div className='App'>
         <ConfirmModal
           show={showModal}
