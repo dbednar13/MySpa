@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+// const admin = require('firebase-admin');
 
-admin.initializeApp();
+// admin.initializeApp();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -9,4 +9,4 @@ admin.initializeApp();
 //  response.send("Hello from Firebase!");
 // });
 
-exports.createSessionCookie = require('./session/createSessionCookie');
+// exports.createSessionCookie = require('./session/createSessionCookie');
