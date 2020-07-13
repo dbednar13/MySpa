@@ -7,7 +7,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Addon from './addon';
 import AddonModal from './addon/addonModal';
 import { addonDefaultProps } from './addon/addonPropType';
-import { deleteAddon, fetchAddons, saveAddon } from '../../../../api/addons';
+import { fireStore } from '../../../../firebase';
+import { deleteAddon, saveAddon } from '../../../../api/addons';
 
 const Addons = ({ user }) => {
   const [addonsLoading, setAddonsLoading] = useState(true);
@@ -15,7 +16,8 @@ const Addons = ({ user }) => {
   const [showAddonModal, setShowAddonModal] = useState(false);
 
   const getAddons = () => {
-    fetchAddons(user.uid).then((snapshot) => {
+    const collection = fireStore.collection(`users/${user.uid}/addons`);
+    return collection.onSnapshot((snapshot) => {
       const tempAddons = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -33,8 +35,9 @@ const Addons = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      getAddons();
+      return getAddons();
     }
+    return () => {};
   }, [user]);
 
   const onNewAddonClick = () => {
@@ -42,13 +45,11 @@ const Addons = ({ user }) => {
   };
 
   const onDeleteAddonClick = (id) => {
-    deleteAddon(user.uid, id).then(getAddons);
+    deleteAddon(user.uid, id);
   };
 
   const onSaveAddonClick = (addon, isNew) => {
-    saveAddon(user.uid, isNew, addon.name, addon.cost, addon.id).then(
-      getAddons
-    );
+    saveAddon(user.uid, isNew, addon.name, addon.cost, addon.id);
   };
 
   const defaultNewAddon = { addon: addonDefaultProps };

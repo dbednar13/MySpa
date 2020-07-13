@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { shape } from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import IdleTimer from 'react-idle-timer';
 import { withCookies } from 'react-cookie';
 
 import {
@@ -12,6 +13,7 @@ import {
   updateUserNotice,
 } from './api/user';
 import { getCookieData } from './helpers/cookieHelper';
+import { maxAge } from './constants/numberConstants';
 import { cookieName, hipaaNoticeText } from './constants/textConstants';
 import { withFirebase } from './firebase';
 import ConfirmModal from './components/common/confirmModal';
@@ -36,6 +38,8 @@ const AppWithContext = ({ firebase, cookies }) => {
   const [showModal, setShowModal] = useState(false);
   const NavWithFirebase = withFirebase(Nav);
 
+  let idleTimer = React.createRef();
+
   const onModalReject = () => {
     firebase
       .auth()
@@ -44,6 +48,17 @@ const AppWithContext = ({ firebase, cookies }) => {
         setShowModal(false);
         window.location.assign('/Home');
       });
+  };
+
+  const handleLogout = () => {
+    cookies.remove(cookieName);
+    if (idleTimer) {
+      idleTimer.pause();
+    }
+
+    if (window.location.pathname !== '/Home') {
+      window.location.assign('/Home');
+    }
   };
 
   const onModalAccept = () => {
@@ -78,19 +93,33 @@ const AppWithContext = ({ firebase, cookies }) => {
     }
   };
 
+  const onTimerAction = () => {
+    const cookieData = getCookieData(currentUser.user);
+    cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
+  };
+
+  const onTimerActive = () => {
+    const cookieData = getCookieData(currentUser.user);
+    cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
+  };
+  const onTimerIdle = () => {
+    idleTimer.pause();
+    if (currentUser.authenticated) {
+      handleLogout();
+    }
+  };
+
   firebase.auth().onAuthStateChanged(() => {
     const user = firebase.auth().currentUser;
     if (currentUser.user !== user) {
       const cookie = cookies.get(cookieName);
       if (user && !cookie) {
         // user is logged into firebase but no valid cookie, sign them out.
-        cookies.remove(cookieName);
         firebase.auth().signOut();
-        if (window.location.pathname !== '/Home') {
-          window.location.assign('/Home');
-        }
+        handleLogout();
       } else if (user && cookie) {
         const cookieData = getCookieData(user);
+        idleTimer.reset();
         cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
         setCurrentUser({ authenticated: true, user });
         fetchUser(user.uid).then((doc) => {
@@ -98,47 +127,65 @@ const AppWithContext = ({ firebase, cookies }) => {
         });
       } else {
         setCurrentUser({ authenticated: false, user: null });
-        cookies.remove(cookieName);
-        if (window.location.pathname !== '/Home') {
-          window.location.assign('/Home');
-        }
+        handleLogout();
       }
     }
   });
   return (
-    <div className='App'>
-      <ConfirmModal
-        show={showModal}
-        bodyText={hipaaNoticeText}
-        title='HIPAA NOTICE'
-        onClose={onModalReject}
-        onOk={onModalAccept}
+    <>
+      <IdleTimer
+        ref={(ref) => {
+          idleTimer = ref;
+        }}
+        element={document}
+        onActive={onTimerActive}
+        onIdle={onTimerIdle}
+        onAction={onTimerAction}
+        debounce={250}
+        timeout={1000 * maxAge}
+        events={[
+          'keydown',
+          'wheel',
+          'DOMMouseScroll',
+          'mouseWheel',
+          'mousedown',
+        ]}
+        stopOnIdle
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Router>
-          <div className='pb-3'>
-            <NavWithFirebase authenticated={currentUser.authenticated} />
-          </div>
-          <div className='container'>
-            <Switch>
-              <Route exact path='/' component={withFirebase(Home)} />
-              <Route exact path='/User' component={withFirebase(User)} />
-              <Route path='/About' component={withFirebase(About)} />
-              <Route path='/Dashboard' component={withFirebase(Dashboard)} />
-              <Route path='/dashboard' component={withFirebase(Dashboard)} />
-              <Route path='/Login' component={withFirebase(Login)} />
-              <Route path='/SignOut' component={withFirebase(SignOut)} />
-              <Route
-                path='/User/Services'
-                component={withFirebase(UserServices)}
-              />
-              <Route path='/User/Clients' component={withFirebase(Clients)} />
-              <Route component={withFirebase(Home)} />
-            </Switch>
-          </div>
-        </Router>
-      </Suspense>
-    </div>
+      <div className='App'>
+        <ConfirmModal
+          show={showModal}
+          bodyText={hipaaNoticeText}
+          title='HIPAA NOTICE'
+          onClose={onModalReject}
+          onOk={onModalAccept}
+        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Router>
+            <div className='pb-3'>
+              <NavWithFirebase authenticated={currentUser.authenticated} />
+            </div>
+            <div className='container'>
+              <Switch>
+                <Route exact path='/' component={withFirebase(Home)} />
+                <Route exact path='/User' component={withFirebase(User)} />
+                <Route path='/About' component={withFirebase(About)} />
+                <Route path='/Dashboard' component={withFirebase(Dashboard)} />
+                <Route path='/dashboard' component={withFirebase(Dashboard)} />
+                <Route path='/Login' component={withFirebase(Login)} />
+                <Route path='/SignOut' component={withFirebase(SignOut)} />
+                <Route
+                  path='/User/Services'
+                  component={withFirebase(UserServices)}
+                />
+                <Route path='/User/Clients' component={withFirebase(Clients)} />
+                <Route component={withFirebase(Home)} />
+              </Switch>
+            </div>
+          </Router>
+        </Suspense>
+      </div>
+    </>
   );
 };
 

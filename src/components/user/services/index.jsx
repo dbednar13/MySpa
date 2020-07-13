@@ -15,14 +15,18 @@ const UserServices = ({ cookies, firebase }) => {
   }, [firebase]);
 
   return !isLoggedIn(cookies, firebase) ? (
-    <Redirect to='/Home' />
+    <Redirect to='/SignOut' />
   ) : (
     <>
-      <Services user={user} />
-      <div className='pt-3 pb-3'>
-        <Divider variant='middle' />
-      </div>
-      <Addons user={user} />
+      {user && (
+        <>
+          <Services user={user} />
+          <div className='pt-3 pb-3'>
+            <Divider variant='middle' />
+          </div>
+          <Addons user={user} />
+        </>
+      )}
     </>
   );
 };

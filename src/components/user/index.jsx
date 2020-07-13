@@ -7,7 +7,7 @@ import { isLoggedIn } from '../../helpers/cookieHelper';
 
 const User = ({ firebase, cookies }) => {
   return !isLoggedIn(cookies, firebase) ? (
-    <Redirect to='/Home' />
+    <Redirect to='/SignOut' />
   ) : (
     <>Maintain a User - aka profile</>
   );
