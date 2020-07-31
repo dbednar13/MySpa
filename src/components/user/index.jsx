@@ -7,16 +7,9 @@ import { shape } from 'prop-types';
 import { fireStore } from '../../firebase';
 import { isLoggedIn } from '../../helpers/cookieHelper';
 
-import {
-  PhoneFormikField,
-  TextFormikField,
-} from '../common/formik';
+import { PhoneFormikField, TextFormikField } from '../common/formik';
 
-import {
-  validateName,
-  validateEmail,
-  validatePhone,
-} from '../../validators';
+import { validateName, validateEmail, validatePhone } from '../../validators';
 
 const User = ({ firebase, cookies }) => {
   const [user, setUser] = useState(null);
@@ -27,7 +20,7 @@ const User = ({ firebase, cookies }) => {
       .collection('users')
       .doc(user.uid)
       .onSnapshot((snapshot) => {
-        const tempUser = {};       
+        const tempUser = {};
         const data = snapshot.data();
 
         tempUser.firstName = data.firstName ? data.firstName : '';
@@ -67,53 +60,53 @@ const User = ({ firebase, cookies }) => {
               <TextFormikField
                 name='firstName'
                 textField={{
-              label: 'First Name:',
-              id: `firstName`,
-              placeholder: 'First Name',
-            }}
+                  label: 'First Name:',
+                  id: `firstName`,
+                  placeholder: 'First Name',
+                }}
                 validate={(value) => {
-              return validateName(value);
-            }}
-            />
+                  return validateName(value);
+                }}
+              />
             </div>
             <div className='pb-3 pr-3 pl-3'>
               <TextFormikField
                 name='lastName'
                 textField={{
-              label: 'Last Name:',
-              id: `lastName`,
-              placeholder: 'Last Name',
-            }}
+                  label: 'Last Name:',
+                  id: `lastName`,
+                  placeholder: 'Last Name',
+                }}
                 validate={(value) => {
-              return validateName(value);
-            }}
-          />
+                  return validateName(value);
+                }}
+              />
             </div>
             <div className='pb-3 pr-3 pl-3'>
               <TextFormikField
                 name='preferredEmail'
                 label='Preferred Email Address:'
                 textField={{
-            id: `preferredEmail`,
-            placeholder: 'Email',
-            fullWidth: true,
-          }}
+                  id: `preferredEmail`,
+                  placeholder: 'Email',
+                  fullWidth: true,
+                }}
                 validate={(value) => {
-            return validateEmail(value);
-          }}
-        />
+                  return validateEmail(value);
+                }}
+              />
             </div>
             <div className='pb-3 pr-3 pl-3'>
               <PhoneFormikField
                 name='phoneNumber'
                 phoneField={{
-            id: `phoneNumber`,
-            label: 'Phone Number:',
-          }}
+                  id: `phoneNumber`,
+                  label: 'Phone Number:',
+                }}
                 validate={(value) => {
-            return validatePhone(value);
-          }}
-        />
+                  return validatePhone(value);
+                }}
+              />
             </div>
           </form>
         )}
