@@ -1,7 +1,6 @@
 import React from 'react';
 import { bool } from 'prop-types';
 import { Divider, InputAdornment } from '@material-ui/core';
-import * as EmailValidator from 'email-validator';
 
 import { clientPropType, clientDefaultProps } from '../clientPropType';
 import {
@@ -10,51 +9,16 @@ import {
   TextFormikField,
 } from '../../../common/formik';
 
+import {
+  validateName,
+  validateEmail,
+  validatePhone,
+} from '../../../../validators';
+
 const ClientData = ({ client, isModal }) => {
   const idSuffix = isModal ? '' : `-${client.id}`;
 
-  const validateEmail = (value) => {
-    if (value === undefined) {
-      return 'Please enter an email';
-    }
-    const email = value.trim();
-    if (email === '') {
-      return 'Please enter an email';
-    }
-
-    if (!EmailValidator.validate(email)) {
-      return 'Please enter a valid email address';
-    }
-
-    return '';
-  };
-
-  const validateName = (value) => {
-    if (value === undefined) {
-      return 'Please enter a name';
-    }
-    const name = value.trim();
-    if (name === '' || name.length < 1) {
-      return 'Please enter a name';
-    }
-
-    return '';
-  };
-
-  const validatePhone = (value) => {
-    if (value === undefined) {
-      return 'Please enter a phone number';
-    }
-    const phone = value.trim();
-    if (phone === '') {
-      return 'Please enter a phone number';
-    }
-    if (phone.length !== 10) {
-      return 'Please enter a phone number';
-    }
-
-    return '';
-  };
+  
 
   return (
     <>

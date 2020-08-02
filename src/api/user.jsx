@@ -25,7 +25,7 @@ export function createUser(uid, user, callback) {
     .then(callback);
 }
 
-export function updateUser(user, uid, callback) {
+export function updateUser(uid, user, callback) {
   fireStore
     .collection('users')
     .doc(uid)

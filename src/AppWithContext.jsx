@@ -83,11 +83,12 @@ const AppWithContext = ({ firebase, cookies }) => {
       );
     } else {
       const data = doc.data();
-      if (
-        !user.displayName.startsWith(data.firstName) ||
-        !user.displayName.endsWith(data.lastName)
-      ) {
-        updateUser(user.uid, createUserObject(user.displayName));
+      if (!user.email !== data.email) {
+        updateUser(user.uid, {
+          firstName: data.firstName,
+          lastName: data.LastName,
+          email: user.email,
+        });
       }
       messageCheck(doc);
     }
@@ -119,7 +120,10 @@ const AppWithContext = ({ firebase, cookies }) => {
         handleLogout();
       } else if (user && cookie) {
         const cookieData = getCookieData(user);
-        idleTimer.reset();
+
+        if (idleTimer) {
+          idleTimer.reset();
+        }
         cookies.set(cookieData.cookieName, cookieData.data, cookieData.options);
         setCurrentUser({ authenticated: true, user });
         fetchUser(user.uid).then((doc) => {
