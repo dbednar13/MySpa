@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import { Formik } from 'formik';
@@ -33,6 +34,23 @@ const User = ({ firebase, cookies }) => {
       });
   };
 
+  const submit = (values) => {
+    fireStore.collection('users').doc(user.uid).set(values, { merge: true });
+  };
+
+  const hasErrors = (errors) => {
+    const calcErrors =
+      (errors.firstName && errors.firstName !== '') ||
+      (errors.lastName && errors.lastName !== '') ||
+      (errors.phoneNumber && errors.phoneNumber !== '') ||
+      (errors.preferredEmail && errors.preferredEmail !== '');
+
+    if (calcErrors === undefined || calcErrors === null) {
+      return false;
+    }
+    return calcErrors;
+  };
+
   useEffect(() => {
     setUser(firebase.auth().currentUser);
   }, [firebase]);
@@ -48,69 +66,86 @@ const User = ({ firebase, cookies }) => {
     <Redirect to='/SignOut' />
   ) : (
     <>
-      <>Maintain a User - aka profile</>
-      <Formik
-        initialValues={userData}
-        validateOnBlur={false}
-        validateOnChange={false}
-        enableReinitialize>
-        {({ values, resetForm, errors }) => (
-          <form>
-            <div className='pb-3 pr-3 pl-3'>
-              <TextFormikField
-                name='firstName'
-                textField={{
-                  label: 'First Name:',
-                  id: `firstName`,
-                  placeholder: 'First Name',
-                }}
-                validate={(value) => {
-                  return validateName(value);
-                }}
-              />
-            </div>
-            <div className='pb-3 pr-3 pl-3'>
-              <TextFormikField
-                name='lastName'
-                textField={{
-                  label: 'Last Name:',
-                  id: `lastName`,
-                  placeholder: 'Last Name',
-                }}
-                validate={(value) => {
-                  return validateName(value);
-                }}
-              />
-            </div>
-            <div className='pb-3 pr-3 pl-3'>
-              <TextFormikField
-                name='preferredEmail'
-                label='Preferred Email Address:'
-                textField={{
-                  id: `preferredEmail`,
-                  placeholder: 'Email',
-                  fullWidth: true,
-                }}
-                validate={(value) => {
-                  return validateEmail(value);
-                }}
-              />
-            </div>
-            <div className='pb-3 pr-3 pl-3'>
-              <PhoneFormikField
-                name='phoneNumber'
-                phoneField={{
-                  id: `phoneNumber`,
-                  label: 'Phone Number:',
-                }}
-                validate={(value) => {
-                  return validatePhone(value);
-                }}
-              />
-            </div>
-          </form>
-        )}
-      </Formik>
+      <div className='pb-3'>Maintain your profile </div>
+      {userData && (
+        <Formik
+          initialValues={userData}
+          validateOnBlur={false}
+          validateOnChange={false}
+          onSubmit={submit}
+          enableReinitialize>
+          {({ dirty, errors, handleSubmit, resetForm }) => (
+            <form onSubmit={handleSubmit}>
+              <div className='pb-3'>
+                <TextFormikField
+                  name='firstName'
+                  textField={{
+                    label: 'First Name:',
+                    id: `firstName`,
+                    placeholder: 'First Name',
+                  }}
+                  validate={(value) => {
+                    return validateName(value);
+                  }}
+                />
+              </div>
+              <div className='pb-3'>
+                <TextFormikField
+                  name='lastName'
+                  textField={{
+                    label: 'Last Name:',
+                    id: `lastName`,
+                    placeholder: 'Last Name',
+                  }}
+                  validate={(value) => {
+                    return validateName(value);
+                  }}
+                />
+              </div>
+              <div className='pb-3'>
+                <TextFormikField
+                  name='preferredEmail'
+                  label='Preferred Email Address:'
+                  textField={{
+                    id: `preferredEmail`,
+                    placeholder: 'Email',
+                  }}
+                  validate={(value) => {
+                    return validateEmail(value);
+                  }}
+                />
+              </div>
+              <div className='pb-3'>
+                <PhoneFormikField
+                  name='phoneNumber'
+                  phoneField={{
+                    id: `phoneNumber`,
+                    label: 'Phone Number:',
+                  }}
+                  validate={(value) => {
+                    return validatePhone(value);
+                  }}
+                />
+              </div>
+              <div className='d-flex justify-content-between'>
+                <div>
+                  <Button variant='secondary' onClick={resetForm}>
+                    Cancel
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    variant='primary'
+                    disabled={!dirty || hasErrors(errors)}
+                    type='submit'>
+                    Save
+                  </Button>
+                </div>
+              </div>
+            </form>
+          )}
+        </Formik>
+      )}
     </>
   );
 };
