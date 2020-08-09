@@ -2,7 +2,10 @@ import React from 'react';
 import { bool } from 'prop-types';
 import { InputAdornment } from '@material-ui/core';
 
-import { servicePropType, serviceDefaultProps } from '../servicePropType';
+import {
+  servicePropType,
+  serviceDefaultProps,
+} from '../../../../../common/props/servicePropType';
 import {
   NumberFormikField,
   TextFormikField,

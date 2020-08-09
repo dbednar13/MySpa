@@ -2,7 +2,10 @@ import React from 'react';
 import { bool } from 'prop-types';
 import { InputAdornment } from '@material-ui/core';
 
-import { addonPropType, addonDefaultProps } from '../addonPropType';
+import {
+  addonPropType,
+  addonDefaultProps,
+} from '../../../../../common/props/addonPropType';
 import {
   NumberFormikField,
   TextFormikField,

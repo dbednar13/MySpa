@@ -4,7 +4,10 @@ import { bool, func, shape } from 'prop-types';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import AddonData from '../addonData';
-import { addonPropType, addonDefaultProps } from '../addonPropType';
+import {
+  addonPropType,
+  addonDefaultProps,
+} from '../../../../../common/props/addonPropType';
 
 const AddonModal = ({
   addon,

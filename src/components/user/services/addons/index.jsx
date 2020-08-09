@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Addon from './addon';
 import AddonModal from './addon/addonModal';
-import { addonDefaultProps } from './addon/addonPropType';
+import { addonDefaultProps } from '../../../common/props/addonPropType';
 import { fireStore } from '../../../../firebase';
 import { deleteAddon, saveAddon } from '../../../../api/addons';
 

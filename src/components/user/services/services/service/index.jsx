@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { func } from 'prop-types';
 import { Formik } from 'formik';
 
-import { servicePropType } from './servicePropType';
+import { servicePropType } from '../../../../common/props/servicePropType';
 import ServiceData from './serviceData';
 import ServiceModal from './serviceModal';
 import EditableCard from '../../../../editableCard';

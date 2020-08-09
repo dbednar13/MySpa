@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Service from './service';
 import ServiceModal from './service/serviceModal';
-import { serviceDefaultProps } from './service/servicePropType';
+import { serviceDefaultProps } from '../../../common/props/servicePropType';
 import { deleteService, saveService } from '../../../../api/services';
 import { fireStore } from '../../../../firebase';
 

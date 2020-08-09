@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { func } from 'prop-types';
 import { Formik } from 'formik';
 
-import { addonPropType } from './addonPropType';
+import { addonPropType } from '../../../../common/props/addonPropType';
 import AddonData from './addonData';
 import AddonModal from './addonModal';
 import EditableCard from '../../../../editableCard';

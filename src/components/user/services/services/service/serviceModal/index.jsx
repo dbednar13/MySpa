@@ -4,7 +4,10 @@ import { bool, func, shape } from 'prop-types';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import ServiceData from '../serviceData';
-import { servicePropType, serviceDefaultProps } from '../servicePropType';
+import {
+  servicePropType,
+  serviceDefaultProps,
+} from '../../../../../common/props/servicePropType';
 
 const ServiceModal = ({
   service,
