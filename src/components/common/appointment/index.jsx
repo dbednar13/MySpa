@@ -1,5 +1,5 @@
 import React from 'react';
-import { arrayOf, bool, func } from 'prop-types';
+import { arrayOf, bool, func, string } from 'prop-types';
 import { Formik } from 'formik';
 
 import {
@@ -20,6 +20,8 @@ import { clientPropType } from '../props/clientPropType';
 import { servicePropType } from '../props/servicePropType';
 import { addonPropType } from '../props/addonPropType';
 
+import { saveAppointment } from '../../../api/appointments';
+
 const Appointment = ({
   addonList,
   appointment,
@@ -28,6 +30,7 @@ const Appointment = ({
   disabled,
   onClose,
   serviceList,
+  userId,
 }) => {
   const handleClose = (resetForm) => {
     resetForm();
@@ -35,7 +38,8 @@ const Appointment = ({
   };
 
   const handleSave = (values) => {
-    // handle save
+    const isNew = values.id === undefined ? true : values.id === '';
+    saveAppointment(userId, values, isNew);
     onClose();
   };
 
@@ -121,13 +125,11 @@ const Appointment = ({
       )}
     </Formik>
   );
-
-  // Service scheduled
-  // Addons given.
 };
 
 Appointment.propTypes = {
   clientList: arrayOf(clientPropType).isRequired,
+  userId: string.isRequired,
   addonList: arrayOf(addonPropType),
   appointment: appointmentPropType,
   clientDisabled: bool,
