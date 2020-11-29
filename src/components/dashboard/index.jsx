@@ -8,6 +8,8 @@ import Appointment from '../common/appointment';
 const Dashboard = ({ firebase }) => {
   const [addons, setAddons] = useState([]);
   const [addonsLoaded, setAddonsLoaded] = useState(false);
+  const [appointments, setAppointments] = useState([]);
+  const [appointmentsLoaded, setAppointmentsLoaded] = useState(false);
   const [clients, setClients] = useState(null);
   const [clientsLoaded, setClientsLoaded] = useState(false);
   const [services, setServices] = useState([]);
@@ -33,11 +35,26 @@ const Dashboard = ({ firebase }) => {
           });
       });
       setAddons(tempAddons);
-      setAddonsLoaded(false);
+      setAddonsLoaded(true);
     });
   };
 
-  const loaded = addonsLoaded && clientsLoaded && servicesLoaded;
+  const getAppointments = () => {
+    const collection = fireStore.collection(`users/${user.uid}/appointments`);
+    // TODO:  Return only future appointments.  Limit 5.
+    return collection.onSnapshot((snapshot) => {
+      const tempAppointments = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        tempAppointments.push(data);
+      });
+      setAppointments(tempAppointments);
+      setAppointmentsLoaded(true);
+    });
+  };
+
+  const loaded =
+    addonsLoaded && appointmentsLoaded && clientsLoaded && servicesLoaded;
 
   const getClients = () => {
     const collection = fireStore.collection(`users/${user.uid}/clients`);
@@ -56,7 +73,7 @@ const Dashboard = ({ firebase }) => {
           });
       });
       setClients(tempClients);
-      setClientsLoaded(false);
+      setClientsLoaded(true);
     });
   };
 
@@ -75,7 +92,7 @@ const Dashboard = ({ firebase }) => {
           });
       });
       setServices(tempServices);
-      setServicesLoaded(false);
+      setServicesLoaded(true);
     });
   };
 
@@ -84,6 +101,7 @@ const Dashboard = ({ firebase }) => {
       getAddons();
       getClients();
       getServices();
+      getAppointments();
     }
     return () => {};
   }, [user]);
@@ -109,14 +127,16 @@ const Dashboard = ({ firebase }) => {
           New Appointment
         </Button>
       </div>
-      {loaded && (
-        <Appointment
-          onClose={handleCloseAppointment}
-          clientList={clients}
-          addonList={addons}
-          serviceList={services}
-        />
-      )}
+      {loaded &&
+        appointments.forEach((appointment) => {
+          <Appointment
+            appointment={appointment}
+            onClose={handleCloseAppointment}
+            clientList={clients}
+            addonList={addons}
+            serviceList={services}
+          />;
+        })}
     </>
   );
 };
