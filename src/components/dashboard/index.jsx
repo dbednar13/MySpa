@@ -128,14 +128,16 @@ const Dashboard = ({ firebase }) => {
         </Button>
       </div>
       {loaded &&
-        appointments.forEach((appointment) => {
-          <Appointment
-            appointment={appointment}
-            onClose={handleCloseAppointment}
-            clientList={clients}
-            addonList={addons}
-            serviceList={services}
-          />;
+        appointments.map((appointment) => {
+          return (
+            <Appointment
+              appointment={appointment}
+              onClose={handleCloseAppointment}
+              clientList={clients}
+              addonList={addons}
+              serviceList={services}
+            />
+          );
         })}
     </>
   );
